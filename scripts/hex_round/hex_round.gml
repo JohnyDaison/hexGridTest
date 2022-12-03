@@ -1,3 +1,5 @@
+// Feather ignore all
+
 ///@function hex_round(hex)
 ///@param hex
 function hex_round(argument0) {

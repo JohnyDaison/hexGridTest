@@ -1,3 +1,5 @@
+// Feather ignore all
+
 ///@function hex_subtract(hex_a, hex_b);
 ///@param hex_a
 ///@param hex_b

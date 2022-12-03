@@ -1,3 +1,5 @@
+// Feather ignore all
+
 ///@function hex_corner_offset(corner,layout);
 ///@param corner
 ///@param layout

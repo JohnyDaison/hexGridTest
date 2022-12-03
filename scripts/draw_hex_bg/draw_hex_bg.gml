@@ -1,3 +1,5 @@
+// Feather ignore all
+
 function draw_hex_bg() {
 	for (var r=0;r<=map_height;r++) {
 		var r_offset = floor(r/2);

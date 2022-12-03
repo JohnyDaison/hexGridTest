@@ -1,3 +1,5 @@
+// Feather ignore all
+
 ///@function pointy_hex_corner(center,size,i);
 ///@param center
 ///@param size

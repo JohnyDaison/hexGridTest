@@ -1,3 +1,5 @@
+// Feather ignore all
+
 ///@function hex_exists(hex);
 ///@param hex
 function hex_exists(argument0) {

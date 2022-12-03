@@ -1,3 +1,5 @@
+// Feather ignore all
+
 ///@function hex_get_passable(hex);
 ///@description Returns whether a hex is passable or not
 ///@param hex

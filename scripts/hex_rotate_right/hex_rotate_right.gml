@@ -1,3 +1,5 @@
+// Feather ignore all
+
 ///@function hex_rotate_right(hex)
 ///@param hex
 function hex_rotate_right(argument0) {

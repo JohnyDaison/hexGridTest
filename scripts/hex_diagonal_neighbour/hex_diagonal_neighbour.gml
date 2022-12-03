@@ -1,3 +1,5 @@
+// Feather ignore all
+
 ///@function hex_diagonal_neighbor(hex, dir)
 ///@param hex
 ///@param dir

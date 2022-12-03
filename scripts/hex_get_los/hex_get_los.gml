@@ -1,3 +1,5 @@
+// Feather ignore all
+
 ///@function hex_get_los(hex,range);
 ///@description Returns an array of hexes visible within the range
 ///@param {array} hex

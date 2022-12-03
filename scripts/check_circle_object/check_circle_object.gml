@@ -1,3 +1,5 @@
+// Feather ignore all
+
 ///@function check_circle(gx,gy,r,grid);
 ///@description [array] Returns an array of all the points inside a circle
 ///@param {real} gx X position of the circle center on grid

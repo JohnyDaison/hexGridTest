@@ -1,3 +1,5 @@
+// Feather ignore all
+
 ///@function hex_direction(dir);
 function hex_direction(argument0) {
 

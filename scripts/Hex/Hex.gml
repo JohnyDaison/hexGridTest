@@ -1,3 +1,5 @@
+// Feather ignore all
+
 ///@function Hex(q, r, s);
 ///@param q
 ///@param r

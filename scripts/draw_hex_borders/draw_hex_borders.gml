@@ -1,3 +1,5 @@
+// Feather ignore all
+
 function draw_hex_borders() {
 	draw_set_color(c_white);
 	for (var r=0;r<=map_height;r++) {

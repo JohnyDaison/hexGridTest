@@ -1,3 +1,5 @@
+// Feather ignore all
+
 function draw_hex_text() {
 	draw_set_color(c_white);
 	draw_set_halign(fa_center);

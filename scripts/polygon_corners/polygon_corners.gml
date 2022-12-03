@@ -1,3 +1,5 @@
+// Feather ignore all
+
 ///@function polygon_corners(hex,layout);
 ///@param hex
 ///@param layout

@@ -1,3 +1,5 @@
+// Feather ignore all
+
 ///@function hex_lerp(hex_a, hex_b, time)
 ///@param hex_a
 ///@param hex_b

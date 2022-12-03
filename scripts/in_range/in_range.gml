@@ -1,3 +1,5 @@
+// Feather ignore all
+
 ///@function in_range(xx,yy,r);
 ///@description [boolean] Returns true if xx and yy are inside the circle
 ///@param {real} x X position to check

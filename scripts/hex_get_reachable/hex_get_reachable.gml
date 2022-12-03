@@ -1,3 +1,5 @@
+// Feather ignore all
+
 ///@function hex_reachable(start, movement);
 ///@param start_hex
 ///@param movement

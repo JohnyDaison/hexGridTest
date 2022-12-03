@@ -1,3 +1,5 @@
+// Feather ignore all
+
 ///@function hex_get_key(hex);
 ///@param hex
 function hex_get_key(argument0) {

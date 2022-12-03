@@ -1,3 +1,5 @@
+// Feather ignore all
+
 ///@function qoffset_to_cube(a,offset)
 ///@param hex
 ///@param offset

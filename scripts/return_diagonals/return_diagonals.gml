@@ -1,3 +1,5 @@
+// Feather ignore all
+
 ///@function return_diagonals();
 function return_diagonals() {
 

@@ -1,3 +1,5 @@
+// Feather ignore all
+
 ///@function hex_scale(hex, scale);
 ///@param hex
 ///@param scale

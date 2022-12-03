@@ -1,3 +1,5 @@
+// Feather ignore all
+
 ///@function hex_get_cost(hex);
 ///@description Returns the move cost for the provided hex
 ///@param {array} hex

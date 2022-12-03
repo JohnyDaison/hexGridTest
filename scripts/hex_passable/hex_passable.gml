@@ -1,3 +1,5 @@
+// Feather ignore all
+
 ///@function hex_passable(hex);
 ///@description Returns whether the provided hex is passable or not (returns 1 if marked passable, -1 if it contains an instance and -2 if marked impassable)
 ///@param {array} hex
