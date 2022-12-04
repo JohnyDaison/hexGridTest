@@ -1,0 +1,1 @@
+hexMap.destroy();
