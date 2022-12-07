@@ -5,7 +5,7 @@
   "resources": [
     {"id":{"name":"draw_hex_borders","path":"scripts/draw_hex_borders/draw_hex_borders.yy",},"order":3,},
     {"id":{"name":"hex_get_spiral","path":"scripts/hex_get_spiral/hex_get_spiral.yy",},"order":20,},
-    {"id":{"name":"TerrainType","path":"scripts/TerrainType/TerrainType.yy",},"order":5,},
+    {"id":{"name":"TerrainTypeEnum","path":"scripts/TerrainTypeEnum/TerrainTypeEnum.yy",},"order":5,},
     {"id":{"name":"sprSnowBasic","path":"sprites/sprSnowBasic/sprSnowBasic.yy",},"order":0,},
     {"id":{"name":"sprSandBasic","path":"sprites/sprSandBasic/sprSandBasic.yy",},"order":0,},
     {"id":{"name":"hex_direction","path":"scripts/hex_direction/hex_direction.yy",},"order":9,},

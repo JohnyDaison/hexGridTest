@@ -1,25 +1,25 @@
-global.TerrainTypeMapping = ds_map_create();
-global.TerrainTypeMapping[? TerrainType.Base] = {
+global.TerrainTypeMap = ds_map_create();
+global.TerrainTypeMap[? TerrainType.Base] = {
     sprBasic: pointer_null,
     sprStack: pointer_null
 }
-global.TerrainTypeMapping[? TerrainType.Grass] = {
+global.TerrainTypeMap[? TerrainType.Grass] = {
     sprBasic: sprGrassBasic,
     sprStack: sprGrassStack
 }
-global.TerrainTypeMapping[? TerrainType.Rock] = {
+global.TerrainTypeMap[? TerrainType.Rock] = {
     sprBasic: sprRockBasic,
     sprStack: sprRockStack
 }
-global.TerrainTypeMapping[? TerrainType.Sand] = {
+global.TerrainTypeMap[? TerrainType.Sand] = {
     sprBasic: sprSandBasic,
     sprStack: sprSandStack
 }
-global.TerrainTypeMapping[? TerrainType.Snow] = {
+global.TerrainTypeMap[? TerrainType.Snow] = {
     sprBasic: sprSnowBasic,
     sprStack: sprSnowStack
 }
-global.TerrainTypeMapping[? TerrainType.Water] = {
+global.TerrainTypeMap[? TerrainType.Water] = {
     sprBasic: sprWaterBasic,
     sprStack: sprWaterStack
 }

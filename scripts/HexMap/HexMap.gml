@@ -55,4 +55,20 @@ function HexMap(_orientation, _size, _origin) constructor {
             }
         }
     }
+    
+    static drawHex = function() {
+        for (var _r = grid.minR; _r <= grid.maxR; _r++) {
+            //var _rOffset = floor(_r / 2);
+            for (var _q = grid.minQ; _q <= grid.maxQ; _q++) {
+                var _hex = new HexVector(_q,_r);
+                var _hexTile = grid.getTile(_hex)
+                if (is_undefined(_hexTile) || _hexTile.TerrainType == TerrainType.Base) {
+                    continue;
+                }
+                var vector = hexToPixel(_hexTile.position);
+                draw_sprite(_hexTile.TerrainTypeInfo.sprBasic, 0, vector.x, vector.y);
+                    
+            }
+        }
+    }
 }
