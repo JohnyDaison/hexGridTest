@@ -1,6 +1,9 @@
 function HexMap(_orientation, _size, _origin) constructor {
     layout = Layout(_orientation, _size, _origin);
     grid = new HexGrid();
+    stackHeight = 1;
+    highlightColor = c_white;
+    highlightAlpha = 0.5;
     
     static destroy = function() {
         grid.destroy();
@@ -34,6 +37,18 @@ function HexMap(_orientation, _size, _origin) constructor {
         return _corners;
     }
     
+    static drawFlatHex = function(_hex, _yOffset = 0) {
+        var _corners = polygonCorners(_hex);
+        draw_primitive_begin(pr_trianglefan);
+        for (var _k = 0; _k < 6; _k++) {
+            var _corner = _corners[_k];
+            var _x1 = _corner.x;
+            var _y1 = _corner.y;
+            draw_vertex(_x1, _y1 + _yOffset);
+        }
+        draw_primitive_end();
+    }
+    
     static drawHexBg = function() {
         for (var _r = grid.minR; _r <= grid.maxR; _r++) {
             var _rOffset = floor(_r / 2);
@@ -43,29 +58,44 @@ function HexMap(_orientation, _size, _origin) constructor {
                     continue;
                 }
                 
-                var _corners = polygonCorners(_hex);
-                draw_primitive_begin(pr_trianglefan);
-                for (var _k = 0; _k < 6; _k++) {
-                    var _corner = _corners[_k];
-                    var _x1 = _corner.x;
-                    var _y1 = _corner.y;
-                    draw_vertex(_x1, _y1);
-                }
-                draw_primitive_end();
+                drawFlatHex(_hex);
             }
         }
     }
     
-    static drawHex = function() {
+    static drawHexTile = function(_hexTile) {
+        var _vector = hexToPixel(_hexTile.position);
+        for(var i = 0; i < _hexTile.height; i++) {
+            if (i == _hexTile.height - 1) {
+                draw_sprite(_hexTile.terrainTypeInfo.sprBasic, 0, _vector.x, _vector.y - i * stackHeight);
+            } else {
+                draw_sprite(_hexTile.terrainTypeInfo.sprStack, 0, _vector.x, _vector.y - i * stackHeight);
+            }
+        }
+    }
+    
+    static drawHexes = function() {
         for (var _r = grid.minR; _r <= grid.maxR; _r++) {
             for (var _q = grid.minQ; _q <= grid.maxQ; _q++) {
                 var _hex = new HexVector(_q,_r);
                 var _hexTile = grid.getTile(_hex)
+                
                 if (is_undefined(_hexTile) || _hexTile.terrainType == TerrainType.Base) {
                     continue;
                 }
-                var _vector = hexToPixel(_hexTile.position);
-                draw_sprite(_hexTile.terrainTypeInfo.sprBasic, 0, _vector.x, _vector.y);  
+                
+                draw_set_alpha(1);
+                
+                drawHexTile(_hexTile);
+                
+                var _drawHighlight = false;
+                
+                if (_drawHighlight) {
+                    draw_set_alpha(highlightAlpha);
+                    draw_set_color(highlightColor);
+                
+                    drawFlatHex(_hex, (_hexTile.height - 1) * -stackHeight);
+                }
             }
         }
     }
