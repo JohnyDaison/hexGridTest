@@ -38,6 +38,8 @@ function HexGrid() constructor {
         if (is_undefined(maxR) || _position.r > maxR) {
             maxR = _position.r;   
         }
+        
+        return _tile;
     }
     
     static getTile = function(_position) {
