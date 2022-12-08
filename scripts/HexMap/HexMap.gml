@@ -61,11 +61,11 @@ function HexMap(_orientation, _size, _origin) constructor {
             for (var _q = grid.minQ; _q <= grid.maxQ; _q++) {
                 var _hex = new HexVector(_q,_r);
                 var _hexTile = grid.getTile(_hex)
-                if (is_undefined(_hexTile) || _hexTile.TerrainType == TerrainType.Base) {
+                if (is_undefined(_hexTile) || _hexTile.terrainType == TerrainType.Base) {
                     continue;
                 }
-                var vector = hexToPixel(_hexTile.position);
-                draw_sprite(_hexTile.TerrainTypeInfo.sprBasic, 0, vector.x, vector.y);  
+                var _vector = hexToPixel(_hexTile.position);
+                draw_sprite(_hexTile.terrainTypeInfo.sprBasic, 0, _vector.x, _vector.y);  
             }
         }
     }

@@ -54,9 +54,9 @@ function HexGrid() constructor {
     }
     
     static destroy = function() {
-        var tileCount = ds_list_size(tileList);
+        var _tileCount = ds_list_size(tileList);
         
-        for(var i = 0; i < tileCount; i++) {
+        for(var i = 0; i < _tileCount; i++) {
             var _tile = tileList[| i];
             _tile.destroy();
         }
