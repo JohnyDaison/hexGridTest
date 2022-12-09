@@ -9,6 +9,22 @@ function HexMap(_orientation, _size, _origin) constructor {
         grid.destroy();
     }
     
+    static pixelToHex = function(_x, _y) {
+        var _ori = layout[lay.orient];
+        var _size = layout[lay.size];
+        var _origin = layout[lay.origin];
+        
+        var _tempX = (_x - _origin.x) / _size.x;
+        var _tempY = (_y - _origin.y) / _size.y;
+
+        var _q = _ori[ori.b0] * _tempX + _ori[ori.b1] * _tempY;
+        var _r = _ori[ori.b2] * _tempX + _ori[ori.b3] * _tempY;
+
+        var _result = new HexVector(_q, _r);
+        _result.makeRound();
+        return _result;
+    }
+    
     static hexToPixel = function(_hex) {
         var _ori = layout[lay.orient];
         var _size = layout[lay.size];
@@ -74,7 +90,7 @@ function HexMap(_orientation, _size, _origin) constructor {
         }
     }
     
-    static drawHexes = function() {
+    static drawHexes = function(_highlightHex) {
         for (var _r = grid.minR; _r <= grid.maxR; _r++) {
             for (var _q = grid.minQ; _q <= grid.maxQ; _q++) {
                 var _hex = new HexVector(_q,_r);
@@ -88,13 +104,13 @@ function HexMap(_orientation, _size, _origin) constructor {
                 
                 drawHexTile(_hexTile);
                 
-                var _drawHighlight = false;
+                var _drawHighlight = _highlightHex.equals(_hex);
                 
                 if (_drawHighlight) {
                     draw_set_alpha(highlightAlpha);
                     draw_set_color(highlightColor);
                 
-                    drawFlatHex(_hex, (_hexTile.height - 1) * -stackHeight);
+                    drawFlatHex(_hex, 0); //(_hexTile.height - 1) * -stackHeight);
                 }
             }
         }

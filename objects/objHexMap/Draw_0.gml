@@ -3,9 +3,9 @@
 //draw_set_alpha(0.5);
 //hexMap.drawHexBg();
 
+var _highlightHex = hexMap.pixelToHex(mouse_x, mouse_y);
 
-
-hexMap.drawHexes();
+hexMap.drawHexes(_highlightHex);
 
 // show tileSize as rectangle
 /*
