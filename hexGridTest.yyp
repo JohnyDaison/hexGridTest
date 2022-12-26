@@ -15,6 +15,7 @@
     {"id":{"name":"qoffset_to_cube","path":"scripts/qoffset_to_cube/qoffset_to_cube.yy",},"order":39,},
     {"id":{"name":"hex_to_pixel","path":"scripts/hex_to_pixel/hex_to_pixel.yy",},"order":30,},
     {"id":{"name":"sprRockBasic","path":"sprites/sprRockBasic/sprRockBasic.yy",},"order":0,},
+    {"id":{"name":"objGameCamera","path":"objects/objGameCamera/objGameCamera.yy",},"order":1,},
     {"id":{"name":"Orientation","path":"scripts/Orientation/Orientation.yy",},"order":34,},
     {"id":{"name":"sprRockStack","path":"sprites/sprRockStack/sprRockStack.yy",},"order":1,},
     {"id":{"name":"objHexMap","path":"objects/objHexMap/objHexMap.yy",},"order":0,},

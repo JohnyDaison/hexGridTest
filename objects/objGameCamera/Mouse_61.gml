@@ -1,0 +1,1 @@
+updateZoomLevel(zoomLevel * zoomOutCoef);
