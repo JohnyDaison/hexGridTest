@@ -21,4 +21,8 @@ function Vector(_x, _y) constructor {
     static distance = function (_otherVector) {
         return point_distance(x, y, _otherVector.x, _otherVector.y);
     }
+	
+	static copy = function () {
+        return new Vector(x, y);
+    }
 }

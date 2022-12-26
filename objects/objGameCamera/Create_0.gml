@@ -1,6 +1,7 @@
 view_visible[0] = true;
 view_enabled = true;
 
+roomCenter = new Vector(room_width/2, room_height/2);
 camera = view_get_camera(0);
 baseViewportWidth = 1920;
 baseViewportHeight = 1080;
@@ -9,6 +10,10 @@ minZoomLevel = 1;
 maxZoomLevel = 8;
 zoomInCoef = 0.8;
 zoomOutCoef = 1.2;
+
+mouseDragStart = new Vector(0, 0);
+origStartPosition = pointer_null;
+draggingView = false;
 
 view_set_wport(0, baseViewportWidth);
 view_set_hport(0, baseViewportHeight);
@@ -28,8 +33,8 @@ updateCamera = function() {
 		zoomLevel * baseViewportWidth,
 		zoomLevel * baseViewportHeight);
 	camera_set_view_pos(camera, 
-		objHexMap.startPosition.x - zoomLevel * baseViewportWidth / 2,
-		objHexMap.startPosition.y - zoomLevel * baseViewportHeight / 2);
+		roomCenter.x - zoomLevel * baseViewportWidth / 2,
+		roomCenter.y - zoomLevel * baseViewportHeight / 2);
 }
 
 updateCamera();
