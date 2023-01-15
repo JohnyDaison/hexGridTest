@@ -17,6 +17,8 @@ if (!is_undefined(_highlightHex)) {
 
 hexMap.drawHexes(_highlightHex);
 
+draw_sprite(sprCrosshair, 0, mouse_x, mouse_y);
+
 // show tileSize as rectangle
 /*
 draw_set_alpha(0.8);
