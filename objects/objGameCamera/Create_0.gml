@@ -3,8 +3,8 @@ view_enabled = true;
 
 roomCenter = new Vector(room_width/2, room_height/2);
 camera = view_get_camera(0);
-baseViewportWidth = 1920;
-baseViewportHeight = 1080;
+baseViewportWidth = 1366;
+baseViewportHeight = 768;
 zoomLevel = 1;
 minZoomLevel = 1;
 maxZoomLevel = 8;

@@ -9,13 +9,17 @@ function HexMap(_orientation, _size, _origin) constructor {
         grid.destroy();
     }
     
-    static pixelToHex = function(_x, _y) {
+    static getTileYOffset = function(_hexTile) {
+        return (_hexTile.height - 1) * -stackHeight;
+    }
+    
+    static pixelToHex = function(_x, _y, _yOffset = 0) {
         var _ori = layout[lay.orient];
         var _size = layout[lay.size];
         var _origin = layout[lay.origin];
         
         var _tempX = (_x - _origin.x) / _size.x;
-        var _tempY = (_y - _origin.y) / _size.y;
+        var _tempY = (_y - _origin.y - _yOffset) / _size.y;
 
         var _q = _ori[ori.b0] * _tempX + _ori[ori.b1] * _tempY;
         var _r = _ori[ori.b2] * _tempX + _ori[ori.b3] * _tempY;
@@ -23,6 +27,38 @@ function HexMap(_orientation, _size, _origin) constructor {
         var _result = new HexVector(_q, _r);
         _result.makeRound();
         return _result;
+    }
+    
+    static isCursorOverHex = function(_x, _y, _hex) {
+        var _hexTile = grid.getTile(_hex);
+        
+        if (!is_undefined(_hexTile)) {
+            var _cursorHex = pixelToHex(_x, _y, getTileYOffset(_hexTile));
+            if (_cursorHex.equals(_hex)) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    static cursorToHex = function(_x, _y) {
+        var _baseHex = pixelToHex(_x, _y);
+        var _highlightHex = undefined;
+        
+        if (isCursorOverHex(_x, _y, _baseHex)) {
+            _highlightHex = _baseHex;
+        }
+        
+        for(var _dirIndex = 0; _dirIndex < 3; _dirIndex++) {
+            var _otherHex = _baseHex.add(global.hexDirectionsDown[_dirIndex]);
+            
+            if (isCursorOverHex(_x, _y, _otherHex)) {
+                _highlightHex = _otherHex;
+            }
+        }
+        
+        return _highlightHex;
     }
     
     static hexToPixel = function(_hex) {
@@ -104,13 +140,13 @@ function HexMap(_orientation, _size, _origin) constructor {
                 
                 drawHexTile(_hexTile);
                 
-                var _drawHighlight = _highlightHex.equals(_hex);
+                var _drawHighlight = !is_undefined(_highlightHex) && _hex.equals(_highlightHex);
                 
                 if (_drawHighlight) {
                     draw_set_alpha(highlightAlpha);
                     draw_set_color(highlightColor);
                 
-                    drawFlatHex(_hex, 0); //(_hexTile.height - 1) * -stackHeight);
+                    drawFlatHex(_hex, getTileYOffset(_hexTile));
                 }
             }
         }
