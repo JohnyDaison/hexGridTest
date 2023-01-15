@@ -21,21 +21,21 @@ window_set_size(baseViewportWidth, baseViewportHeight);
 display_set_gui_size(baseViewportWidth, baseViewportHeight);
 
 updateZoomLevel = function(_newLevel) {
-	var _prevZoomLevel = zoomLevel;
-	zoomLevel = clamp(_newLevel, minZoomLevel, maxZoomLevel);
-	
-	if (zoomLevel != _prevZoomLevel) {
-		updateCamera();
-	}
+    var _prevZoomLevel = zoomLevel;
+    zoomLevel = clamp(_newLevel, minZoomLevel, maxZoomLevel);
+    
+    if (zoomLevel != _prevZoomLevel) {
+        updateCamera();
+    }
 }
 
 updateCamera = function() {
-	camera_set_view_size(camera,
-		zoomLevel * baseViewportWidth,
-		zoomLevel * baseViewportHeight);
-	camera_set_view_pos(camera, 
-		roomCenter.x - zoomLevel * baseViewportWidth / 2,
-		roomCenter.y - zoomLevel * baseViewportHeight / 2);
+    camera_set_view_size(camera,
+        zoomLevel * baseViewportWidth,
+        zoomLevel * baseViewportHeight);
+    camera_set_view_pos(camera,
+        roomCenter.x - zoomLevel * baseViewportWidth / 2,
+        roomCenter.y - zoomLevel * baseViewportHeight / 2);
 }
 
 updateCamera();
