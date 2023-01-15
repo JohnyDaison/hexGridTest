@@ -4,6 +4,12 @@
 //hexMap.drawHexBg();
 
 var _highlightHex = hexMap.pixelToHex(mouse_x, mouse_y);
+debugText = string("{0},{1}",_highlightHex.q, _highlightHex.r);
+
+var _hexTile = hexMap.grid.getTile(_highlightHex);
+if (!is_undefined(_hexTile)) {
+    debugText += string(": {0}", ds_list_size(_hexTile.neighbors));
+}
 
 hexMap.drawHexes(_highlightHex);
 

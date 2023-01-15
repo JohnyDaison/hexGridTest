@@ -18,6 +18,7 @@ draggingView = false;
 view_set_wport(0, baseViewportWidth);
 view_set_hport(0, baseViewportHeight);
 window_set_size(baseViewportWidth, baseViewportHeight);
+display_set_gui_size(baseViewportWidth, baseViewportHeight);
 
 updateZoomLevel = function(_newLevel) {
 	var _prevZoomLevel = zoomLevel;

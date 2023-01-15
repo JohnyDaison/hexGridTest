@@ -1,5 +1,6 @@
 tileSize = new Vector(160, 150); // tuned to our sprites
 startPosition = new Vector(room_width/2, room_height/2);
+debugText = "TEST";
 
 hexMap = new HexMap(layout_flat, tileSize, startPosition);
 hexMap.stackHeight = 60;
