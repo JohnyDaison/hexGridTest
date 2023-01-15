@@ -1,3 +1,5 @@
+global.hexDirections = [new HexVector(1, 0), new HexVector(1, -1), new HexVector(0, -1), new HexVector(-1, 0), new HexVector(-1, 1), new HexVector(0, 1)];
+
 function HexVector(_q, _r) constructor {
     q = _q;
     r = _r;
@@ -51,5 +53,17 @@ function HexVector(_q, _r) constructor {
         q = _q;
         r = _r;
         s = _s;
+        
+        if (q == -0) {
+            q = 0;
+        }
+        
+        if (r == -0) {
+            r = 0;
+        }
+        
+        if (s == -0) {
+            s = 0;
+        }
     }
 }

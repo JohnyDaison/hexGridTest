@@ -39,6 +39,16 @@ function HexGrid() constructor {
             maxR = _position.r;   
         }
         
+        for(var _dirIndex = 0; _dirIndex < 6; _dirIndex++) {
+            var _dir = global.hexDirections[_dirIndex];
+            var _otherTile = getTile(_position.add(_dir));
+            
+            if (!is_undefined(_otherTile)) {
+                ds_list_add(_tile.neighbors, _otherTile);
+                ds_list_add(_otherTile.neighbors, _tile);
+            }
+        }
+        
         return _tile;
     }
     

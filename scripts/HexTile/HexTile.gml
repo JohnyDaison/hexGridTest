@@ -3,10 +3,10 @@ function HexTile(_position, _terrainType = TerrainType.Base) constructor {
     terrainType = _terrainType;
     terrainTypeInfo = global.terrainTypeMap[? _terrainType];
     height = 1;
-    //neighbors = ds_list_create();
+    neighbors = ds_list_create();
     
     static destroy = function() {
-        //ds_list_destroy(neighbors);
+        ds_list_destroy(neighbors);
     }
     
     static setTerrainType = function(_terrainType) {
