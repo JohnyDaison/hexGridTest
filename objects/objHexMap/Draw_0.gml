@@ -3,11 +3,11 @@
 //draw_set_alpha(0.5);
 //hexMap.drawHexBg();
 
-debugText = "";
+debugText = string("{0} ", objGameCamera.zoomLevel);
 
 var _highlightHex = hexMap.cursorToHex(mouse_x, mouse_y);
 if (!is_undefined(_highlightHex)) {
-    debugText = string("{0},{1}",_highlightHex.q, _highlightHex.r);
+    debugText += string("{0},{1}",_highlightHex.q, _highlightHex.r);
 
     var _hexTile = hexMap.grid.getTile(_highlightHex);
     if (!is_undefined(_hexTile)) {
