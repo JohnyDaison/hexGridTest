@@ -4,9 +4,18 @@ function HexMap(_orientation, _size, _origin) constructor {
     stackHeight = 1;
     highlightColor = c_white;
     highlightAlpha = 0.5;
+    units = ds_list_create();
     
     static destroy = function() {
         grid.destroy();
+        
+        var _unitCount = ds_list_size(units);
+        for (var i = 0; i < _unitCount; i++) {
+            var _unit = units[| i];
+            _unit.destroy();
+        }
+        
+        ds_list_destroy(units);
     }
     
     static getTileYOffset = function(_hexTile) {
@@ -126,6 +135,21 @@ function HexMap(_orientation, _size, _origin) constructor {
         }
     }
     
+    static drawHexUnit = function(_hexTile) {
+        if (_hexTile.unit == pointer_null) {
+            return;
+        }
+        
+        var _vector = hexToPixel(_hexTile.position);
+        var _unit = _hexTile.unit;
+        var _unitScale = _unit.type.scale;
+        var _yOffset = _unit.type.yOffset;
+        
+        draw_sprite_ext(_unit.animSprite, _unit.animProgress,
+            _vector.x, _vector.y + _unitScale*_yOffset - (_hexTile.height - 1) * stackHeight,
+            _unitScale * _unit.facing, _unitScale, 0, c_white, 1);
+    }
+    
     static drawHexes = function(_highlightHex) {
         for (var _r = grid.minR; _r <= grid.maxR; _r++) {
             for (var _q = grid.minQ; _q <= grid.maxQ; _q++) {
@@ -148,7 +172,38 @@ function HexMap(_orientation, _size, _origin) constructor {
                 
                     drawFlatHex(_hex, getTileYOffset(_hexTile));
                 }
+                
+                drawHexUnit(_hexTile);
             }
+        }
+    }
+    
+    static addTile = function (_q, _r, _terrainType, _height = 1) {
+        var _tile = grid.addTile(new HexVector(_q, _r));
+        _tile.setTerrainType(_terrainType);
+        _tile.height = _height;
+        
+        return _tile;
+    }
+    
+    static addUnit = function(_hexTile, _unitType) {
+        if (_hexTile.unit != pointer_null) {
+            return false;
+        }
+        
+        _hexTile.unit = new Unit(_unitType);
+        ds_list_add(units, _hexTile.unit);
+        
+        return true;
+    }
+    
+    static unitsAnimUpdate = function () {
+        var _unitCount = ds_list_size(units);
+        
+        for (var i = 0; i < _unitCount; i++) {
+            var _unit = units[| i];
+            
+            _unit.animUpdate();
         }
     }
 }

@@ -7,7 +7,7 @@ baseViewportWidth = 1366;
 baseViewportHeight = 768;
 zoomLevel = 1;
 minZoomLevel = 1;
-maxZoomLevel = 8;
+maxZoomLevel = 4;
 zoomInCoef = 0.8;
 zoomOutCoef = 1.2;
 

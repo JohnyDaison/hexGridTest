@@ -24,11 +24,11 @@ function HexGrid() constructor {
         _column[? _position.r] = _tile;
         
         if (is_undefined(minQ) || _position.q < minQ) {
-            minQ = _position.q;   
+            minQ = _position.q;
         }
         
         if (is_undefined(maxQ) || _position.q > maxQ) {
-            maxQ = _position.q;   
+            maxQ = _position.q;
         }
         
         if (is_undefined(minR) || _position.r < minR) {
@@ -36,7 +36,7 @@ function HexGrid() constructor {
         }
         
         if (is_undefined(maxR) || _position.r > maxR) {
-            maxR = _position.r;   
+            maxR = _position.r;
         }
         
         for(var _dirIndex = 0; _dirIndex < 6; _dirIndex++) {
@@ -55,7 +55,7 @@ function HexGrid() constructor {
     static getTile = function(_position) {
         var _column = tileGrid[? _position.q];
         if (is_undefined(_column)) {
-            return undefined;   
+            return undefined;
         }
         
         var _tile = _column[? _position.r];
