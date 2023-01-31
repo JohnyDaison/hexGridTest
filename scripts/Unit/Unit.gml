@@ -1,10 +1,18 @@
 function Unit(_unitType) constructor {
     type = global.unitTypeMap[? _unitType];
     facing = 1;
+    myTile = pointer_null;
     
     self.setAnimState(UnitAnimState.Idle);
     
-    static destroy = function () {};
+    static toString = function() {
+        var _typeName = type.name;
+        return string("{0}", _typeName);
+    }
+    
+    static destroy = function () {
+        myTile = pointer_null;
+    };
     
     static setAnimState = function (_state) {
         var _animSprite = type.getAnim(_state);

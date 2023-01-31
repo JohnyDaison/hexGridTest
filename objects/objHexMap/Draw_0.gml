@@ -5,7 +5,7 @@
 
 debugText = string("{0} ", objGameCamera.zoomLevel);
 
-var _highlightHex = hexMap.cursorToHex(mouse_x, mouse_y);
+var _highlightHex = selectedHex;
 if (!is_undefined(_highlightHex)) {
     debugText += string("Hex {0},{1}",_highlightHex.q, _highlightHex.r);
 
@@ -18,7 +18,15 @@ if (!is_undefined(_highlightHex)) {
     debugText += string("Pos {0},{1}",_hexPos.q, _hexPos.r);
 }
 
-hexMap.drawHexes(_highlightHex);
+debugText += "\n";
+debugText += string("{0} {1}", string(selectedUnit), string(moveTargetTile));
+
+var _movementTile = undefined;
+if (selectedUnit != pointer_null) {
+    _movementTile = selectedUnit.myTile;
+}
+
+hexMap.drawHexes(_highlightHex, _movementTile);
 
 draw_sprite(sprCrosshair, 0, mouse_x, mouse_y);
 

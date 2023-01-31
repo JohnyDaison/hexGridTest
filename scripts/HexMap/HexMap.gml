@@ -3,6 +3,7 @@ function HexMap(_orientation, _size, _origin) constructor {
     grid = new HexGrid();
     stackHeight = 1;
     highlightColor = c_white;
+    highlightMoveColor = merge_color(c_white, c_yellow, 0.8);
     highlightAlpha = 0.5;
     units = ds_list_create();
     
@@ -150,7 +151,7 @@ function HexMap(_orientation, _size, _origin) constructor {
             _unitScale * _unit.facing, _unitScale, 0, c_white, 1);
     }
     
-    static drawHexes = function(_highlightHex) {
+    static drawHexes = function(_highlightHex, _movementTile) {
         for (var _r = grid.minR; _r <= grid.maxR; _r++) {
             for (var _q = grid.minQ; _q <= grid.maxQ; _q++) {
                 var _hex = new HexVector(_q,_r);
@@ -165,10 +166,16 @@ function HexMap(_orientation, _size, _origin) constructor {
                 drawHexTile(_hexTile);
                 
                 var _drawHighlight = !is_undefined(_highlightHex) && _hex.equals(_highlightHex);
+                var _highlightColor = highlightColor;
+                
+                if (!is_undefined(_movementTile) && _hexTile == _movementTile) {
+                    _drawHighlight = true;
+                    _highlightColor = highlightMoveColor;
+                }
                 
                 if (_drawHighlight) {
                     draw_set_alpha(highlightAlpha);
-                    draw_set_color(highlightColor);
+                    draw_set_color(_highlightColor);
                 
                     drawFlatHex(_hex, getTileYOffset(_hexTile));
                 }
@@ -193,6 +200,44 @@ function HexMap(_orientation, _size, _origin) constructor {
         
         _hexTile.unit = new Unit(_unitType);
         ds_list_add(units, _hexTile.unit);
+        _hexTile.unit.myTile = _hexTile;
+        
+        return true;
+    }
+    
+    static placeUnit = function(_hexTile, _unit) {
+        if (_hexTile.unit != pointer_null) {
+            return false;
+        }
+        
+        _hexTile.unit = _unit;
+        _hexTile.unit.myTile = _hexTile;
+        
+        return true;
+    }
+    
+    static displaceUnit = function(_unit) {
+        var _hexTile = _unit.myTile;
+        if (_hexTile == pointer_null) {
+            return false;
+        }
+        
+        _hexTile.unit = pointer_null;
+        _unit.myTile = pointer_null;
+        
+        return true;
+    }
+    
+    static deleteUnit = function(_unit) {
+        var _hexTile = _unit.myTile;
+        
+        if (_hexTile != pointer_null) {
+            _hexTile.unit = pointer_null;
+        }
+        
+        _unit.destroy();
+        
+        ds_list_delete(units, ds_list_find_index(units, _unit));
         
         return true;
     }

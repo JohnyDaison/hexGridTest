@@ -6,6 +6,11 @@ function HexTile(_position, _terrainType = TerrainType.Base) constructor {
     neighbors = ds_list_create();
     unit = pointer_null;
     
+    static toString = function() {
+        var _typeName = terrainTypeInfo.name;
+        return string("{0}", _typeName);
+    }
+    
     static destroy = function() {
         ds_list_destroy(neighbors);
     }
