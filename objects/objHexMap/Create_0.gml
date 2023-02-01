@@ -5,9 +5,11 @@ debugText = "TEST";
 hexMap = new HexMap(layout_flat, tileSize, startPosition);
 hexMap.stackHeight = 60;
 
-selectedHex = undefined;
+cursorHex = undefined;
+cursorPos = undefined;
+cursorTile = undefined;
 selectedUnit = pointer_null;
-moveTargetTile = undefined;
+moveTargetTile = pointer_null;
 
 createTestTiles = function() {
     var _swordSkeleton = hexMap.addTile(-1, 0, TerrainType.Snow);

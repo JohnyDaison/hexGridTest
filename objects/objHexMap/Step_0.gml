@@ -1,27 +1,27 @@
 hexMap.unitsAnimUpdate();
 
-selectedHex = hexMap.cursorToHex(mouse_x, mouse_y);
+cursorHex = hexMap.cursorToHex(mouse_x, mouse_y);
+cursorPos = hexMap.pixelToHex(mouse_x, mouse_y);
+cursorTile = undefined;
 
-if (!is_undefined(selectedHex)) {
+if (!is_undefined(cursorHex)) {
+    cursorTile = hexMap.grid.getTile(cursorHex);
+    
     if (mouse_check_button_pressed(mb_left)) {
-        var _hexTile = hexMap.grid.getTile(selectedHex);
-        
         if (selectedUnit == pointer_null) {
-            selectedUnit = _hexTile.unit;
-        } else if (_hexTile.unit == pointer_null) {
-            moveTargetTile = _hexTile;
-        } else if (_hexTile.unit == selectedUnit) {
+            selectedUnit = cursorTile.unit;
+        } else if (cursorTile.unit == pointer_null) {
+            moveTargetTile = cursorTile;
+        } else if (cursorTile.unit == selectedUnit) {
             selectedUnit = pointer_null;
         }
     }
 }
 
-if (selectedUnit != pointer_null && !is_undefined(moveTargetTile)) {
-    var _originTile = selectedUnit.myTile;
-    
+if (selectedUnit != pointer_null && moveTargetTile != pointer_null) {
     hexMap.displaceUnit(selectedUnit);
     hexMap.placeUnit(moveTargetTile, selectedUnit);
     
     selectedUnit = pointer_null;
-    moveTargetTile = undefined;
+    moveTargetTile = pointer_null;
 }

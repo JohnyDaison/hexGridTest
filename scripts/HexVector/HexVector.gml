@@ -1,6 +1,9 @@
 global.hexDirections = [new HexVector(1, 0), new HexVector(1, -1), new HexVector(0, -1), new HexVector(-1, 0), new HexVector(-1, 1), new HexVector(0, 1)];
 global.hexDirectionsDown = [global.hexDirections[0], global.hexDirections[4], global.hexDirections[5]];
 
+/// @function HexVector(_q, _r)
+/// @param {Real} _q 
+/// @param {Real} _r
 function HexVector(_q, _r) constructor {
     q = _q;
     r = _r;
