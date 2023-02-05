@@ -70,3 +70,28 @@ function randomTerrainGenerator(_q, _r, _hexMap, _options) {
     
     return { type: _type, height: _height };
 }
+
+function wavesTerrainGenerator(_q, _r, _hexMap, _options) {
+    var _type = TerrainType.Water;
+    var _height = undefined;
+    var _maxHeight = 3;
+    var _maxHeightOffset = _maxHeight - 1;
+    var _waveLength = 5;
+    var _waveLengthMaxIndex = _waveLength - 1;
+    
+    if (!is_undefined(_options)) {
+        if (_options.height) {
+            var _rem = abs(_r mod _waveLengthMaxIndex);
+            
+            var _ratio = _rem / _waveLengthMaxIndex;
+            if (_ratio > 0.5) {
+                _ratio = 1 - _ratio;
+            }
+            _ratio *= 2;
+            
+            _height = 1 + round(_ratio * _maxHeightOffset);
+        }
+    }
+    
+    return { type: _type, height: _height };
+}
