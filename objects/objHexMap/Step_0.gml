@@ -8,16 +8,6 @@ var _paintPos = cursorPos;
 if (!is_undefined(cursorHex)) {
     cursorTile = hexMap.grid.getTile(cursorHex);
     _paintPos = cursorHex;
-    
-    if (mouse_check_button_pressed(mb_left)) {
-        if (selectedUnit == pointer_null) {
-            selectedUnit = cursorTile.unit;
-        } else if (cursorTile.unit == pointer_null) {
-            moveTargetTile = cursorTile;
-        } else if (cursorTile.unit == selectedUnit) {
-            selectedUnit = pointer_null;
-        }
-    }
 }
 
 if (mouse_check_button(mb_right)) {
