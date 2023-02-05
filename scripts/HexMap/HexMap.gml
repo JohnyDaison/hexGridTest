@@ -6,6 +6,7 @@ function HexMap(_orientation, _size, _origin) constructor {
     highlightMoveColor = merge_color(c_white, c_yellow, 0.8);
     highlightAlpha = 0.5;
     units = ds_list_create();
+    terrainPainter = new TerrainPainter(self);
     
     static destroy = function() {
         grid.destroy();
@@ -186,11 +187,19 @@ function HexMap(_orientation, _size, _origin) constructor {
     }
     
     static addTile = function (_q, _r, _terrainType, _height = 1) {
-        var _tile = grid.addTile(new HexVector(_q, _r));
-        _tile.setTerrainType(_terrainType);
-        _tile.height = _height;
+        var _hexTile = grid.addTile(new HexVector(_q, _r));
         
-        return _tile;
+        if (is_undefined(_hexTile)) {
+            return pointer_null;   
+        }
+        _hexTile.setTerrainType(_terrainType);
+        _hexTile.height = _height;
+        
+        return _hexTile;
+    }
+    
+    static paintTerrain = function (_centerHex, _brush, _generatorFunction, _options = undefined) {
+        terrainPainter.paintTerrain(_centerHex, _brush, _generatorFunction, _options);
     }
     
     static addUnit = function(_hexTile, _unitType) {

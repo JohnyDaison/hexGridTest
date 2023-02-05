@@ -11,6 +11,10 @@ cursorTile = undefined;
 selectedUnit = pointer_null;
 moveTargetTile = pointer_null;
 
+activeTerrainBrush = new TerrainBrush(TerrainBrushShape.Hexagon, 2, 1);
+terrainGeneratorOptions = { height: true };
+lastPaintedPos = undefined;
+
 createTestTiles = function() {
     var _swordSkeleton = hexMap.addTile(-1, 0, TerrainType.Snow);
     hexMap.addUnit(_swordSkeleton, UnitType.SkeletonSwordBasic);
@@ -37,6 +41,8 @@ createTestTiles = function() {
     
     var _spider = hexMap.addTile(2, 0, TerrainType.Rock, 2);
     hexMap.addUnit(_spider, UnitType.SpiderBasic);
+    
+    hexMap.paintTerrain(new HexVector(0, 0), new TerrainBrush(TerrainBrushShape.Hexagon, 4, 3, 1), randomTerrainGenerator);
 }
 
 createTestTiles();

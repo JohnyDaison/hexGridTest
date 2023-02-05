@@ -8,7 +8,7 @@ function HexGrid() constructor {
     
     static addTile = function(_position) {
         if (!is_undefined(getTile(_position))) {
-            return false;
+            return undefined;
         }
 
         var _tile = new HexTile(_position);
@@ -59,6 +59,17 @@ function HexGrid() constructor {
         }
         
         var _tile = _column[? _position.r];
+        
+        return _tile;
+    }
+    
+    static getTileQR = function(_q, _r) {
+        var _column = tileGrid[? _q];
+        if (is_undefined(_column)) {
+            return undefined;
+        }
+        
+        var _tile = _column[? _r];
         
         return _tile;
     }

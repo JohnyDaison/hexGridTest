@@ -1,5 +1,8 @@
 /// @description DEBUG TEXT
-debugText = string("{0} ", objGameCamera.zoomLevel);
+debugText = "";
+debugText += string("{0} | {1}\n", fps, string_format(fps_real, 4, 0));
+
+debugText += string("{0} ", objGameCamera.zoomLevel);
 
 if (!is_undefined(cursorHex)) {
     debugText += string("Hex {0},{1}", cursorHex.q, cursorHex.r);

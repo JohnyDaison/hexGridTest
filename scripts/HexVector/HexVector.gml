@@ -29,12 +29,47 @@ function HexVector(_q, _r) constructor {
         return new HexVector(q / _otherVector.q, r / _otherVector.r);
     }
     
+    static scale = function (_factor) {
+        return new HexVector(q * _factor, r * _factor);
+    }
+    
+    static neighbor = function (_directionIndex) {
+        return add(global.hexDirections[_directionIndex]);
+    }
+    
     static length = function () {
         return (abs(q) + abs(r) + abs(s)) / 2;
     }
     
     static distance = function (_otherVector) {
         return subtract(_otherVector).length();
+    }
+    
+    static getRing = function (_radius) {
+        var _results = [];
+        var _c = 0;
+
+        var _hex = self.add(global.hexDirections[4].scale(_radius));
+        for (var _side = 0; _side < 6; _side++) {
+            for (var _hexIndex = 0; _hexIndex < _radius; _hexIndex++) {
+                _results[_c] = _hex;
+                _hex = _hex.neighbor(_side);
+                _c++;
+            }
+        }
+
+        return _results;
+    }
+    
+    static getSpiral = function (_radius) {
+        var _results = [self];
+        
+        for (var _currentRadius = 0; _currentRadius <= _radius; _currentRadius++) {
+            var _ringArray = self.getRing(_currentRadius);
+            _results = array_concat(_results, _ringArray);
+        }
+        
+        return _results;
     }
     
     static makeRound = function () {
