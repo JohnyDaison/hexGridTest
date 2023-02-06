@@ -11,6 +11,7 @@ function UnitTypeData(_id, _name) constructor {
     
     scale = 1;
     yOffset = 0;
+    animMovementSpeed = 1000;
     animationMap = ds_map_create();
     
     static getAnim = function(_state) {

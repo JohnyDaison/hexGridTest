@@ -3,6 +3,7 @@ function Unit(_unitType) constructor {
     scale = type.scale;
     facing = 1;
     currentTile = pointer_null;
+    loopAnimState = undefined;
     
     self.setAnimState(UnitAnimState.Idle);
     
@@ -15,7 +16,7 @@ function Unit(_unitType) constructor {
         currentTile = pointer_null;
     };
     
-    static setAnimState = function (_state) {
+    static setAnimState = function (_state, _loop = false) {
         var _animSprite = type.getAnim(_state);
         if (is_undefined(_animSprite)) {
             return false;
@@ -26,6 +27,12 @@ function Unit(_unitType) constructor {
         animProgress = 0;
         animLength = sprite_get_number(animSprite);
         animSpeed = sprite_get_speed(animSprite) / 1000; // sprites have to use frames per second, not per game frame!
+        
+        if (_loop) {
+            loopAnimState = _state;
+        } else {
+            loopAnimState = undefined;
+        }
         
         return true;
     }
@@ -43,7 +50,11 @@ function Unit(_unitType) constructor {
     }
     
     static onAnimEnd = function () {
-        setAnimState(choose(UnitAnimState.Idle, UnitAnimState.Moving, UnitAnimState.Attacking, UnitAnimState.ReceivingHit, UnitAnimState.Death));
+        if (!is_undefined(loopAnimState)) {
+            setAnimState(loopAnimState, true);
+        } else {
+            setAnimState(choose(UnitAnimState.Idle, UnitAnimState.Moving, UnitAnimState.Attacking, UnitAnimState.ReceivingHit, UnitAnimState.Death));
+        }
     };
     
     static draw = function (_x, _y) {

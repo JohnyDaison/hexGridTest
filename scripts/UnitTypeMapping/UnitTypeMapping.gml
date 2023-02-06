@@ -17,6 +17,7 @@ function landUnitType(_id, _name) {
     
     _unitType.ground = true;
     _unitType.mobile = true;
+    _unitType.animMovementSpeed = 300;
     
     return _unitType;
 }
@@ -27,6 +28,7 @@ function flyingUnitType(_id, _name) {
     _unitType.flying = true;
     _unitType.mobile = true;
     _unitType.yOffset = -100;
+    _unitType.animMovementSpeed = 600;
     
     return _unitType;
 }

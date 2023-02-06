@@ -8,6 +8,7 @@ function HexMap(_orientation, _size, _origin) constructor {
     units = ds_list_create();
     gameAnimations = ds_list_create();
     terrainPainter = new TerrainPainter(self);
+    drawTileCoords = true;
     
     static destroy = function() {
         grid.destroy();
@@ -204,6 +205,17 @@ function HexMap(_orientation, _size, _origin) constructor {
                     draw_set_color(_highlightColor);
                 
                     drawFlatHex(_hex, getTileYOffset(_hexTile));
+                }
+                
+                if (drawTileCoords) {
+                    draw_set_alpha(1);
+                    draw_set_color(c_black);
+                    draw_set_font(fontDebug);
+                    draw_set_halign(fa_center);
+                
+                    var _center = getTileXY(_hexTile);
+                    var _coordsOffset = 35;
+                    draw_text(_center.x, _center.y + _coordsOffset, string("[{0}, {1}]", _q, _r));
                 }
                 
                 drawHexUnit(_hexTile);
