@@ -6,7 +6,7 @@
 var _highlightHex = cursorHex;
 var _movementTile = undefined;
 if (selectedUnit != pointer_null) {
-    _movementTile = selectedUnit.myTile;
+    _movementTile = selectedUnit.currentTile;
 }
 
 hexMap.drawHexes(_highlightHex, _movementTile);

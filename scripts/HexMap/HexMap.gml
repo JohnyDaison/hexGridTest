@@ -6,15 +6,26 @@ function HexMap(_orientation, _size, _origin) constructor {
     highlightMoveColor = merge_color(c_white, c_yellow, 0.8);
     highlightAlpha = 0.5;
     units = ds_list_create();
+    gameAnimations = ds_list_create();
     terrainPainter = new TerrainPainter(self);
     
     static destroy = function() {
         grid.destroy();
         
+        var _gameAnimationCount = ds_list_size(gameAnimations);
+        for (var i = _gameAnimationCount - 1; i >= 0; i--) {
+            var _gameAnimation = gameAnimations[| i];
+            _gameAnimation.destroy();
+            delete _gameAnimation;
+        }
+        
+        ds_list_destroy(gameAnimations);
+        
         var _unitCount = ds_list_size(units);
         for (var i = 0; i < _unitCount; i++) {
             var _unit = units[| i];
             _unit.destroy();
+            delete _unit;
         }
         
         ds_list_destroy(units);
@@ -22,6 +33,12 @@ function HexMap(_orientation, _size, _origin) constructor {
     
     static getTileYOffset = function(_hexTile) {
         return (_hexTile.height - 1) * -stackHeight;
+    }
+    
+    static getTileXY = function(_hexTile) {
+        var _vector = hexToPixel(_hexTile.position);
+        
+        return new Vector(_vector.x, _vector.y + getTileYOffset(_hexTile));
     }
     
     static pixelToHex = function(_x, _y, _yOffset = 0) {
@@ -142,14 +159,22 @@ function HexMap(_orientation, _size, _origin) constructor {
             return;
         }
         
-        var _vector = hexToPixel(_hexTile.position);
+        var _vector = getTileXY(_hexTile);
         var _unit = _hexTile.unit;
-        var _unitScale = _unit.type.scale;
-        var _yOffset = _unit.type.yOffset;
         
-        draw_sprite_ext(_unit.animSprite, _unit.animProgress,
-            _vector.x, _vector.y + _unitScale*_yOffset - (_hexTile.height - 1) * stackHeight,
-            _unitScale * _unit.facing, _unitScale, 0, c_white, 1);
+        _unit.draw(_vector.x, _vector.y);
+    }
+    
+    static drawHexAnimations = function(_hexTile) {
+        var _count = ds_list_size(_hexTile.animations);
+        
+        for(var i = 0; i < _count; i++) {
+            var _animation = _hexTile.animations[| i];
+            
+            if (_animation.started && !_animation.ended) {
+                _animation.draw(_hexTile);
+            }
+        }
     }
     
     static drawHexes = function(_highlightHex, _movementTile) {
@@ -182,6 +207,7 @@ function HexMap(_orientation, _size, _origin) constructor {
                 }
                 
                 drawHexUnit(_hexTile);
+                drawHexAnimations(_hexTile);
             }
         }
     }
@@ -209,7 +235,7 @@ function HexMap(_orientation, _size, _origin) constructor {
         
         _hexTile.unit = new Unit(_unitType);
         ds_list_add(units, _hexTile.unit);
-        _hexTile.unit.myTile = _hexTile;
+        _hexTile.unit.currentTile = _hexTile;
         
         return true;
     }
@@ -220,25 +246,25 @@ function HexMap(_orientation, _size, _origin) constructor {
         }
         
         _hexTile.unit = _unit;
-        _hexTile.unit.myTile = _hexTile;
+        _hexTile.unit.currentTile = _hexTile;
         
         return true;
     }
     
     static displaceUnit = function(_unit) {
-        var _hexTile = _unit.myTile;
+        var _hexTile = _unit.currentTile;
         if (_hexTile == pointer_null) {
             return false;
         }
         
         _hexTile.unit = pointer_null;
-        _unit.myTile = pointer_null;
+        _unit.currentTile = pointer_null;
         
         return true;
     }
     
     static deleteUnit = function(_unit) {
-        var _hexTile = _unit.myTile;
+        var _hexTile = _unit.currentTile;
         
         if (_hexTile != pointer_null) {
             _hexTile.unit = pointer_null;
@@ -251,6 +277,11 @@ function HexMap(_orientation, _size, _origin) constructor {
         return true;
     }
     
+    static animationUpdate = function () {
+        gameAnimationsUpdate();
+        unitsAnimUpdate();
+    }
+    
     static unitsAnimUpdate = function () {
         var _unitCount = ds_list_size(units);
         
@@ -258,6 +289,16 @@ function HexMap(_orientation, _size, _origin) constructor {
             var _unit = units[| i];
             
             _unit.animUpdate();
+        }
+    }
+    
+    static gameAnimationsUpdate = function () {
+        var _gameAnimationCount = ds_list_size(gameAnimations);
+        
+        for (var i = 0; i < _gameAnimationCount; i++) {
+            var _gameAnimation = gameAnimations[| i];
+            
+            _gameAnimation.update();
         }
     }
 }

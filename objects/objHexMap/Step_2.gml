@@ -1,4 +1,9 @@
-/// @description DEBUG TEXT
+/// @description ANIMATIONS, DEBUG TEXT
+
+// ANIMATIONS
+hexMap.animationUpdate();
+
+// DEBUG TEXT
 debugText = "";
 debugText += string("{0} | {1}\n", fps, string_format(fps_real, 4, 0));
 

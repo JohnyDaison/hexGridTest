@@ -1,5 +1,3 @@
-hexMap.unitsAnimUpdate();
-
 cursorHex = hexMap.cursorToHex(mouse_x, mouse_y);
 cursorPos = hexMap.pixelToHex(mouse_x, mouse_y);
 cursorTile = undefined;
@@ -17,12 +15,4 @@ if (mouse_check_button(mb_right)) {
     }
 } else {
     lastPaintedPos = undefined;
-}
-
-if (selectedUnit != pointer_null && moveTargetTile != pointer_null) {
-    hexMap.displaceUnit(selectedUnit);
-    hexMap.placeUnit(moveTargetTile, selectedUnit);
-    
-    selectedUnit = pointer_null;
-    moveTargetTile = pointer_null;
 }

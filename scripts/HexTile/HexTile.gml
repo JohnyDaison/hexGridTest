@@ -5,6 +5,7 @@ function HexTile(_position, _terrainType = TerrainType.Base) constructor {
     height = 1;
     neighbors = ds_list_create();
     unit = pointer_null;
+    animations = ds_list_create();
     
     static toString = function() {
         var _typeName = terrainTypeInfo.name;
@@ -13,6 +14,7 @@ function HexTile(_position, _terrainType = TerrainType.Base) constructor {
     
     static destroy = function() {
         ds_list_destroy(neighbors);
+        ds_list_destroy(animations);
     }
     
     static setTerrainType = function(_terrainType) {

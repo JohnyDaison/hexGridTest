@@ -1,7 +1,8 @@
 function Unit(_unitType) constructor {
     type = global.unitTypeMap[? _unitType];
+    scale = type.scale;
     facing = 1;
-    myTile = pointer_null;
+    currentTile = pointer_null;
     
     self.setAnimState(UnitAnimState.Idle);
     
@@ -11,7 +12,7 @@ function Unit(_unitType) constructor {
     }
     
     static destroy = function () {
-        myTile = pointer_null;
+        currentTile = pointer_null;
     };
     
     static setAnimState = function (_state) {
@@ -44,4 +45,12 @@ function Unit(_unitType) constructor {
     static onAnimEnd = function () {
         setAnimState(choose(UnitAnimState.Idle, UnitAnimState.Moving, UnitAnimState.Attacking, UnitAnimState.ReceivingHit, UnitAnimState.Death));
     };
+    
+    static draw = function (_x, _y) {
+        var _yOffset = type.yOffset;
+        
+        draw_sprite_ext(animSprite, animProgress,
+            _x, _y + scale * _yOffset,
+            scale * facing, scale, 0, c_white, 1);
+    }
 }
