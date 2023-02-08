@@ -14,11 +14,19 @@ function GameAnimation(_hexMap) constructor {
         if (!started) {
             animationStart();
             progress = 0;
+            started = true;
+                    
+            if(!is_undefined(onAnimStart))
+                onAnimStart();
         } else if (!paused && !ended) {
             progress += delta_time / 1000000;
             
             if (progress >= duration) {
                 animationEnd();
+                ended = true;
+                
+                if(!is_undefined(onAnimEnd))
+                    onAnimEnd();
             } else {
                 animationStep();
             }

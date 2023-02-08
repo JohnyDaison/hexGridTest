@@ -48,12 +48,8 @@ function BasicMovementAnimation(_hexMap, _unit, _endTile) : GameAnimation(_hexMa
             unit.facing = sign(_xDiff);
         }
         
-        started = true;
         hexMap.displaceUnit(unit);
         unit.setAnimState(UnitAnimState.Moving, true);
-        
-        if(!is_undefined(onAnimStart))
-            onAnimStart();
     }
     
     static animationStep = function() {
@@ -68,14 +64,10 @@ function BasicMovementAnimation(_hexMap, _unit, _endTile) : GameAnimation(_hexMa
     }
     
     static animationEnd = function() {
-        ended = true;
         hexMap.placeUnit(endTile, unit);
         setDrawingTile(pointer_null);
         
         unit.setAnimState(UnitAnimState.Idle);
-        
-        if(!is_undefined(onAnimEnd))
-            onAnimEnd();
     }
     
     static draw = function(_tile) {
