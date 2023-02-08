@@ -10,7 +10,6 @@ cursorPos = undefined;
 cursorTile = undefined;
 selectedUnit = pointer_null;
 moveTargetTile = pointer_null;
-movementAnimation = pointer_null;
 
 activeTerrainBrush = new TerrainBrush(TerrainBrushShape.Hexagon, 2, 1);
 terrainGeneratorOptions = { height: true };

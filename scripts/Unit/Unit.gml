@@ -2,8 +2,16 @@ function Unit(_unitType) constructor {
     type = global.unitTypeMap[? _unitType];
     scale = type.scale;
     facing = 1;
+    hexMap = pointer_null;
     currentTile = pointer_null;
     loopAnimState = undefined;
+    
+    actionQueue = ds_list_create();
+    currentAction = pointer_null;
+    lastAction = pointer_null;
+    actionStarted = false;
+    onActionStart = undefined;
+    onActionEnd = undefined;
     
     self.setAnimState(UnitAnimState.Idle);
     
@@ -14,6 +22,7 @@ function Unit(_unitType) constructor {
     
     static destroy = function () {
         currentTile = pointer_null;
+        ds_list_destroy(actionQueue);
     };
     
     static setAnimState = function (_state, _loop = false) {
@@ -63,5 +72,56 @@ function Unit(_unitType) constructor {
         draw_sprite_ext(animSprite, animProgress,
             _x, _y + scale * _yOffset,
             scale * facing, scale, 0, c_white, 1);
+    }
+    
+    static enqueueAction = function(_action) {
+        ds_list_add(actionQueue, _action);
+    }
+    
+    static startNextAction = function () {
+        if (currentAction != pointer_null) {
+            return;   
+        }
+        
+        var _nextAction = actionQueue[| 0];
+        
+        if (is_undefined(_nextAction)) {
+            return;
+        }
+        
+        currentAction = _nextAction;
+        actionStarted = false;
+        ds_list_delete(actionQueue, 0);
+        
+        if(!is_undefined(onActionStart))
+            onActionStart();
+    }
+    
+    static endCurrentAction = function () {
+        lastAction = currentAction;
+        currentAction = pointer_null;
+        
+        if(!is_undefined(onActionEnd))
+            onActionEnd();
+    }
+    
+    static handleCurrentAction = function () {
+        if (currentAction == pointer_null) {
+            return;
+        }
+        
+        if (!actionStarted) {
+            if (currentAction.type == ActionType.MoveToHex) {
+                moveToHex(currentAction.hex);
+            }
+            
+            actionStarted = true;
+        }
+    }
+    
+    static moveToHex = function (_hex) {
+        var _movementAnimation = new BasicMovementAnimation(hexMap, self, hexMap.getTile(_hex));
+    
+        _movementAnimation.onAnimEnd = method(self, endCurrentAction);
     }
 }

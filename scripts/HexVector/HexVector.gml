@@ -9,6 +9,10 @@ function HexVector(_q, _r) constructor {
     r = _r;
     s = -(_q+_r);
     
+    static toString = function() {
+        return string("[{0}, {1}]", q, r);
+    }
+    
     static equals = function (_otherVector) {
         return q == _otherVector.q && r == _otherVector.r && s == _otherVector.s;
     }

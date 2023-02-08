@@ -1,6 +1,7 @@
 /// @description ANIMATIONS, DEBUG TEXT
 
 // ANIMATIONS
+hexMap.gameUpdate();
 hexMap.animationUpdate();
 
 // DEBUG TEXT
@@ -18,3 +19,19 @@ if (!is_undefined(cursorHex)) {
 
 debugText += "\n";
 debugText += string("{0} {1}", string(selectedUnit), string(moveTargetTile));
+debugText += "\n";
+
+if (selectedUnit != pointer_null) {
+    if (selectedUnit.currentAction != pointer_null) {
+        debugText += string(selectedUnit.currentAction) + "\n";
+        debugText += "----------" + "\n";
+    }
+    
+    var _actionCount = ds_list_size(selectedUnit.actionQueue);
+    for(var i = 0; i < _actionCount; i++) {
+        var _action = selectedUnit.actionQueue[| i];
+        debugText += string(_action) + "\n";
+    }
+
+    debugText += "\n";
+}

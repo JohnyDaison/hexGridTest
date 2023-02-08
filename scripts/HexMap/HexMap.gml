@@ -236,6 +236,10 @@ function HexMap(_orientation, _size, _origin) constructor {
         return _hexTile;
     }
     
+    static getTile = function (_hex) {
+        return grid.getTile(_hex);
+    }
+    
     static paintTerrain = function (_centerHex, _brush, _generatorFunction, _options = undefined) {
         terrainPainter.paintTerrain(_centerHex, _brush, _generatorFunction, _options);
     }
@@ -247,6 +251,7 @@ function HexMap(_orientation, _size, _origin) constructor {
         
         _hexTile.unit = new Unit(_unitType);
         ds_list_add(units, _hexTile.unit);
+        _hexTile.unit.hexMap = self;
         _hexTile.unit.currentTile = _hexTile;
         
         return true;
@@ -276,11 +281,7 @@ function HexMap(_orientation, _size, _origin) constructor {
     }
     
     static deleteUnit = function(_unit) {
-        var _hexTile = _unit.currentTile;
-        
-        if (_hexTile != pointer_null) {
-            _hexTile.unit = pointer_null;
-        }
+        displaceUnit(_unit);
         
         _unit.destroy();
         
@@ -311,6 +312,16 @@ function HexMap(_orientation, _size, _origin) constructor {
             var _gameAnimation = gameAnimations[| i];
             
             _gameAnimation.update();
+        }
+    }
+    
+    static gameUpdate = function () {
+        var _unitCount = ds_list_size(units);
+        
+        for (var i = 0; i < _unitCount; i++) {
+            var _unit = units[| i];
+            
+            _unit.handleCurrentAction();
         }
     }
 }

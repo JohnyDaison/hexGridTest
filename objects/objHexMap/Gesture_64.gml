@@ -3,19 +3,21 @@
 if (!is_undefined(cursorHex)) {
     if (selectedUnit == pointer_null) {
         selectedUnit = cursorTile.unit;
-    } else if (moveTargetTile == pointer_null && cursorTile.unit == pointer_null) {
+    } else if (cursorTile.unit == pointer_null) {
         moveTargetTile = cursorTile;
     } else if (cursorTile.unit == selectedUnit) {
         selectedUnit = pointer_null;
     }
 }
 
-if (selectedUnit != pointer_null && moveTargetTile != pointer_null && movementAnimation == pointer_null) {
-    movementAnimation = new BasicMovementAnimation(hexMap, selectedUnit, moveTargetTile);
-    
-    movementAnimation.onAnimEnd = method(self, function () {
-        selectedUnit = pointer_null;
-        moveTargetTile = pointer_null;
-        movementAnimation = pointer_null
+if (selectedUnit != pointer_null && moveTargetTile != pointer_null) {
+    selectedUnit.enqueueAction(new MoveToHexAction(moveTargetTile.position));
+    selectedUnit.startNextAction();
+    selectedUnit.onActionEnd = method(self, function () {
+        selectedUnit.startNextAction();
+        if (selectedUnit.currentAction == pointer_null) {
+            selectedUnit = pointer_null;
+            moveTargetTile = pointer_null;
+        }
     });
 }
