@@ -6,22 +6,25 @@ hexMap.animationUpdate();
 
 // DEBUG TEXT
 debugText = "";
-debugText += string("{0} | {1}\n", fps, string_format(fps_real, 4, 0));
+debugText += string("FPS {0} | {1}\n", fps, string_format(fps_real, 3, 0));
 
-debugText += string("{0} ", objGameCamera.zoomLevel);
+debugText += string("Zoom: {0}\n", objGameCamera.zoomLevel);
 
 if (!is_undefined(cursorHex)) {
-    debugText += string("Hex {0},{1}", cursorHex.q, cursorHex.r);
-    debugText += string(": {0}", ds_list_size(cursorTile.neighbors));
+    debugText += string("Hex {0}", cursorHex);
+    debugText += string(": {0}", cursorTile);
 } else {
-    debugText += string("Pos {0},{1}", cursorPos.q, cursorPos.r);
+    debugText += string("Pos {0}", cursorPos);
 }
 
-debugText += "\n";
-debugText += string("{0} {1}", string(selectedUnit), string(moveTargetTile));
-debugText += "\n";
+debugText += "\n\n";
+debugText += string("{0}\n", string(selectedUnit));
 
 if (selectedUnit != pointer_null) {
+    debugText += string("Move to: {0} {1}", moveTargetTile ? string(moveTargetTile.position) : "", string(moveTargetTile));
+    debugText += "\n";
+    
+    debugText += "Actions:\n";
     if (selectedUnit.currentAction != pointer_null) {
         debugText += string(selectedUnit.currentAction) + "\n";
         debugText += "----------" + "\n";
