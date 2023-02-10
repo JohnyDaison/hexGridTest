@@ -15,9 +15,9 @@ function GameAnimation(_hexMap) constructor {
             animationStart();
             progress = 0;
             started = true;
-                    
+            
             if(!is_undefined(onAnimStart))
-                onAnimStart();
+                onAnimStart(self);
         } else if (!paused && !ended) {
             progress += delta_time / 1000000;
             
@@ -26,7 +26,7 @@ function GameAnimation(_hexMap) constructor {
                 ended = true;
                 
                 if(!is_undefined(onAnimEnd))
-                    onAnimEnd();
+                    onAnimEnd(self);
             } else {
                 animationStep();
             }

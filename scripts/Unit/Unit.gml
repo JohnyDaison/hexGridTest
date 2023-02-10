@@ -120,8 +120,13 @@ function Unit(_unitType) constructor {
     }
     
     static moveToHex = function (_hex) {
-        var _movementAnimation = new BasicMovementAnimation(hexMap, self, hexMap.getTile(_hex));
+        var _endTile = hexMap.getTile(_hex);
+        var _movementAnimation = new BasicMovementAnimation(hexMap, self, _endTile);
+        hexMap.displaceUnit(self);
     
-        _movementAnimation.onAnimEnd = method(self, endCurrentAction);
+        _movementAnimation.onAnimEnd = method(self, function (_animation) {
+            hexMap.placeUnit(_animation.endTile, self);
+            endCurrentAction();
+        });
     }
 }

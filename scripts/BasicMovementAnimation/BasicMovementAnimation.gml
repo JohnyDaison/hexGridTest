@@ -48,7 +48,6 @@ function BasicMovementAnimation(_hexMap, _unit, _endTile) : GameAnimation(_hexMa
             unit.facing = sign(_xDiff);
         }
         
-        hexMap.displaceUnit(unit);
         unit.setAnimState(UnitAnimState.Moving, true);
     }
     
@@ -64,7 +63,6 @@ function BasicMovementAnimation(_hexMap, _unit, _endTile) : GameAnimation(_hexMa
     }
     
     static animationEnd = function() {
-        hexMap.placeUnit(endTile, unit);
         setDrawingTile(pointer_null);
         
         unit.setAnimState(UnitAnimState.Idle);
