@@ -157,15 +157,15 @@ function HexMap(_orientation, _size, _origin) constructor {
         }
     }
     
-    static drawHexUnit = function(_hexTile) {
-        if (_hexTile.unit == pointer_null) {
-            return;
-        }
-        
+    static drawHexUnits = function(_hexTile) {
+        var _count = ds_list_size(_hexTile.units);
         var _vector = getTileXY(_hexTile);
-        var _unit = _hexTile.unit;
         
-        _unit.draw(_vector.x, _vector.y);
+        for(var i = _count - 1; i >= 0; i--) {
+            var _unit = _hexTile.units[| i];
+            
+            _unit.draw(_vector.x, _vector.y);
+        }
     }
     
     static drawHexAnimations = function(_hexTile) {
@@ -220,7 +220,7 @@ function HexMap(_orientation, _size, _origin) constructor {
                     draw_text(_center.x, _center.y + _coordsOffset, string("[{0}, {1}]", _q, _r));
                 }
                 
-                drawHexUnit(_hexTile);
+                drawHexUnits(_hexTile);
                 drawHexAnimations(_hexTile);
             }
         }
@@ -248,27 +248,17 @@ function HexMap(_orientation, _size, _origin) constructor {
     }
     
     static addUnit = function(_hexTile, _unitType) {
-        if (_hexTile.unit != pointer_null) {
-            return false;
-        }
+        var _unit = new Unit(_unitType);
+        ds_list_add(units, _unit);
+        _unit.hexMap = self;
         
-        _hexTile.unit = new Unit(_unitType);
-        ds_list_add(units, _hexTile.unit);
-        _hexTile.unit.hexMap = self;
-        _hexTile.unit.currentTile = _hexTile;
+        placeUnit(_hexTile, _unit);
         
         return true;
     }
     
     static placeUnit = function(_hexTile, _unit) {
-        if (_hexTile.unit != pointer_null) {
-            return false;
-        }
-        
-        _hexTile.unit = _unit;
-        _hexTile.unit.currentTile = _hexTile;
-        
-        return true;
+        return _hexTile.placeUnit(_unit);
     }
     
     static displaceUnit = function(_unit) {
@@ -277,8 +267,7 @@ function HexMap(_orientation, _size, _origin) constructor {
             return false;
         }
         
-        _hexTile.unit = pointer_null;
-        _unit.currentTile = pointer_null;
+        _hexTile.displaceUnit(_unit);
         
         return true;
     }

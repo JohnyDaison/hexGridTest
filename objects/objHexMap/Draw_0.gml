@@ -5,7 +5,7 @@
 
 var _highlightHex = cursorHex;
 var _movementTile = pointer_null;
-if (selectedUnit != pointer_null) {
+if (selectedUnit != pointer_null && selectedUnit.currentAction == pointer_null) {
     _movementTile = selectedUnit.currentTile;
 }
 
