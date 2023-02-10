@@ -1,10 +1,10 @@
 cursorHex = hexMap.cursorToHex(mouse_x, mouse_y);
 cursorPos = hexMap.pixelToHex(mouse_x, mouse_y);
-cursorTile = undefined;
+cursorTile = pointer_null;
 var _paintPos = cursorPos;
 
 if (!is_undefined(cursorHex)) {
-    cursorTile = hexMap.grid.getTile(cursorHex);
+    cursorTile = hexMap.getTile(cursorHex);
     _paintPos = cursorHex;
 }
 

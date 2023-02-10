@@ -7,8 +7,8 @@ function HexGrid() constructor {
     maxR = undefined;
     
     static addTile = function(_position) {
-        if (!is_undefined(getTile(_position))) {
-            return undefined;
+        if (getTile(_position) != pointer_null) {
+            return pointer_null;
         }
 
         var _tile = new HexTile(_position);
@@ -43,7 +43,7 @@ function HexGrid() constructor {
             var _dir = global.hexDirections[_dirIndex];
             var _otherTile = getTile(_position.add(_dir));
             
-            if (!is_undefined(_otherTile)) {
+            if (_otherTile != pointer_null) {
                 ds_list_add(_tile.neighbors, _otherTile);
                 ds_list_add(_otherTile.neighbors, _tile);
             }
@@ -55,10 +55,13 @@ function HexGrid() constructor {
     static getTile = function(_position) {
         var _column = tileGrid[? _position.q];
         if (is_undefined(_column)) {
-            return undefined;
+            return pointer_null;
         }
         
         var _tile = _column[? _position.r];
+        if (is_undefined(_tile)) {
+            return pointer_null;
+        }
         
         return _tile;
     }

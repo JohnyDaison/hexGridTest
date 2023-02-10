@@ -61,11 +61,13 @@ function HexMap(_orientation, _size, _origin) constructor {
     static isCursorOverHex = function(_x, _y, _hex) {
         var _hexTile = grid.getTile(_hex);
         
-        if (!is_undefined(_hexTile)) {
-            var _cursorHex = pixelToHex(_x, _y, getTileYOffset(_hexTile));
-            if (_cursorHex.equals(_hex)) {
-                return true;
-            }
+        if (_hexTile == pointer_null) {
+            return false;
+        }
+        
+        var _cursorHex = pixelToHex(_x, _y, getTileYOffset(_hexTile));
+        if (_cursorHex.equals(_hex)) {
+            return true;
         }
         
         return false;
@@ -135,7 +137,7 @@ function HexMap(_orientation, _size, _origin) constructor {
             var _rOffset = floor(_r / 2);
             for (var _q = grid.minQ; _q <= grid.maxQ; _q++) {
                 var _hex = new HexVector(_q,_r);
-                if (is_undefined(grid.getTile(_hex))) {
+                if (grid.getTile(_hex) == pointer_null) {
                     continue;
                 }
                 
@@ -184,7 +186,7 @@ function HexMap(_orientation, _size, _origin) constructor {
                 var _hex = new HexVector(_q,_r);
                 var _hexTile = grid.getTile(_hex)
                 
-                if (is_undefined(_hexTile) || _hexTile.terrainType == TerrainType.Base) {
+                if (_hexTile == pointer_null || _hexTile.terrainType == TerrainType.Base) {
                     continue;
                 }
                 
@@ -195,7 +197,7 @@ function HexMap(_orientation, _size, _origin) constructor {
                 var _drawHighlight = !is_undefined(_highlightHex) && _hex.equals(_highlightHex);
                 var _highlightColor = highlightColor;
                 
-                if (!is_undefined(_movementTile) && _hexTile == _movementTile) {
+                if (_movementTile != pointer_null && _hexTile == _movementTile) {
                     _drawHighlight = true;
                     _highlightColor = highlightMoveColor;
                 }
@@ -227,9 +229,10 @@ function HexMap(_orientation, _size, _origin) constructor {
     static addTile = function (_q, _r, _terrainType, _height = 1) {
         var _hexTile = grid.addTile(new HexVector(_q, _r));
         
-        if (is_undefined(_hexTile)) {
-            return pointer_null;   
+        if (_hexTile == pointer_null) {
+            return pointer_null;
         }
+        
         _hexTile.setTerrainType(_terrainType);
         _hexTile.height = _height;
         

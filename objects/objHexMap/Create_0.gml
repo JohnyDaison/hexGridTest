@@ -7,7 +7,7 @@ hexMap.stackHeight = 60;
 
 cursorHex = undefined;
 cursorPos = undefined;
-cursorTile = undefined;
+cursorTile = pointer_null;
 selectedUnit = pointer_null;
 moveTargetTile = pointer_null;
 

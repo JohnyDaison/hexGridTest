@@ -4,7 +4,7 @@
 //hexMap.drawHexBg();
 
 var _highlightHex = cursorHex;
-var _movementTile = undefined;
+var _movementTile = pointer_null;
 if (selectedUnit != pointer_null) {
     _movementTile = selectedUnit.currentTile;
 }
