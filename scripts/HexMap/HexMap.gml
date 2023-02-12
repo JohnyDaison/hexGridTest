@@ -316,4 +316,31 @@ function HexMap(_orientation, _size, _origin) constructor {
             _unit.handleCurrentAction();
         }
     }
+    
+    static findUnitPath = function (_unit, _fromHex, _toHex, _maxPathLength = 100) {
+        var _actionArray = [];
+        
+        var _startTile = getTile(_fromHex);
+        if (_startTile == pointer_null) {
+            return _actionArray;
+        }
+        
+        var _frontier = [];
+        var _currentTile = _startTile;
+        var _counter = 0;
+        
+        while(!_currentTile.position.equals(_toHex) && _counter < _maxPathLength) {
+            _frontier = _currentTile.neighbors;
+        
+            var _nextTileIndex = _toHex.findClosestTile(_frontier);
+            var _nextTile = _frontier[_nextTileIndex];
+        
+            array_push(_actionArray, new MoveToHexAction(_nextTile.position));
+            
+            _currentTile = _nextTile;
+            _counter++;
+        }
+        
+        return _actionArray;
+    }
 }

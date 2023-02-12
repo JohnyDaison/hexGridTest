@@ -44,8 +44,8 @@ function HexGrid() constructor {
             var _otherTile = getTile(_position.add(_dir));
             
             if (_otherTile != pointer_null) {
-                ds_list_add(_tile.neighbors, _otherTile);
-                ds_list_add(_otherTile.neighbors, _tile);
+                array_push(_tile.neighbors, _otherTile);
+                array_push(_otherTile.neighbors, _tile);
             }
         }
         

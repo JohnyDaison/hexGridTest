@@ -76,6 +76,24 @@ function HexVector(_q, _r) constructor {
         return _results;
     }
     
+    static findClosestTile = function (_array) {
+        var _count = array_length(_array);
+        var _minDistance = 0;
+        var _closestIndex = -1;
+        
+        for (var i = 0; i < _count; i++) {
+            var _tile = _array[i];
+            var _distance = self.distance(_tile.position);
+            
+            if (_closestIndex == -1 || _distance < _minDistance) {
+                _minDistance = _distance;
+                _closestIndex = i;
+            }
+        }
+        
+        return _closestIndex;
+    }
+    
     static makeRound = function () {
         var _q = round(q);
         var _r = round(r);

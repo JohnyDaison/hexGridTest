@@ -14,13 +14,10 @@ if (selectedUnit == pointer_null) {
 }
 
 if (selectedUnit != pointer_null && moveTargetTile != pointer_null) {
-    selectedUnit.enqueueAction(new MoveToHexAction(moveTargetTile.position));
+    selectedUnit.planMovementToHex(moveTargetTile.position);
     selectedUnit.startNextAction();
-    selectedUnit.onActionEnd = method(self, function () {
-        selectedUnit.startNextAction();
-        if (selectedUnit.currentAction == pointer_null) {
-            selectedUnit = pointer_null;
-            moveTargetTile = pointer_null;
-        }
+    selectedUnit.onPlanEnd = method(self, function () {
+        selectedUnit = pointer_null;
+        moveTargetTile = pointer_null;
     });
 }

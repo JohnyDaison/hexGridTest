@@ -3,7 +3,7 @@ function HexTile(_position, _terrainType = TerrainType.Base) constructor {
     terrainType = _terrainType;
     terrainTypeInfo = global.terrainTypeMap[? _terrainType];
     height = 1;
-    neighbors = ds_list_create();
+    neighbors = [];
     units = ds_list_create();
     animations = ds_list_create();
     
@@ -13,7 +13,6 @@ function HexTile(_position, _terrainType = TerrainType.Base) constructor {
     }
     
     static destroy = function() {
-        ds_list_destroy(neighbors);
         ds_list_destroy(units);
         ds_list_destroy(animations);
     }
@@ -30,6 +29,9 @@ function HexTile(_position, _terrainType = TerrainType.Base) constructor {
         
         ds_list_add(units, _unit);
         _unit.currentTile = self;
+        
+        if (_unit.plannedFinalPosition == pointer_null)
+            _unit.plannedFinalPosition = position;
         
         return true;
     }

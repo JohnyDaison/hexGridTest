@@ -4,14 +4,18 @@ function Unit(_unitType) constructor {
     facing = 1;
     hexMap = pointer_null;
     currentTile = pointer_null;
+    animState = undefined;
     loopAnimState = undefined;
     
     actionQueue = ds_list_create();
     currentAction = pointer_null;
     lastAction = pointer_null;
     actionStarted = false;
+    pauseActions = false;
     onActionStart = undefined;
     onActionEnd = undefined;
+    onPlanEnd = undefined;
+    plannedFinalPosition = pointer_null;
     
     self.setAnimState(UnitAnimState.Idle);
     
@@ -25,17 +29,22 @@ function Unit(_unitType) constructor {
         ds_list_destroy(actionQueue);
     };
     
+    static setNextAnimState = function (_state, _loop = false) {
+        nextAnimState = _state;
+        nextAnimLoop = _loop;
+    }
+    
     static setAnimState = function (_state, _loop = false) {
         var _animSprite = type.getAnim(_state);
         if (is_undefined(_animSprite)) {
             return false;
         }
         
-        animState = _state;
-        animSprite = _animSprite;
-        animProgress = 0;
-        animLength = sprite_get_number(animSprite);
-        animSpeed = sprite_get_speed(animSprite) / 1000; // sprites have to use frames per second, not per game frame!
+        setNextAnimState(_state, _loop);
+        
+        if (animState != _state) {
+            resetAnimState(_state, _animSprite);
+        }
         
         if (_loop) {
             loopAnimState = _state;
@@ -46,23 +55,37 @@ function Unit(_unitType) constructor {
         return true;
     }
     
+    static resetAnimState = function (_state, _sprite, _progress = 0) {
+        if (!sprite_exists(_sprite)) {
+            return false;
+        }
+        
+        animState = _state;
+        animSprite = _sprite;
+        animProgress = _progress;
+        animLength = sprite_get_number(animSprite);
+        animSpeed = sprite_get_speed(animSprite) / 1000; // sprites have to use frames per second, not per game frame!
+        
+        return true;
+    }
+    
     static animUpdate = function () {
         animProgress += animSpeed * delta_time / 1000;
         
-        if (animProgress >= animLength) {
-            onAnimEnd();
-        }
+        if (nextAnimState != animState || nextAnimLoop != !is_undefined(loopAnimState))
+            setAnimState(nextAnimState, nextAnimLoop);
         
         if (animProgress >= animLength) {
-            setAnimState(UnitAnimState.Idle);
+            onAnimEnd();
         }
     }
     
     static onAnimEnd = function () {
         if (!is_undefined(loopAnimState)) {
-            setAnimState(loopAnimState, true);
+            setNextAnimState(loopAnimState, true);
         } else {
-            setAnimState(choose(UnitAnimState.Idle, UnitAnimState.Moving, UnitAnimState.Attacking, UnitAnimState.ReceivingHit, UnitAnimState.Death));
+            setNextAnimState(UnitAnimState.Idle);
+            setNextAnimState(choose(UnitAnimState.Idle, UnitAnimState.Moving, UnitAnimState.Attacking, UnitAnimState.ReceivingHit, UnitAnimState.Death));
         }
     };
     
@@ -76,6 +99,10 @@ function Unit(_unitType) constructor {
     
     static enqueueAction = function(_action) {
         ds_list_add(actionQueue, _action);
+        
+        if (_action.type == ActionType.MoveToHex) {
+            plannedFinalPosition = _action.hex;
+        }
     }
     
     static startNextAction = function () {
@@ -103,6 +130,12 @@ function Unit(_unitType) constructor {
         
         if(!is_undefined(onActionEnd))
             onActionEnd();
+        
+        if(!pauseActions)
+            startNextAction();
+        
+        if(currentAction == pointer_null && ds_list_size(actionQueue) == 0 && !is_undefined(onPlanEnd))
+            onPlanEnd();
     }
     
     static handleCurrentAction = function () {
@@ -127,6 +160,14 @@ function Unit(_unitType) constructor {
         _movementAnimation.onAnimEnd = method(self, function (_animation) {
             hexMap.placeUnit(_animation.endTile, self);
             endCurrentAction();
+        });
+    }
+    
+    static planMovementToHex = function (_hex) {
+        var _actionArray = hexMap.findUnitPath(self, plannedFinalPosition, _hex);
+        
+        array_foreach(_actionArray, function(_action, _index) {
+            enqueueAction(_action);
         });
     }
 }

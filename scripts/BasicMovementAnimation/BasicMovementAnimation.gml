@@ -48,7 +48,7 @@ function BasicMovementAnimation(_hexMap, _unit, _endTile) : GameAnimation(_hexMa
             unit.facing = sign(_xDiff);
         }
         
-        unit.setAnimState(UnitAnimState.Moving, true);
+        unit.setNextAnimState(UnitAnimState.Moving, true);
     }
     
     static animationStep = function() {
@@ -65,7 +65,7 @@ function BasicMovementAnimation(_hexMap, _unit, _endTile) : GameAnimation(_hexMa
     static animationEnd = function() {
         setDrawingTile(pointer_null);
         
-        unit.setAnimState(UnitAnimState.Idle);
+        unit.setNextAnimState(UnitAnimState.Moving, false);
     }
     
     static draw = function(_tile) {
