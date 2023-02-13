@@ -3,7 +3,7 @@ if (is_undefined(cursorHex)) {
     exit;
 }
 
-var _cursorUnit = cursorTile.getUnit(0);
+var _cursorUnit = cursorTile.getUnit(cursorTile.getUnitCount() - 1);
 
 if (selectedUnit == pointer_null) {
     selectedUnit = _cursorUnit;

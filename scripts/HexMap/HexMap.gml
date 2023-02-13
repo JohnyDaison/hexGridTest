@@ -158,11 +158,11 @@ function HexMap(_orientation, _size, _origin) constructor {
     }
     
     static drawHexUnits = function(_hexTile) {
-        var _count = ds_list_size(_hexTile.units);
+        var _count = _hexTile.getUnitCount();
         var _vector = getTileXY(_hexTile);
         
-        for(var i = _count - 1; i >= 0; i--) {
-            var _unit = _hexTile.units[| i];
+        for(var i = 0; i < _count; i++) {
+            var _unit = _hexTile.getUnit(i);
             
             _unit.draw(_vector.x, _vector.y);
         }
