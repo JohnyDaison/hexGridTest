@@ -6,6 +6,11 @@ function Unit(_unitType) constructor {
     currentTile = pointer_null;
     animState = undefined;
     loopAnimState = undefined;
+    mobile = type.mobile;
+    dying = false;
+    dead = false;
+    
+    combat = new CombatModule(self, type.combat);
     
     actionQueue = ds_list_create();
     currentAction = pointer_null;
@@ -32,6 +37,15 @@ function Unit(_unitType) constructor {
     static setNextAnimState = function (_state, _loop = false) {
         nextAnimState = _state;
         nextAnimLoop = _loop;
+    }
+    
+    static hasAnimStateSprite = function (_state) {
+        var _animSprite = type.getAnim(_state);
+        if (is_undefined(_animSprite)) {
+            return false;
+        }
+        
+        return true;
     }
     
     static setAnimState = function (_state, _loop = false) {
@@ -70,22 +84,35 @@ function Unit(_unitType) constructor {
     }
     
     static animUpdate = function () {
-        animProgress += animSpeed * delta_time / 1000;
+        var _prevProgress = animProgress;
+        if (!dead) {
+            animProgress += animSpeed * delta_time / 1000;
+        }
         
         if (nextAnimState != animState || nextAnimLoop != !is_undefined(loopAnimState))
             setAnimState(nextAnimState, nextAnimLoop);
         
         if (animProgress >= animLength) {
             onAnimEnd();
+            
+            if (dead) {
+                animProgress = _prevProgress;
+            }
         }
     }
     
     static onAnimEnd = function () {
-        if (!is_undefined(loopAnimState)) {
+        if (dying) {
+            if (hasAnimStateSprite(UnitAnimState.Death) && animState != UnitAnimState.Death) {
+                setNextAnimState(UnitAnimState.Death);
+            } else {
+                dead = true;
+            }
+        }
+        else if (!is_undefined(loopAnimState)) {
             setNextAnimState(loopAnimState, true);
         } else {
             setNextAnimState(UnitAnimState.Idle);
-            setNextAnimState(choose(UnitAnimState.Idle, UnitAnimState.Moving, UnitAnimState.Attacking, UnitAnimState.ReceivingHit, UnitAnimState.Death));
         }
     };
     
@@ -107,7 +134,7 @@ function Unit(_unitType) constructor {
     
     static startNextAction = function () {
         if (currentAction != pointer_null) {
-            return;   
+            return;
         }
         
         var _nextAction = actionQueue[| 0];
@@ -144,8 +171,15 @@ function Unit(_unitType) constructor {
         }
         
         if (!actionStarted) {
-            if (currentAction.type == ActionType.MoveToHex) {
-                moveToHex(currentAction.hex);
+            switch (currentAction.type) {
+                case ActionType.MoveToHex: {
+                    moveToHex(currentAction.hex);
+                    break;
+                }
+                case ActionType.AttackHex: {
+                    combat.attackHex(currentAction.hex);
+                    break;
+                }
             }
             
             actionStarted = true;
@@ -164,10 +198,16 @@ function Unit(_unitType) constructor {
     }
     
     static planMovementToHex = function (_hex) {
+        if (!mobile) {
+            return false;
+        }
+        
         var _actionArray = hexMap.findUnitPath(self, plannedFinalPosition, _hex);
         
         array_foreach(_actionArray, function(_action, _index) {
             enqueueAction(_action);
         });
+        
+        return true;
     }
 }

@@ -1,11 +1,11 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "UnitStateEnum",
+  "name": "BasicAttackAnimation",
   "isCompatibility": false,
   "isDnD": false,
   "parent": {
-    "name": "Units",
-    "path": "folders/Scripts/HexMap/Units.yy",
+    "name": "Combat",
+    "path": "folders/Scripts/HexMap/Animations/Combat.yy",
   },
 }

@@ -40,6 +40,10 @@ function HexTile(_position, _terrainType = TerrainType.Base) constructor {
         return units[| _index] ?? pointer_null;
     }
     
+    static getTopUnit = function() {
+        return units[| getUnitCount() - 1] ?? pointer_null;
+    }
+    
     static getUnitCount = function() {
         return ds_list_size(units);
     }

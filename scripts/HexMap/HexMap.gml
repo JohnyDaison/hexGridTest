@@ -310,6 +310,16 @@ function HexMap(_orientation, _size, _origin) constructor {
     static gameUpdate = function () {
         var _unitCount = ds_list_size(units);
         
+        for (var i = _unitCount - 1; i >= 0; i--) {
+            var _unit = units[| i];
+            
+            if (_unit.dead) {
+                deleteUnit(_unit);
+            }
+        }
+        
+        _unitCount = ds_list_size(units);
+        
         for (var i = 0; i < _unitCount; i++) {
             var _unit = units[| i];
             

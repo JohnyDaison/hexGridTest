@@ -7,11 +7,12 @@ function UnitTypeData(_id, _name) constructor {
     flying = false;
     water = false;
     mobile = false;
-    passive = false;
+    combat = new CombatStats();
     
     scale = 1;
     yOffset = 0;
     animMovementSpeed = 1000;
+    animAttackSpeed = 1000;
     animationMap = ds_map_create();
     
     static getAnim = function(_state) {

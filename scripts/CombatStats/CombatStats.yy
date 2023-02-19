@@ -1,7 +1,7 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "UnitStateEnum",
+  "name": "CombatStats",
   "isCompatibility": false,
   "isDnD": false,
   "parent": {

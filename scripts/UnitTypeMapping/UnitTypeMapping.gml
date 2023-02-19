@@ -35,6 +35,7 @@ function flyingUnitType(_id, _name) {
 
 
 _unitType = landUnitType(UnitType.KnightUnarmedBasic, "Basic Unarmed Knight");
+_unitType.combat.passive = true;
 _unitType.scale = 0.5;
 _unitType.setAnim(UnitAnimState.Idle, sprKnight_Idle);
 _unitType.setAnim(UnitAnimState.Moving, sprKnight_Walk);
@@ -52,6 +53,7 @@ _unitType.setAnim(UnitAnimState.Death, sprKnight_Die_Sword);
 
 
 _unitType = landUnitType(UnitType.KnightBowBasic, "Basic Bow Knight");
+_unitType.combat.attackRange = 3;
 _unitType.scale = 0.5;
 _unitType.setAnim(UnitAnimState.Idle, sprKnight_Idle_Bow);
 _unitType.setAnim(UnitAnimState.Moving, sprKnight_Walk_Bow);
@@ -70,6 +72,7 @@ _unitType.setAnim(UnitAnimState.Death, sprSkeleton_Die_Sword);
 
 
 _unitType = landUnitType(UnitType.SkeletonBowBasic, "Basic Bow Skeleton");
+_unitType.combat.attackRange = 5;
 _unitType.scale = 0.5;
 _unitType.setAnim(UnitAnimState.Idle, sprSkeleton_Idle_Bow);
 _unitType.setAnim(UnitAnimState.Moving, sprSkeleton_Walk_Bow);
@@ -98,8 +101,8 @@ _unitType.setAnim(UnitAnimState.Death, sprBat_Die);
 
 
 _unitType = landUnitType(UnitType.TrainingDummy, "Training Dummy");
+_unitType.combat.passive = true;
 _unitType.scale = 0.5;
 _unitType.mobile = false;
-_unitType.passive = true;
 _unitType.setAnim(UnitAnimState.Idle, sprDummy_Idle);
 _unitType.setAnim(UnitAnimState.ReceivingHit, sprDummy_Hit);

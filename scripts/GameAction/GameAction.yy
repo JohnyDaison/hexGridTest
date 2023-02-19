@@ -5,7 +5,7 @@
   "isCompatibility": false,
   "isDnD": false,
   "parent": {
-    "name": "Actions",
-    "path": "folders/Scripts/HexMap/Actions.yy",
+    "name": "Enum and Parent",
+    "path": "folders/Scripts/HexMap/Actions/Enum and Parent.yy",
   },
 }

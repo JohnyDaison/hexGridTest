@@ -21,7 +21,7 @@ debugText += "\n\n";
 debugText += string("{0}\n", string(selectedUnit));
 
 if (selectedUnit != pointer_null) {
-    debugText += string("Move to: {0} {1}", moveTargetTile ? string(moveTargetTile.position) : "", string(moveTargetTile));
+    debugText += string("Target tile: {0} {1}", unitTargetTile ? string(unitTargetTile.position) : "", string(unitTargetTile));
     debugText += "\n";
     
     debugText += "Actions:\n";
