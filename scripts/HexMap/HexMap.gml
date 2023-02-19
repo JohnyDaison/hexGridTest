@@ -337,6 +337,7 @@ function HexMap(_orientation, _size, _origin) constructor {
         
         var _frontier = [];
         var _currentTile = _startTile;
+        var _previousTile = pointer_null;
         var _counter = 0;
         
         while(!_currentTile.position.equals(_toHex) && _counter < _maxPathLength) {
@@ -345,8 +346,14 @@ function HexMap(_orientation, _size, _origin) constructor {
             var _nextTileIndex = _toHex.findClosestTile(_frontier);
             var _nextTile = _frontier[_nextTileIndex];
         
+            // prevent looping between two tiles
+            if (_previousTile == _nextTile) {
+                break;
+            }
+        
             array_push(_actionArray, new MoveToHexAction(_nextTile.position));
             
+            _previousTile = _currentTile;
             _currentTile = _nextTile;
             _counter++;
         }
