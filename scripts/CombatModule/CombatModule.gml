@@ -39,7 +39,11 @@ function CombatModule(_unit, _stats) constructor {
         var _attackAnimation = new BasicAttackAnimation(myUnit.gameController, myUnit, _endTile);
     
         _attackAnimation.onAnimEnd = method(self, function (_animation) {
-            dealDamage(stats.attack, _animation.endTile.getTopUnit());
+            var _targetUnit = _animation.endTile.getTopUnit();
+            if (_targetUnit != pointer_null) {
+                dealDamage(stats.attack, _targetUnit);
+            }
+            
             myUnit.endCurrentAction();
         });
     }
