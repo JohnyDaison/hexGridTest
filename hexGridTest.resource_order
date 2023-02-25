@@ -148,6 +148,7 @@
     {"name":"Layout","order":32,"path":"scripts/Layout/Layout.yy",},
     {"name":"TerrainPainting","order":11,"path":"scripts/TerrainPainting/TerrainPainting.yy",},
     {"name":"hex_get_los","order":15,"path":"scripts/hex_get_los/hex_get_los.yy",},
+    {"name":"GameController","order":16,"path":"scripts/GameController/GameController.yy",},
     {"name":"check_circle_object","order":1,"path":"scripts/check_circle_object/check_circle_object.yy",},
     {"name":"in_range","order":31,"path":"scripts/in_range/in_range.yy",},
     {"name":"hex_get_ring","order":19,"path":"scripts/hex_get_ring/hex_get_ring.yy",},

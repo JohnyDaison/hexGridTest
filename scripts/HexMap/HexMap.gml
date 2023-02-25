@@ -5,31 +5,11 @@ function HexMap(_orientation, _size, _origin) constructor {
     highlightColor = c_white;
     highlightMoveColor = merge_color(c_white, c_yellow, 0.8);
     highlightAlpha = 0.5;
-    units = ds_list_create();
-    gameAnimations = ds_list_create();
     terrainPainter = new TerrainPainter(self);
     drawTileCoords = true;
     
     static destroy = function() {
         grid.destroy();
-        
-        var _gameAnimationCount = ds_list_size(gameAnimations);
-        for (var i = _gameAnimationCount - 1; i >= 0; i--) {
-            var _gameAnimation = gameAnimations[| i];
-            _gameAnimation.destroy();
-            delete _gameAnimation;
-        }
-        
-        ds_list_destroy(gameAnimations);
-        
-        var _unitCount = ds_list_size(units);
-        for (var i = 0; i < _unitCount; i++) {
-            var _unit = units[| i];
-            _unit.destroy();
-            delete _unit;
-        }
-        
-        ds_list_destroy(units);
     }
     
     static getTileYOffset = function(_hexTile) {
@@ -247,16 +227,6 @@ function HexMap(_orientation, _size, _origin) constructor {
         terrainPainter.paintTerrain(_centerHex, _brush, _generatorFunction, _options);
     }
     
-    static addUnit = function(_hexTile, _unitType) {
-        var _unit = new Unit(_unitType);
-        ds_list_add(units, _unit);
-        _unit.hexMap = self;
-        
-        placeUnit(_hexTile, _unit);
-        
-        return true;
-    }
-    
     static placeUnit = function(_hexTile, _unit) {
         return _hexTile.placeUnit(_unit);
     }
@@ -271,62 +241,7 @@ function HexMap(_orientation, _size, _origin) constructor {
         
         return true;
     }
-    
-    static deleteUnit = function(_unit) {
-        displaceUnit(_unit);
-        
-        _unit.destroy();
-        
-        ds_list_delete(units, ds_list_find_index(units, _unit));
-        
-        return true;
-    }
-    
-    static animationUpdate = function () {
-        gameAnimationsUpdate();
-        unitsAnimUpdate();
-    }
-    
-    static unitsAnimUpdate = function () {
-        var _unitCount = ds_list_size(units);
-        
-        for (var i = 0; i < _unitCount; i++) {
-            var _unit = units[| i];
-            
-            _unit.animUpdate();
-        }
-    }
-    
-    static gameAnimationsUpdate = function () {
-        var _gameAnimationCount = ds_list_size(gameAnimations);
-        
-        for (var i = 0; i < _gameAnimationCount; i++) {
-            var _gameAnimation = gameAnimations[| i];
-            
-            _gameAnimation.update();
-        }
-    }
-    
-    static gameUpdate = function () {
-        var _unitCount = ds_list_size(units);
-        
-        for (var i = _unitCount - 1; i >= 0; i--) {
-            var _unit = units[| i];
-            
-            if (_unit.dead) {
-                deleteUnit(_unit);
-            }
-        }
-        
-        _unitCount = ds_list_size(units);
-        
-        for (var i = 0; i < _unitCount; i++) {
-            var _unit = units[| i];
-            
-            _unit.handleCurrentAction();
-        }
-    }
-    
+
     static findUnitPath = function (_unit, _fromHex, _toHex, _maxPathLength = 100) {
         var _actionArray = [];
         

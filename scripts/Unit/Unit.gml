@@ -188,7 +188,7 @@ function Unit(_unitType) constructor {
     
     static moveToHex = function (_hex) {
         var _endTile = hexMap.getTile(_hex);
-        var _movementAnimation = new BasicMovementAnimation(hexMap, self, _endTile);
+        var _movementAnimation = new BasicMovementAnimation(gameController, self, _endTile);
         hexMap.displaceUnit(self);
     
         _movementAnimation.onAnimEnd = method(self, function (_animation) {

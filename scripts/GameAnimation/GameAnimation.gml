@@ -1,6 +1,7 @@
-function GameAnimation(_hexMap) constructor {
-    hexMap = _hexMap;
-    ds_list_add(hexMap.gameAnimations, self);
+function GameAnimation(_gameController) constructor {
+    gameController = _gameController
+    hexMap = gameController.hexMap;
+    ds_list_add(gameController.gameAnimations, self);
     
     started = false;
     paused = false;
@@ -34,7 +35,7 @@ function GameAnimation(_hexMap) constructor {
     }
     
     static destroy = function() {
-        var _index = ds_list_find_index(hexMap.gameAnimations, self);
-        ds_list_delete(hexMap.gameAnimations, _index);
+        var _index = ds_list_find_index(gameController.gameAnimations, self);
+        ds_list_delete(gameController.gameAnimations, _index);
     }
 }

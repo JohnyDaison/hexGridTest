@@ -1,1 +1,1 @@
-hexMap.destroy();
+gameController.destroy();

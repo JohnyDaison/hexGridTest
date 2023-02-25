@@ -36,7 +36,7 @@ function CombatModule(_unit, _stats) constructor {
     
     static attackHex = function (_hex) {
         var _endTile = myUnit.hexMap.getTile(_hex);
-        var _attackAnimation = new BasicAttackAnimation(myUnit.hexMap, myUnit, _endTile);
+        var _attackAnimation = new BasicAttackAnimation(myUnit.gameController, myUnit, _endTile);
     
         _attackAnimation.onAnimEnd = method(self, function (_animation) {
             dealDamage(stats.attack, _animation.endTile.getTopUnit());

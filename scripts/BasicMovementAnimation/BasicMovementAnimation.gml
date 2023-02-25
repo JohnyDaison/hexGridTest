@@ -1,4 +1,4 @@
-function BasicMovementAnimation(_hexMap, _unit, _endTile) : GameAnimation(_hexMap) constructor {
+function BasicMovementAnimation(_gameController, _unit, _endTile) : GameAnimation(_gameController) constructor {
     unit = _unit;
     startTile = unit.currentTile;
     endTile = _endTile;

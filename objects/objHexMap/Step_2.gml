@@ -1,8 +1,8 @@
 /// @description ANIMATIONS, DEBUG TEXT
 
 // ANIMATIONS
-hexMap.gameUpdate();
-hexMap.animationUpdate();
+gameController.gameUpdate();
+gameController.animationUpdate();
 
 // DEBUG TEXT
 debugText = "";
