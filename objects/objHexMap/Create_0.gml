@@ -8,8 +8,6 @@ hexMap = gameController.createMap(layout_flat, tileSize, startPosition);
 cursorHex = undefined;
 cursorPos = undefined;
 cursorTile = pointer_null;
-selectedUnit = pointer_null;
-unitTargetTile = pointer_null;
 
 activeTerrainBrush = new TerrainBrush(TerrainBrushShape.Hexagon, 2, 1);
 terrainGeneratorOptions = { height: true };

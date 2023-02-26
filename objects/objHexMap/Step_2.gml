@@ -17,22 +17,25 @@ if (!is_undefined(cursorHex)) {
     debugText += string("Pos {0}", cursorPos);
 }
 
-debugText += "\n\n";
-debugText += string("{0}\n", string(selectedUnit));
+var _selectedUnit = gameController.selectedUnit;
+var _unitTargetTile = gameController.unitTargetTile;
 
-if (selectedUnit != pointer_null) {
-    debugText += string("Target tile: {0} {1}", unitTargetTile ? string(unitTargetTile.position) : "", string(unitTargetTile));
+debugText += "\n\n";
+debugText += string("{0}\n", string(_selectedUnit));
+
+if (_selectedUnit != pointer_null) {
+    debugText += string("Target tile: {0} {1}", _unitTargetTile ? string(_unitTargetTile.position) : "", string(_unitTargetTile));
     debugText += "\n";
     
     debugText += "Actions:\n";
-    if (selectedUnit.currentAction != pointer_null) {
-        debugText += string(selectedUnit.currentAction) + "\n";
+    if (_selectedUnit.currentAction != pointer_null) {
+        debugText += string(_selectedUnit.currentAction) + "\n";
         debugText += "----------" + "\n";
     }
     
-    var _actionCount = ds_list_size(selectedUnit.actionQueue);
+    var _actionCount = ds_list_size(_selectedUnit.actionQueue);
     for(var i = 0; i < _actionCount; i++) {
-        var _action = selectedUnit.actionQueue[| i];
+        var _action = _selectedUnit.actionQueue[| i];
         debugText += string(_action) + "\n";
     }
 

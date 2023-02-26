@@ -4,12 +4,12 @@
 //hexMap.drawHexBg();
 
 var _highlightHex = cursorHex;
-var _movementTile = pointer_null;
-if (selectedUnit != pointer_null && selectedUnit.currentAction == pointer_null) {
-    _movementTile = selectedUnit.currentTile;
+var _selectedTile = pointer_null;
+if (gameController.selectedUnit != pointer_null && gameController.selectedUnit.currentAction == pointer_null) {
+    _selectedTile = gameController.selectedUnit.currentTile;
 }
 
-hexMap.drawHexes(_highlightHex, _movementTile);
+hexMap.drawHexes(_highlightHex, _selectedTile);
 
 draw_sprite(sprCrosshair, 0, mouse_x, mouse_y);
 

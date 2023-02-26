@@ -2,6 +2,8 @@ function GameController() constructor {
     units = ds_list_create();
     gameAnimations = ds_list_create();
     hexMap = pointer_null;
+    selectedUnit = pointer_null;
+    unitTargetTile = pointer_null;
     
     static destroy = function() {
         destroyMap();
@@ -55,7 +57,17 @@ function GameController() constructor {
         return true;
     }
     
+    /**
+     * Remove unit from the game permanently
+     * @param {Struct.Unit} _unit
+     * @returns {bool} success
+     */
     static deleteUnit = function(_unit) {
+        if (selectedUnit == _unit) {
+            selectedUnit = pointer_null;
+            unitTargetTile = pointer_null;
+        }
+        
         hexMap.displaceUnit(_unit);
         
         _unit.destroy();
@@ -107,6 +119,40 @@ function GameController() constructor {
             var _unit = units[| i];
             
             _unit.handleCurrentAction();
+        }
+    }
+    
+    static handleTileClicked = function(_cursorTile) {
+        var _cursorUnit = _cursorTile.getTopUnit();
+        
+        if (selectedUnit == pointer_null) {
+            if (_cursorUnit != pointer_null && !_cursorUnit.dying) {
+                selectedUnit = _cursorUnit;
+            }
+        } else if (_cursorUnit == selectedUnit) {
+            selectedUnit = pointer_null;
+            unitTargetTile = pointer_null;
+        } else {
+            unitTargetTile = _cursorTile;
+        }
+        
+        if (selectedUnit != pointer_null && unitTargetTile != pointer_null) {
+            var _planned = false;
+    
+            if (_cursorUnit != pointer_null && selectedUnit.combat.canAttack()) {
+                _planned = selectedUnit.combat.planAttackOnHex(unitTargetTile.position);
+            } else if (selectedUnit.mobile) {
+                _planned = selectedUnit.planMovementToHex(unitTargetTile.position);
+            }
+    
+            if (_planned) {
+                selectedUnit.startNextAction();
+                selectedUnit.onPlanEnd = method(self, function () {
+                    selectedUnit = pointer_null;
+                    unitTargetTile = pointer_null;
+                    unitTargetTile = pointer_null;
+                });
+            }
         }
     }
 }

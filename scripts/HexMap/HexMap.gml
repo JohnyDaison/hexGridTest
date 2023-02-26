@@ -3,7 +3,7 @@ function HexMap(_orientation, _size, _origin) constructor {
     grid = new HexGrid();
     stackHeight = 1;
     highlightColor = c_white;
-    highlightMoveColor = merge_color(c_white, c_yellow, 0.8);
+    highlightSelectedColor = merge_color(c_white, c_yellow, 0.8);
     highlightAlpha = 0.5;
     terrainPainter = new TerrainPainter(self);
     drawTileCoords = true;
@@ -160,7 +160,7 @@ function HexMap(_orientation, _size, _origin) constructor {
         }
     }
     
-    static drawHexes = function(_highlightHex, _movementTile) {
+    static drawHexes = function(_highlightHex, _selectedTile) {
         for (var _r = grid.minR; _r <= grid.maxR; _r++) {
             for (var _q = grid.minQ; _q <= grid.maxQ; _q++) {
                 var _hex = new HexVector(_q,_r);
@@ -177,9 +177,9 @@ function HexMap(_orientation, _size, _origin) constructor {
                 var _drawHighlight = !is_undefined(_highlightHex) && _hex.equals(_highlightHex);
                 var _highlightColor = highlightColor;
                 
-                if (_movementTile != pointer_null && _hexTile == _movementTile) {
+                if (_selectedTile != pointer_null && _hexTile == _selectedTile) {
                     _drawHighlight = true;
-                    _highlightColor = highlightMoveColor;
+                    _highlightColor = highlightSelectedColor;
                 }
                 
                 if (_drawHighlight) {
