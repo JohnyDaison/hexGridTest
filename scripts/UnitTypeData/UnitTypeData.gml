@@ -3,6 +3,7 @@ function UnitTypeData(_id, _name) constructor {
     typeId = _id;
     name = _name;
     
+    initiative = 0;
     ground = false;
     flying = false;
     water = false;

@@ -5,15 +5,28 @@ function GameController() constructor {
     selectedUnit = pointer_null;
     unitTargetTile = pointer_null;
     
+    unitQueue = new UnitQueue();
+    useUnitQueue = true;
+    
     static destroy = function() {
         destroyMap();
+        unitQueue.destroy();
 
         ds_list_destroy(gameAnimations);
         ds_list_destroy(units);
     }
     
+    static init = function() {
+        updateUnitInitiative();
+        unitQueue.init();
+        
+        if (useUnitQueue) {
+            selectedUnit = unitQueue.activeUnit;
+        }
+    }
+    
     static createMap = function (_orientation, _size, _origin) {
-        if(hexMap != pointer_null) {
+        if (hexMap != pointer_null) {
             return pointer_null;
         }
         
@@ -54,6 +67,10 @@ function GameController() constructor {
         
         hexMap.placeUnit(_hexTile, _unit);
         
+        if (useUnitQueue) {
+            unitQueue.addUnit(_unit);
+        }
+        
         return true;
     }
     
@@ -64,9 +81,10 @@ function GameController() constructor {
      */
     static deleteUnit = function(_unit) {
         if (selectedUnit == _unit) {
-            selectedUnit = pointer_null;
-            unitTargetTile = pointer_null;
+            endUnitTurn();
         }
+        
+        unitQueue.deleteUnit(_unit);
         
         hexMap.displaceUnit(_unit);
         
@@ -108,7 +126,7 @@ function GameController() constructor {
         for (var i = _unitCount - 1; i >= 0; i--) {
             var _unit = units[| i];
             
-            if (_unit.dead) {
+            if (_unit.dying) {
                 deleteUnit(_unit);
             }
         }
@@ -120,20 +138,28 @@ function GameController() constructor {
             
             _unit.handleCurrentAction();
         }
+        
+        unitQueue.updateCards();
     }
     
     static handleTileClicked = function(_cursorTile) {
         var _cursorUnit = _cursorTile.getTopUnit();
         
-        if (selectedUnit == pointer_null) {
-            if (_cursorUnit != pointer_null && !_cursorUnit.dying) {
-                selectedUnit = _cursorUnit;
+        if (useUnitQueue) {
+            if (_cursorUnit != selectedUnit) {
+                unitTargetTile = _cursorTile;
             }
-        } else if (_cursorUnit == selectedUnit) {
-            selectedUnit = pointer_null;
-            unitTargetTile = pointer_null;
         } else {
-            unitTargetTile = _cursorTile;
+            if (selectedUnit == pointer_null) {
+                if (_cursorUnit != pointer_null && !_cursorUnit.dying) {
+                    selectedUnit = _cursorUnit;
+                }
+            } else if (_cursorUnit == selectedUnit) {
+                selectedUnit = pointer_null;
+                unitTargetTile = pointer_null;
+            } else {
+                unitTargetTile = _cursorTile;
+            }
         }
         
         if (selectedUnit != pointer_null && unitTargetTile != pointer_null) {
@@ -148,11 +174,53 @@ function GameController() constructor {
             if (_planned) {
                 selectedUnit.startNextAction();
                 selectedUnit.onPlanEnd = method(self, function () {
-                    selectedUnit = pointer_null;
-                    unitTargetTile = pointer_null;
                     unitTargetTile = pointer_null;
                 });
             }
+        }
+    }
+
+    static getActiveUnit = function () {
+        return unitQueue.activeUnit;
+    }
+    
+    static updateUnitInitiative = function () {
+        var _unitCount = ds_list_size(units);
+        
+        for (var i = 0; i < _unitCount; i++) {
+            var _unit = units[| i];
+            _unit.updateInitiative();
+        }
+    }
+    
+    static canTurnBeEnded = function () {
+        if (selectedUnit != pointer_null && selectedUnit.currentAction != pointer_null) {
+            return false;
+        }
+        
+        return true;
+    }
+    
+    static endUnitTurn = function () {
+        show_debug_message("endUnitTurn called");
+        
+        if (selectedUnit != pointer_null) {
+            selectedUnit.initiativeAccumulated = 0;
+        }
+        
+        updateUnitInitiative();
+        selectedUnit = pointer_null;
+        unitTargetTile = pointer_null;
+        
+        if (useUnitQueue) {
+            unitQueue.update();
+            selectedUnit = unitQueue.activeUnit;
+        }
+    }
+
+    static drawUnitQueue = function () {
+        if (useUnitQueue) {
+            unitQueue.draw();
         }
     }
 }

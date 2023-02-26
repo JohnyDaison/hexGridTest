@@ -1,6 +1,8 @@
 function Unit(_unitType) constructor {
     type = global.unitTypeMap[? _unitType];
     scale = type.scale;
+    initiative = type.initiative;
+    initiativeAccumulated = 0;
     facing = 1;
     hexMap = pointer_null;
     currentTile = pointer_null;
@@ -147,7 +149,7 @@ function Unit(_unitType) constructor {
         actionStarted = false;
         ds_list_delete(actionQueue, 0);
         
-        if(!is_undefined(onActionStart))
+        if (!is_undefined(onActionStart))
             onActionStart();
     }
     
@@ -155,13 +157,13 @@ function Unit(_unitType) constructor {
         lastAction = currentAction;
         currentAction = pointer_null;
         
-        if(!is_undefined(onActionEnd))
+        if (!is_undefined(onActionEnd))
             onActionEnd();
         
-        if(!pauseActions)
+        if (!pauseActions)
             startNextAction();
         
-        if(currentAction == pointer_null && ds_list_size(actionQueue) == 0 && !is_undefined(onPlanEnd))
+        if (currentAction == pointer_null && ds_list_size(actionQueue) == 0 && !is_undefined(onPlanEnd))
             onPlanEnd();
     }
     
@@ -184,6 +186,10 @@ function Unit(_unitType) constructor {
             
             actionStarted = true;
         }
+    }
+    
+    static die = function () {
+        dying = true;
     }
     
     static moveToHex = function (_hex) {
@@ -209,5 +215,9 @@ function Unit(_unitType) constructor {
         });
         
         return true;
+    }
+    
+    static updateInitiative = function () {
+        initiativeAccumulated += initiative;   
     }
 }

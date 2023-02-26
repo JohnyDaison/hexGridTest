@@ -1,9 +1,15 @@
 tileSize = new Vector(160, 150); // tuned to our sprites
-startPosition = new Vector(room_width/2, room_height/2);
+endTurnButtonMargin = 30;
+
+var _halfRoomWidth = room_width / 2;
+var _halfRoomHeight = room_height / 2;
+startPosition = new Vector(_halfRoomWidth, _halfRoomHeight);
 debugText = "TEST";
 
 gameController = new GameController();
 hexMap = gameController.createMap(layout_flat, tileSize, startPosition);
+
+endTurnButton = noone;
 
 cursorHex = undefined;
 cursorPos = undefined;
@@ -12,6 +18,14 @@ cursorTile = pointer_null;
 activeTerrainBrush = new TerrainBrush(TerrainBrushShape.Hexagon, 2, 1);
 terrainGeneratorOptions = { height: true };
 lastPaintedPos = undefined;
+
+handleTap = function() {
+    if (is_undefined(cursorHex)) {
+        exit;
+    }
+
+    gameController.handleTileClicked(cursorTile);
+}
 
 createTestTiles = function() {
     var _swordSkeleton = hexMap.addTile(-1, 0, TerrainType.Snow);
@@ -44,3 +58,5 @@ createTestTiles = function() {
 }
 
 createTestTiles();
+
+gameController.init();

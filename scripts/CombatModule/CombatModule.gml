@@ -37,10 +37,10 @@ function CombatModule(_unit, _stats) constructor {
     static attackHex = function (_hex) {
         var _endTile = myUnit.hexMap.getTile(_hex);
         var _attackAnimation = new BasicAttackAnimation(myUnit.gameController, myUnit, _endTile);
-    
+        
         _attackAnimation.onAnimEnd = method(self, function (_animation) {
             var _targetUnit = _animation.endTile.getTopUnit();
-            if (_targetUnit != pointer_null) {
+            if (_targetUnit != pointer_null && _targetUnit != self.myUnit) {
                 dealDamage(stats.attack, _targetUnit);
             }
             
@@ -61,7 +61,7 @@ function CombatModule(_unit, _stats) constructor {
         myUnit.setNextAnimState(UnitAnimState.ReceivingHit);
         
         if (stats.health <= 0) {
-            myUnit.dying = true;
+            myUnit.die();
         }
     }
 }

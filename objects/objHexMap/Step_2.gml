@@ -1,8 +1,20 @@
 /// @description ANIMATIONS, DEBUG TEXT
 
+if (endTurnButton == noone) {
+    var _xPos = objGameCamera.baseViewportWidth - endTurnButtonMargin;
+    var _yPos = objGameCamera.baseViewportHeight - endTurnButtonMargin;
+    
+    endTurnButton = instance_create_layer(_xPos, _yPos, "GUI", objEndTurnButton);
+    
+    endTurnButton.onClick = method(self, function () {
+        gameController.endUnitTurn();
+    });
+}
+
 // ANIMATIONS
 gameController.gameUpdate();
 gameController.animationUpdate();
+endTurnButton.enabled = gameController.canTurnBeEnded();
 
 // DEBUG TEXT
 debugText = "";
@@ -34,7 +46,7 @@ if (_selectedUnit != pointer_null) {
     }
     
     var _actionCount = ds_list_size(_selectedUnit.actionQueue);
-    for(var i = 0; i < _actionCount; i++) {
+    for (var i = 0; i < _actionCount; i++) {
         var _action = _selectedUnit.actionQueue[| i];
         debugText += string(_action) + "\n";
     }

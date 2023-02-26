@@ -61,7 +61,7 @@ function HexMap(_orientation, _size, _origin) constructor {
             _highlightHex = _baseHex;
         }
         
-        for(var _dirIndex = 0; _dirIndex < 3; _dirIndex++) {
+        for (var _dirIndex = 0; _dirIndex < 3; _dirIndex++) {
             var _otherHex = _baseHex.add(global.hexDirectionsDown[_dirIndex]);
             
             if (isCursorOverHex(_x, _y, _otherHex)) {
@@ -128,7 +128,7 @@ function HexMap(_orientation, _size, _origin) constructor {
     
     static drawHexTile = function(_hexTile) {
         var _vector = hexToPixel(_hexTile.position);
-        for(var i = 0; i < _hexTile.height; i++) {
+        for (var i = 0; i < _hexTile.height; i++) {
             if (i == _hexTile.height - 1) {
                 draw_sprite(_hexTile.terrainTypeInfo.sprBasic, 0, _vector.x, _vector.y - i * stackHeight);
             } else {
@@ -141,7 +141,7 @@ function HexMap(_orientation, _size, _origin) constructor {
         var _count = _hexTile.getUnitCount();
         var _vector = getTileXY(_hexTile);
         
-        for(var i = 0; i < _count; i++) {
+        for (var i = 0; i < _count; i++) {
             var _unit = _hexTile.getUnit(i);
             
             _unit.draw(_vector.x, _vector.y);
@@ -151,7 +151,7 @@ function HexMap(_orientation, _size, _origin) constructor {
     static drawHexAnimations = function(_hexTile) {
         var _count = ds_list_size(_hexTile.animations);
         
-        for(var i = 0; i < _count; i++) {
+        for (var i = 0; i < _count; i++) {
             var _animation = _hexTile.animations[| i];
             
             if (_animation.started && !_animation.ended) {

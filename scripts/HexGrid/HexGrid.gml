@@ -39,7 +39,7 @@ function HexGrid() constructor {
             maxR = _position.r;
         }
         
-        for(var _dirIndex = 0; _dirIndex < 6; _dirIndex++) {
+        for (var _dirIndex = 0; _dirIndex < 6; _dirIndex++) {
             var _dir = global.hexDirections[_dirIndex];
             var _otherTile = getTile(_position.add(_dir));
             
@@ -80,14 +80,14 @@ function HexGrid() constructor {
     static destroy = function() {
         var _tileCount = ds_list_size(tileList);
         
-        for(var i = 0; i < _tileCount; i++) {
+        for (var i = 0; i < _tileCount; i++) {
             var _tile = tileList[| i];
             _tile.destroy();
         }
         
         ds_list_destroy(tileList);
         
-        for(var _q = minQ; _q <= maxQ; _q++) {
+        for (var _q = minQ; _q <= maxQ; _q++) {
             var _column = tileGrid[? _q];
             
             if (!is_undefined(_column)) {

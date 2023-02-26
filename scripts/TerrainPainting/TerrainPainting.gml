@@ -31,7 +31,7 @@ function TerrainPainter(_hexMap) constructor {
                 var _hexCount = array_length(_ringArray);
                 _brushHeight = round(lerp(_brush.centerHeight, _brush.edgeHeight, _currentRadius / _radius));
                 
-                for(var _hexIndex = 0; _hexIndex < _hexCount; _hexIndex++) {
+                for (var _hexIndex = 0; _hexIndex < _hexCount; _hexIndex++) {
                     var _hex = _ringArray[_hexIndex];
                     paintHex(_hex.q, _hex.r, _centerHex, _brushHeight, _generatorFunction, _options);
                 }
