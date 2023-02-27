@@ -4,8 +4,10 @@ function UnitQueue() constructor {
     
     queuePadding = 6;
     cardPadding = 6;
+    labelMargin = 2;
+    labelHeight = 20;
     
-    cardSpacing = 160;
+    cardSpacing = 180;
     height = 200;
     scale = 0.5;
     
@@ -127,7 +129,7 @@ function UnitQueue() constructor {
         var _leftEdge = position.x - _cardWidth / 2;
         
         var _bgTop = position.y - height * scale - _padding;
-        var _bgBottom = position.y + _padding;
+        var _bgBottom = position.y + labelHeight + _padding;
         var _bgLeft = _leftEdge - _padding;
         var _bgRight = _leftEdge + _width + _padding;
         

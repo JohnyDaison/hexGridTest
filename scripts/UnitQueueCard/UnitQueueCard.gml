@@ -68,5 +68,16 @@ function UnitQueueCard(_unitQueue, _unit) constructor {
         }
         
         draw_sprite_ext(sprite, 0, _centerX, _spriteCenterY, _scale, _scale, 0, c_white, 1);
+        
+        if (_isActive) {
+            draw_set_color(c_white);
+        } else {
+            draw_set_color(c_yellow);
+        }
+        draw_set_alpha(1);
+        draw_set_font(fontDebug);
+        
+        draw_set_halign(fa_center);
+        draw_text(_centerX, _bottomY + unitQueue.labelMargin, string("{0} +{1}", unit.initiativeAccumulated, unit.initiative));
     }
 }

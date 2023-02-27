@@ -13,7 +13,7 @@ function CombatModule(_unit, _stats) constructor {
         
         if (myUnit.plannedFinalPosition.distance(_hex) > stats.attackRange) {
             if (!myUnit.mobile) {
-                return false;   
+                return false;
             }
             
             var _actionArray = myUnit.hexMap.findUnitPath(myUnit, _hex, myUnit.plannedFinalPosition, stats.attackRange);
