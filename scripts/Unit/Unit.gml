@@ -2,6 +2,10 @@ function Unit(_unitType) constructor {
     type = global.unitTypeMap[? _unitType];
     scale = type.scale;
     initiative = type.initiative;
+    
+    static shadowAlpha = 0.3;
+    static shadowRatio = 0.4;
+    
     initiativeAccumulated = 0;
     facing = 1;
     hexMap = pointer_null;
@@ -120,6 +124,15 @@ function Unit(_unitType) constructor {
     
     static draw = function (_x, _y) {
         var _yOffset = type.yOffset;
+        
+        var _shadowRadiusX = type.shadowRadius * scale;
+        var _shadowRadiusY = type.shadowRadius * scale * shadowRatio;
+        
+        draw_set_color(c_black);
+        draw_set_alpha(shadowAlpha);
+        
+        draw_ellipse(_x - _shadowRadiusX, _y - _shadowRadiusY,
+                    _x + _shadowRadiusX, _y + _shadowRadiusY, false);
         
         draw_sprite_ext(animSprite, animProgress,
             _x, _y + scale * _yOffset,

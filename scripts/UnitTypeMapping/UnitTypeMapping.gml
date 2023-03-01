@@ -18,6 +18,7 @@ function landUnitType(_id, _name) {
     _unitType.ground = true;
     _unitType.mobile = true;
     _unitType.animMovementSpeed = 300;
+    _unitType.shadowRadius = 70;
     
     return _unitType;
 }
@@ -95,6 +96,7 @@ _unitType = landUnitType(UnitType.SpiderBasic, "Basic Spider");
 _unitType.initiative = 5;
 
 _unitType.scale = 0.5;
+_unitType.shadowRadius = 70;
 _unitType.setAnim(UnitAnimState.Idle, sprSpider_Idle);
 _unitType.setAnim(UnitAnimState.Moving, sprSpider_Walk);
 _unitType.setAnim(UnitAnimState.Attacking, sprSpider_Attack);
@@ -106,6 +108,7 @@ _unitType = flyingUnitType(UnitType.BatBasic, "Basic Bat");
 _unitType.initiative = 3;
 
 _unitType.scale = 0.5;
+_unitType.shadowRadius = 50;
 _unitType.yOffset = -150;
 _unitType.setAnim(UnitAnimState.Idle, sprBat_Idle);
 _unitType.setAnim(UnitAnimState.Moving, sprBat_Fly);
@@ -120,5 +123,6 @@ _unitType.initiative = 1;
 _unitType.mobile = false;
 
 _unitType.scale = 0.5;
+_unitType.shadowRadius = 40;
 _unitType.setAnim(UnitAnimState.Idle, sprDummy_Idle);
 _unitType.setAnim(UnitAnimState.ReceivingHit, sprDummy_Hit);

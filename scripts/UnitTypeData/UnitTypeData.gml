@@ -10,6 +10,7 @@ function UnitTypeData(_id, _name) constructor {
     mobile = false;
     combat = new CombatStats();
     
+    shadowRadius = 100;
     scale = 1;
     yOffset = 0;
     animMovementSpeed = 1000;
