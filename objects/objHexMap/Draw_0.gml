@@ -11,6 +11,10 @@ if (gameController.selectedUnit != pointer_null && gameController.selectedUnit.c
 
 hexMap.drawHexes(_highlightHex, _selectedTile);
 
+if (gameController.selectedUnit != pointer_null) {
+    gameController.selectedUnit.drawPlannedActions();
+}
+
 // show tileSize as rectangle
 /*
 draw_set_alpha(0.8);

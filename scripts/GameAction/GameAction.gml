@@ -1,3 +1,4 @@
 function GameAction() constructor {
-    type = undefined;
+    static type = undefined;
+    static planColor = c_white;
 }

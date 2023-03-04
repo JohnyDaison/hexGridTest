@@ -189,6 +189,7 @@
     {"id":{"name":"sprSkeleton_Die_Bow","path":"sprites/sprSkeleton_Die_Bow/sprSkeleton_Die_Bow.yy",},"order":1,},
     {"id":{"name":"sprKnight_Walk_Bow","path":"sprites/sprKnight_Walk_Bow/sprKnight_Walk_Bow.yy",},"order":9,},
     {"id":{"name":"hex_passable","path":"scripts/hex_passable/hex_passable.yy",},"order":24,},
+    {"id":{"name":"Drawing","path":"scripts/Drawing/Drawing.yy",},"order":5,},
     {"id":{"name":"sprDummy_Hit","path":"sprites/sprDummy_Hit/sprDummy_Hit.yy",},"order":0,},
     {"id":{"name":"hex_rotate_left","path":"scripts/hex_rotate_left/hex_rotate_left.yy",},"order":25,},
     {"id":{"name":"return_diagonals","path":"scripts/return_diagonals/return_diagonals.yy",},"order":40,},

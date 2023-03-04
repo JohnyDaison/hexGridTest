@@ -5,6 +5,8 @@ function Unit(_unitType) constructor {
     
     static shadowAlpha = 0.3;
     static shadowRatio = 0.4;
+    static actionPlanStartAlpha = 0.5;
+    static actionPlanEndAlpha = 0.2;
     
     initiativeAccumulated = 0;
     facing = 1;
@@ -26,6 +28,7 @@ function Unit(_unitType) constructor {
     onActionStart = undefined;
     onActionEnd = undefined;
     onPlanEnd = undefined;
+    nextPosition = pointer_null;
     plannedFinalPosition = pointer_null;
     
     self.setAnimState(UnitAnimState.Idle);
@@ -147,6 +150,38 @@ function Unit(_unitType) constructor {
         }
     }
     
+    static drawPlannedActions = function () {
+        var _count = ds_list_size(actionQueue);
+        var _currentHex = nextPosition;
+        
+        for(var _index = 0; _index < _count; _index++) {
+            var _action = actionQueue[| _index];
+            var _fromPosition = hexMap.getTileXY(hexMap.getTile(_currentHex));
+            
+            draw_set_alpha(lerp(actionPlanStartAlpha, actionPlanEndAlpha, _index/_count));
+            
+            drawAction(_action, _currentHex, _fromPosition);
+            
+            _currentHex = getActionEndPosition(_action, _currentHex);
+        }
+    }
+    
+    static getActionEndPosition = function (_action, _fromHex) {
+        switch (_action.type) {
+            case ActionType.MoveToHex:
+                return _action.hex;
+            default:
+                return _fromHex;
+        }
+    }
+    
+    static drawAction = function(_action, _fromHex, _fromPosition) {
+        var _toPosition = hexMap.getTileXY(hexMap.getTile(_action.hex));
+        
+        draw_set_color(_action.planColor);
+        drawSimpleArrow(_fromPosition, _toPosition, 20);
+    }
+    
     static startNextAction = function () {
         if (currentAction != pointer_null) {
             return;
@@ -160,6 +195,7 @@ function Unit(_unitType) constructor {
         
         currentAction = _nextAction;
         actionStarted = false;
+        nextPosition = getActionEndPosition(_nextAction, nextPosition);
         ds_list_delete(actionQueue, 0);
         
         if (!is_undefined(onActionStart))
@@ -231,6 +267,6 @@ function Unit(_unitType) constructor {
     }
     
     static updateInitiative = function () {
-        initiativeAccumulated += initiative;   
+        initiativeAccumulated += initiative;
     }
 }

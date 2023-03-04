@@ -152,6 +152,7 @@
     {"name":"sprSkeleton_Die_Bow","order":1,"path":"sprites/sprSkeleton_Die_Bow/sprSkeleton_Die_Bow.yy",},
     {"name":"sprKnight_Walk_Bow","order":9,"path":"sprites/sprKnight_Walk_Bow/sprKnight_Walk_Bow.yy",},
     {"name":"hex_passable","order":24,"path":"scripts/hex_passable/hex_passable.yy",},
+    {"name":"Drawing","order":5,"path":"scripts/Drawing/Drawing.yy",},
     {"name":"hex_rotate_left","order":25,"path":"scripts/hex_rotate_left/hex_rotate_left.yy",},
     {"name":"return_diagonals","order":40,"path":"scripts/return_diagonals/return_diagonals.yy",},
     {"name":"Layout","order":32,"path":"scripts/Layout/Layout.yy",},

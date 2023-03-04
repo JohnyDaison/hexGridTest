@@ -1,5 +1,6 @@
 function MoveToHexAction(_hex) : GameAction() constructor {
-    type = ActionType.MoveToHex;
+    static type = ActionType.MoveToHex;
+    static planColor = c_green;
     hex = _hex;
     
     static toString = function() {

@@ -30,6 +30,9 @@ function HexTile(_position, _terrainType = TerrainType.Base) constructor {
         ds_list_add(units, _unit);
         _unit.currentTile = self;
         
+        if (_unit.nextPosition == pointer_null)
+            _unit.nextPosition = position;
+        
         if (_unit.plannedFinalPosition == pointer_null)
             _unit.plannedFinalPosition = position;
         
