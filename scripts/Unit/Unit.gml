@@ -9,6 +9,7 @@ function Unit(_unitType) constructor {
     static actionPlanEndAlpha = 0.4;
     
     initiativeAccumulated = 0;
+    turnCounter = 0;
     facing = 1;
     hexMap = pointer_null;
     currentTile = pointer_null;

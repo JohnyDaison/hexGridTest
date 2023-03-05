@@ -206,6 +206,7 @@ function GameController() constructor {
         
         if (selectedUnit != pointer_null) {
             selectedUnit.initiativeAccumulated = 0;
+            selectedUnit.turnCounter++;
         }
         
         updateUnitInitiative();

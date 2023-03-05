@@ -60,3 +60,12 @@ createTestTiles = function() {
 createTestTiles();
 
 gameController.init();
+
+testInitiativeSystem = function () {
+    var _testCount = 1000;
+    for(var i = 0; i < _testCount; i++) {
+        gameController.endUnitTurn();
+    }
+}
+
+// testInitiativeSystem();

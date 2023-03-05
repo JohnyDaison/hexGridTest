@@ -59,6 +59,9 @@ function UnitQueueCard(_unitQueue, _unit) constructor {
         var _cardLeft = _centerX - (spriteWidth / 2) * _scale - _padding;
         var _cardRight = _centerX + (spriteWidth / 2) * _scale + _padding;
         
+        var _initativeLabelY = _bottomY + unitQueue.labelMargin;
+        var _turnCounterLabelY = _initativeLabelY + unitQueue. labelHeight + unitQueue.labelMargin;
+        
         if (_isActive) {
             draw_set_color(c_white);
             draw_set_alpha(0.7);
@@ -74,10 +77,13 @@ function UnitQueueCard(_unitQueue, _unit) constructor {
         } else {
             draw_set_color(c_yellow);
         }
+        
         draw_set_alpha(1);
         draw_set_font(fontDebug);
-        
         draw_set_halign(fa_center);
-        draw_text(_centerX, _bottomY + unitQueue.labelMargin, string("{0} +{1}", unit.initiativeAccumulated, unit.initiative));
+        draw_set_valign(fa_top);
+        
+        draw_text(_centerX, _initativeLabelY, string("{0} +{1}", unit.initiativeAccumulated, unit.initiative));
+        draw_text(_centerX, _turnCounterLabelY, string("{0}", unit.turnCounter));
     }
 }

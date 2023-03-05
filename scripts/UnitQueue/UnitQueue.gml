@@ -129,7 +129,7 @@ function UnitQueue() constructor {
         var _leftEdge = position.x - _cardWidth / 2;
         
         var _bgTop = position.y - height * scale - _padding;
-        var _bgBottom = position.y + labelHeight + _padding;
+        var _bgBottom = position.y + 2 * labelHeight + labelMargin + _padding;
         var _bgLeft = _leftEdge - _padding;
         var _bgRight = _leftEdge + _width + _padding;
         
