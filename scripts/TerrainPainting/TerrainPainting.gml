@@ -42,7 +42,7 @@ function TerrainPainter(_hexMap) constructor {
     static paintHex = function (_q, _r, _centerHex, _brushHeight, _generatorFunction, _options = undefined) {
         var _existingTile = hexMap.grid.getTileQR(_q, _r);
         if (!is_undefined(_existingTile)) {
-            return pointer_null;   
+            return pointer_null;
         }
         
         var _height = _brushHeight;
