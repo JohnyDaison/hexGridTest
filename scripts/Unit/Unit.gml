@@ -5,8 +5,8 @@ function Unit(_unitType) constructor {
     
     static shadowAlpha = 0.3;
     static shadowRatio = 0.4;
-    static actionPlanStartAlpha = 0.5;
-    static actionPlanEndAlpha = 0.2;
+    static actionPlanStartAlpha = 0.7;
+    static actionPlanEndAlpha = 0.4;
     
     initiativeAccumulated = 0;
     facing = 1;
@@ -156,30 +156,13 @@ function Unit(_unitType) constructor {
         
         for(var _index = 0; _index < _count; _index++) {
             var _action = actionQueue[| _index];
-            var _fromPosition = hexMap.getTileXY(hexMap.getTile(_currentHex));
+            var _actionAlpha = lerp(actionPlanStartAlpha, actionPlanEndAlpha, _index / _count);
             
-            draw_set_alpha(lerp(actionPlanStartAlpha, actionPlanEndAlpha, _index/_count));
+            draw_set_alpha(_actionAlpha);
+            _action.drawPlanned(self, _currentHex);
             
-            drawAction(_action, _currentHex, _fromPosition);
-            
-            _currentHex = getActionEndPosition(_action, _currentHex);
+            _currentHex = _action.getEndPosition(self, _currentHex);
         }
-    }
-    
-    static getActionEndPosition = function (_action, _fromHex) {
-        switch (_action.type) {
-            case ActionType.MoveToHex:
-                return _action.hex;
-            default:
-                return _fromHex;
-        }
-    }
-    
-    static drawAction = function(_action, _fromHex, _fromPosition) {
-        var _toPosition = hexMap.getTileXY(hexMap.getTile(_action.hex));
-        
-        draw_set_color(_action.planColor);
-        drawSimpleArrow(_fromPosition, _toPosition, 20);
     }
     
     static startNextAction = function () {
@@ -195,7 +178,7 @@ function Unit(_unitType) constructor {
         
         currentAction = _nextAction;
         actionStarted = false;
-        nextPosition = getActionEndPosition(_nextAction, nextPosition);
+        nextPosition = _nextAction.getEndPosition(self, nextPosition);
         ds_list_delete(actionQueue, 0);
         
         if (!is_undefined(onActionStart))
