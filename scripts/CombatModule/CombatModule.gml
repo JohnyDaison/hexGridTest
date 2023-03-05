@@ -12,7 +12,7 @@ function CombatModule(_unit, _stats) constructor {
         }
         
         if (myUnit.plannedFinalPosition.distance(_hex) > stats.attackRange) {
-            if (!myUnit.mobile) {
+            if (!myUnit.movement.canMove()) {
                 return false;
             }
             
@@ -20,7 +20,7 @@ function CombatModule(_unit, _stats) constructor {
             var _lastAction = array_last(_actionArray);
             var _lastHex = _lastAction.hex;
             
-            if (!myUnit.planMovementToHex(_lastHex)) {
+            if (!myUnit.movement.planMovementToHex(_lastHex)) {
                 return false;
             }
         }

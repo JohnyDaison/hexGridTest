@@ -16,7 +16,6 @@ function landUnitType(_id, _name) {
     var _unitType = new UnitTypeData(_id, _name);
     
     _unitType.ground = true;
-    _unitType.mobile = true;
     _unitType.animMovementSpeed = 300;
     _unitType.shadowRadius = 70;
     
@@ -27,7 +26,6 @@ function flyingUnitType(_id, _name) {
     var _unitType = new UnitTypeData(_id, _name);
     
     _unitType.flying = true;
-    _unitType.mobile = true;
     _unitType.yOffset = -100;
     _unitType.animMovementSpeed = 600;
     
@@ -118,9 +116,9 @@ _unitType.setAnim(UnitAnimState.Death, sprBat_Die);
 
 
 _unitType = landUnitType(UnitType.TrainingDummy, "Training Dummy");
+_unitType.movement.mobile = false;
 _unitType.combat.passive = true;
 _unitType.initiative = 1;
-_unitType.mobile = false;
 
 _unitType.scale = 0.5;
 _unitType.shadowRadius = 40;

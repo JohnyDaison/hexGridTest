@@ -7,7 +7,7 @@ function UnitTypeData(_id, _name) constructor {
     ground = false;
     flying = false;
     water = false;
-    mobile = false;
+    movement = new MovementStats();
     combat = new CombatStats();
     
     shadowRadius = 100;

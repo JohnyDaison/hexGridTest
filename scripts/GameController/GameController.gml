@@ -167,8 +167,8 @@ function GameController() constructor {
     
             if (_cursorUnit != pointer_null && selectedUnit.combat.canAttack()) {
                 _planned = selectedUnit.combat.planAttackOnHex(unitTargetTile.position);
-            } else if (selectedUnit.mobile) {
-                _planned = selectedUnit.planMovementToHex(unitTargetTile.position);
+            } else if (selectedUnit.movement.canMove()) {
+                _planned = selectedUnit.movement.planMovementToHex(unitTargetTile.position);
             }
     
             if (_planned) {

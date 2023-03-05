@@ -14,10 +14,10 @@ function Unit(_unitType) constructor {
     currentTile = pointer_null;
     animState = undefined;
     loopAnimState = undefined;
-    mobile = type.mobile;
     dying = false;
     dead = false;
     
+    movement = new MovementModule(self, type.movement);
     combat = new CombatModule(self, type.combat);
     
     actionQueue = ds_list_create();
@@ -207,7 +207,7 @@ function Unit(_unitType) constructor {
         if (!actionStarted) {
             switch (currentAction.type) {
                 case ActionType.MoveToHex: {
-                    moveToHex(currentAction.hex);
+                    movement.moveToHex(currentAction.hex);
                     break;
                 }
                 case ActionType.AttackHex: {
@@ -222,31 +222,6 @@ function Unit(_unitType) constructor {
     
     static die = function () {
         dying = true;
-    }
-    
-    static moveToHex = function (_hex) {
-        var _endTile = hexMap.getTile(_hex);
-        var _movementAnimation = new BasicMovementAnimation(gameController, self, _endTile);
-        hexMap.displaceUnit(self);
-    
-        _movementAnimation.onAnimEnd = method(self, function (_animation) {
-            hexMap.placeUnit(_animation.endTile, self);
-            endCurrentAction();
-        });
-    }
-    
-    static planMovementToHex = function (_hex) {
-        if (!mobile) {
-            return false;
-        }
-        
-        var _actionArray = hexMap.findUnitPath(self, plannedFinalPosition, _hex);
-        
-        array_foreach(_actionArray, function(_action, _index) {
-            enqueueAction(_action);
-        });
-        
-        return true;
     }
     
     static updateInitiative = function () {
