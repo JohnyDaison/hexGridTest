@@ -28,11 +28,14 @@ if (!is_undefined(cursorHex)) {
 } else {
     debugText += string("Pos {0}", cursorPos);
 }
+debugText += "\n";
+
+debugText += string("Round: {0}\n", gameController.roundCounter);
 
 var _selectedUnit = gameController.selectedUnit;
 var _unitTargetTile = gameController.unitTargetTile;
 
-debugText += "\n\n";
+debugText += "\n";
 debugText += string("{0}\n", string(_selectedUnit));
 
 if (_selectedUnit != pointer_null) {

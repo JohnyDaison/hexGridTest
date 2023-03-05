@@ -45,7 +45,7 @@ function UnitQueueCard(_unitQueue, _unit) constructor {
         }
     }
     
-    static draw = function (_isActive) {
+    static draw = function (_isActive, _isInRound) {
         var _yOffset = unit.type.yOffset;
         var _scale = unitQueue.scale * unit.scale;
         
@@ -53,11 +53,8 @@ function UnitQueueCard(_unitQueue, _unit) constructor {
         var _spriteCenterY = currentPosition.y + _scale * _yOffset;
         var _bottomY = currentPosition.y;
         var _padding = unitQueue.cardPadding;
+        var _drawCard = _isActive || _isInRound;
         
-        var _cardTop = _spriteCenterY - spriteHeight * _scale - _padding;
-        var _cardBottom = _bottomY;
-        var _cardLeft = _centerX - (spriteWidth / 2) * _scale - _padding;
-        var _cardRight = _centerX + (spriteWidth / 2) * _scale + _padding;
         
         var _initativeLabelY = _bottomY + unitQueue.labelMargin;
         var _turnCounterLabelY = _initativeLabelY + unitQueue. labelHeight + unitQueue.labelMargin;
@@ -65,6 +62,17 @@ function UnitQueueCard(_unitQueue, _unit) constructor {
         if (_isActive) {
             draw_set_color(c_white);
             draw_set_alpha(0.7);
+        } else if (_isInRound) {
+            draw_set_color(c_ltgray);
+            draw_set_alpha(0.4);
+        }
+        
+        if (_drawCard) {
+            var _cardTop = _spriteCenterY - spriteHeight * _scale - _padding;
+            var _cardBottom = _bottomY;
+            var _cardLeft = _centerX - (spriteWidth / 2) * _scale - _padding;
+            var _cardRight = _centerX + (spriteWidth / 2) * _scale + _padding;
+            
             draw_roundrect(_cardLeft, _cardTop, _cardRight, _cardBottom, true);
             draw_roundrect(_cardLeft, _cardTop, _cardRight, _cardBottom, false);
             draw_roundrect(_cardLeft, _cardTop, _cardRight, _cardBottom, true);
@@ -72,7 +80,7 @@ function UnitQueueCard(_unitQueue, _unit) constructor {
         
         draw_sprite_ext(sprite, 0, _centerX, _spriteCenterY, _scale, _scale, 0, c_white, 1);
         
-        if (_isActive) {
+        if (_drawCard) {
             draw_set_color(c_white);
         } else {
             draw_set_color(c_yellow);

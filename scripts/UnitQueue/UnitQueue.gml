@@ -1,4 +1,5 @@
-function UnitQueue() constructor {
+function UnitQueue(_gameController) constructor {
+    gameController = _gameController;
     activeUnit = pointer_null;
     unitCards = [];
     
@@ -58,6 +59,10 @@ function UnitQueue() constructor {
         return true;
     }
     
+    static isInThisRound = function(_unitCard) {
+        return _unitCard.unit.initiativeAccumulated >= gameController.initiativeThreshold;
+    }
+    
     static updateActiveUnit = function () {
         show_debug_message("updateActiveUnit called");
         
@@ -68,7 +73,12 @@ function UnitQueue() constructor {
         }
         
         var _firstCard = array_first(unitCards)
-        activeUnit = _firstCard.unit;
+        
+        if (isInThisRound(_firstCard)) {
+            activeUnit = _firstCard.unit;
+        } else {
+            activeUnit = pointer_null;
+        }
     }
     
     static update = function () {
@@ -83,9 +93,13 @@ function UnitQueue() constructor {
             array_push(unitCards, _firstCard);
         }
         
-        insertionSort(unitCards, function(_card1, _card2) {
+        insertionSort(unitCards, method(self, function(_card1, _card2) {
+            if(isInThisRound(_card1) && isInThisRound(_card2)) {
+                return _card2.unit.initiative - _card1.unit.initiative;
+            }
+            
             return _card2.unit.initiativeAccumulated - _card1.unit.initiativeAccumulated;
-        });
+        }));
         
         updateCardTargets();
         updateActiveUnit();
@@ -139,8 +153,9 @@ function UnitQueue() constructor {
         
         for (var i = _unitCardCount - 1; i >= 0; i--) {
             var _unitCard = unitCards[i];
-            var _drawBorder = _unitCard.unit == activeUnit;
-            _unitCard.draw(_drawBorder);
+            var _isActive = _unitCard.unit == activeUnit;
+            var _isInRound = isInThisRound(_unitCard);
+            _unitCard.draw(_isActive, _isInRound);
         }
     }
 }

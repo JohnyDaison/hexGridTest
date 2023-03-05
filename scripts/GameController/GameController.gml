@@ -5,8 +5,11 @@ function GameController() constructor {
     selectedUnit = pointer_null;
     unitTargetTile = pointer_null;
     
-    unitQueue = new UnitQueue();
+    unitQueue = new UnitQueue(self);
     useUnitQueue = true;
+    
+    initiativeThreshold = 60;
+    roundCounter = 1;
     
     static destroy = function() {
         destroyMap();
@@ -205,11 +208,10 @@ function GameController() constructor {
         show_debug_message("endUnitTurn called");
         
         if (selectedUnit != pointer_null) {
-            selectedUnit.initiativeAccumulated = 0;
+            selectedUnit.initiativeAccumulated -= initiativeThreshold;
             selectedUnit.turnCounter++;
         }
         
-        updateUnitInitiative();
         selectedUnit = pointer_null;
         unitTargetTile = pointer_null;
         
@@ -217,6 +219,19 @@ function GameController() constructor {
             unitQueue.update();
             selectedUnit = unitQueue.activeUnit;
         }
+        
+        if (selectedUnit == pointer_null) {
+            endRound();
+        }
+    }
+    
+    static endRound = function () {
+        show_debug_message("endRound called");
+        
+        roundCounter++;
+        
+        updateUnitInitiative();
+        endUnitTurn();
     }
 
     static drawUnitQueue = function () {
