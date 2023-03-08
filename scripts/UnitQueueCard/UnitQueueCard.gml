@@ -56,8 +56,9 @@ function UnitQueueCard(_unitQueue, _unit) constructor {
         var _drawCard = _isActive || _isInRound;
         
         
-        var _initativeLabelY = _bottomY + unitQueue.labelMargin;
-        var _turnCounterLabelY = _initativeLabelY + unitQueue. labelHeight + unitQueue.labelMargin;
+        var _firstLabelY = _bottomY + unitQueue.labelMargin;
+        var _secondLabelY = _firstLabelY + unitQueue.labelHeight + unitQueue.labelMargin;
+        var _thirdLabelY = _secondLabelY + unitQueue.labelHeight + unitQueue.labelMargin;
         
         if (_isActive) {
             draw_set_color(c_white);
@@ -91,7 +92,8 @@ function UnitQueueCard(_unitQueue, _unit) constructor {
         draw_set_halign(fa_center);
         draw_set_valign(fa_top);
         
-        draw_text(_centerX, _initativeLabelY, string("{0} +{1}", unit.initiativeAccumulated, unit.initiative));
-        draw_text(_centerX, _turnCounterLabelY, string("{0}", unit.turnCounter));
+        draw_text(_centerX, _firstLabelY, string("{0}", unitQueue.roundsUntilActive(self)));
+        draw_text(_centerX, _secondLabelY, string("{0} +{1}", unit.initiativeAccumulated, unit.initiative));
+        draw_text(_centerX, _thirdLabelY, string("{0}", unit.turnCounter));
     }
 }

@@ -227,5 +227,8 @@ function Unit(_unitType) constructor {
     
     static updateInitiative = function () {
         initiativeAccumulated += initiative;
+        if (initiativeAccumulated < 0) {
+            initiativeAccumulated = 0;
+        }
     }
 }

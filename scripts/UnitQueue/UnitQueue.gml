@@ -63,6 +63,14 @@ function UnitQueue(_gameController) constructor {
         return _unitCard.unit.initiativeAccumulated >= gameController.initiativeThreshold;
     }
     
+    static roundsUntilActive = function(_unitCard) {
+        if (_unitCard.unit.initiative <= 0) {
+            return infinity;
+        }
+        
+        return ceil((gameController.initiativeThreshold - _unitCard.unit.initiativeAccumulated) / _unitCard.unit.initiative);
+    }
+    
     static updateActiveUnit = function () {
         show_debug_message("updateActiveUnit called");
         
@@ -94,11 +102,11 @@ function UnitQueue(_gameController) constructor {
         }
         
         insertionSort(unitCards, method(self, function(_card1, _card2) {
-            if(isInThisRound(_card1) && isInThisRound(_card2)) {
+            if(roundsUntilActive(_card1) == roundsUntilActive(_card2)) {
                 return _card2.unit.initiative - _card1.unit.initiative;
             }
             
-            return _card2.unit.initiativeAccumulated - _card1.unit.initiativeAccumulated;
+            return roundsUntilActive(_card1) - roundsUntilActive(_card2);
         }));
         
         updateCardTargets();
@@ -143,7 +151,7 @@ function UnitQueue(_gameController) constructor {
         var _leftEdge = position.x - _cardWidth / 2;
         
         var _bgTop = position.y - height * scale - _padding;
-        var _bgBottom = position.y + 2 * labelHeight + labelMargin + _padding;
+        var _bgBottom = position.y + 3 * labelHeight + 2 * labelMargin + _padding;
         var _bgLeft = _leftEdge - _padding;
         var _bgRight = _leftEdge + _width + _padding;
         
