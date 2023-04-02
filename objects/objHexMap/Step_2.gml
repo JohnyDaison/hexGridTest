@@ -1,5 +1,17 @@
 /// @description ANIMATIONS, DEBUG TEXT
 
+if (clearPlanButton == noone) {
+    var _xPos = objGameCamera.baseViewportWidth - clearPlanButtonMargin;
+    var _yPos = objGameCamera.baseViewportHeight - endTurnButtonMargin;
+    
+    clearPlanButton = instance_create_layer(_xPos, _yPos, "GUI", objBasicSpriteButton);
+	clearPlanButton.sprite_index = sprClearPlanButton;
+    
+    clearPlanButton.onClick = method(self, function () {
+        gameController.clearUnitPlan();
+    });
+}
+
 if (endTurnButton == noone) {
     var _xPos = objGameCamera.baseViewportWidth - endTurnButtonMargin;
     var _yPos = objGameCamera.baseViewportHeight - endTurnButtonMargin;
@@ -7,13 +19,14 @@ if (endTurnButton == noone) {
     endTurnButton = instance_create_layer(_xPos, _yPos, "GUI", objEndTurnButton);
     
     endTurnButton.onClick = method(self, function () {
-        gameController.endUnitTurn();
+        gameController.endTurnButtonPressed = true;
     });
 }
 
 // ANIMATIONS
 gameController.gameUpdate();
 gameController.animationUpdate();
+clearPlanButton.enabled = gameController.canPlanBeCleared();
 endTurnButton.enabled = gameController.canTurnBeEnded();
 
 // DEBUG TEXT
@@ -39,6 +52,8 @@ debugText += "\n";
 debugText += string("{0}\n", string(_selectedUnit));
 
 if (_selectedUnit != pointer_null) {
+	debugText += string("Action points: {0}/{1}", string(_selectedUnit.actionPoints - _selectedUnit.actionPointsUsed), string(_selectedUnit.actionPoints));
+    debugText += "\n";
     debugText += string("Target tile: {0} {1}", _unitTargetTile ? string(_unitTargetTile.position) : "", string(_unitTargetTile));
     debugText += "\n";
     

@@ -4,5 +4,6 @@ enum TerrainType {
     Rock,
     Sand,
     Snow,
-    Water
+    Water,
+	Length // hack for iterating the enum
 }

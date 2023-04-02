@@ -1,4 +1,5 @@
 tileSize = new Vector(160, 150); // tuned to our sprites
+clearPlanButtonMargin = 190;
 endTurnButtonMargin = 30;
 
 var _halfRoomWidth = room_width / 2;
@@ -9,6 +10,7 @@ debugText = "TEST";
 gameController = new GameController();
 hexMap = gameController.createMap(layout_flat, tileSize, startPosition);
 
+clearPlanButton = noone;
 endTurnButton = noone;
 
 cursorHex = undefined;

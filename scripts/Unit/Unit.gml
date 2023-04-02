@@ -2,6 +2,7 @@ function Unit(_unitType) constructor {
     type = global.unitTypeMap[? _unitType];
     scale = type.scale;
     initiative = type.initiative;
+	actionPoints = type.actionPoints;
     
     static shadowAlpha = 0.3;
     static shadowRatio = 0.4;
@@ -9,6 +10,7 @@ function Unit(_unitType) constructor {
     static actionPlanEndAlpha = 0.4;
     
     initiativeAccumulated = 0;
+	actionPointsUsed = 0;
     turnCounter = 0;
     facing = 1;
     hexMap = pointer_null;
@@ -42,6 +44,7 @@ function Unit(_unitType) constructor {
     static destroy = function () {
         currentTile = pointer_null;
         ds_list_destroy(actionQueue);
+		movement.destroy();
     };
     
     static setNextAnimState = function (_state, _loop = false) {
@@ -150,6 +153,12 @@ function Unit(_unitType) constructor {
             plannedFinalPosition = _action.hex;
         }
     }
+	
+	static clearActionQueue = function() {
+		ds_list_clear(actionQueue);
+		
+		plannedFinalPosition = nextPosition;
+	}
     
     static drawPlannedActions = function () {
         var _count = ds_list_size(actionQueue);
@@ -165,6 +174,17 @@ function Unit(_unitType) constructor {
             _currentHex = _action.getEndPosition(self, _currentHex);
         }
     }
+	
+	static getActionCost = function (_fromTile, _action) {
+        switch (_action.type) {
+            case ActionType.MoveToHex: {
+                return movement.getMovementCost(_fromTile, _action);
+            }
+            case ActionType.AttackHex: {
+                return combat.getAttackCost(_fromTile, _action);
+            }
+        }
+    }
     
     static startNextAction = function () {
         if (currentAction != pointer_null) {
@@ -176,7 +196,20 @@ function Unit(_unitType) constructor {
         if (is_undefined(_nextAction)) {
             return;
         }
-        
+		
+		var _actionCost = getActionCost(currentTile, _nextAction);
+		
+		if (is_undefined(_actionCost)) {
+			ds_list_delete(actionQueue, 0);
+			startNextAction();
+			return;
+		}
+		
+		if (_actionCost > actionPoints - actionPointsUsed) {
+			return;	
+		}
+		
+        actionPointsUsed += _actionCost;
         currentAction = _nextAction;
         actionStarted = false;
         nextPosition = _nextAction.getEndPosition(self, nextPosition);
@@ -231,4 +264,10 @@ function Unit(_unitType) constructor {
             initiativeAccumulated = 0;
         }
     }
+	
+	static onRoundStart = function () {
+		updateInitiative();
+					
+		actionPointsUsed = 0;
+	}
 }
