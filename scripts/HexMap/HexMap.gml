@@ -3,7 +3,7 @@ function HexMap(_orientation, _size, _origin) constructor {
     grid = new HexGrid();
     stackHeight = 1;
     highlightColor = c_white;
-    highlightSelectedColor = merge_color(c_white, c_yellow, 0.8);
+    highlightSelectedColor = merge_color(c_white, merge_color(c_lime, c_green, 0.5), 0.8);
     highlightAlpha = 0.5;
     terrainPainter = new TerrainPainter(self);
     drawTileCoords = true;
@@ -78,6 +78,7 @@ function HexMap(_orientation, _size, _origin) constructor {
         var _origin = layout[lay.origin];
         var _xx = (_ori[ori.f0] * _hex.q + _ori[ori.f1] * _hex.r) * _size.x;
         var _yy = (_ori[ori.f2] * _hex.q + _ori[ori.f3] * _hex.r) * _size.y;
+        
         return new Vector(_xx + _origin.x, _yy + _origin.y);
     }
     
@@ -89,19 +90,23 @@ function HexMap(_orientation, _size, _origin) constructor {
         return new Vector(_size.x * cos(_angle), _size.y * sin(_angle));
     }
     
-    static polygonCorners = function(_hex) {
+    static polygonCorners = function(_hex, _scale = 1) {
         var _corners = [];
         var _center = hexToPixel(_hex);
         for (var i = 0; i < 6; i++) {
             var _offset = hexCornerOffset(i);
+            if (_scale != 1) {
+               _offset = _offset.multiplyByScalar(_scale);
+            }
+            
             _corners[i] = _center.add(_offset);
         }
 
         return _corners;
     }
     
-    static drawFlatHex = function(_hex, _yOffset = 0) {
-        var _corners = polygonCorners(_hex);
+    static drawFlatHex = function(_hex, _yOffset = 0, _scale = 1) {
+        var _corners = polygonCorners(_hex, _scale);
         draw_primitive_begin(pr_trianglefan);
         for (var _k = 0; _k < 6; _k++) {
             var _corner = _corners[_k];
@@ -111,6 +116,43 @@ function HexMap(_orientation, _size, _origin) constructor {
         }
         draw_primitive_end();
     }
+    
+    static drawUnitHighlight = function(_hex, _color, _yOffset = 0, _scale = 1) {
+        var _innerCorners = polygonCorners(_hex, _scale);
+        var _outerCorners = polygonCorners(_hex, _scale + 0.1);
+        var _innerCornersOutline = polygonCorners(_hex, _scale - 0.025);
+        var _outerCornersOutline = polygonCorners(_hex, _scale + 0.125);
+        
+        draw_set_alpha(0.65);
+        drawHexagonOutline(_innerCorners, _outerCorners, _yOffset, _color);
+        drawHexagonOutline(_innerCorners, _innerCornersOutline, _yOffset, c_black);
+        drawHexagonOutline(_outerCorners, _outerCornersOutline, _yOffset, c_black);
+    }
+    
+    static drawHexagonOutline = function(_innerCorners, _outerCorners, _yOffset, _color) {
+        draw_set_color(_color);
+        draw_primitive_begin(pr_trianglestrip);
+        for (var _k = 0,  _shouldBreak = false; !_shouldBreak; _k++) {
+            if (_k == 6) {
+                _k = 0;
+                _shouldBreak = true;
+            }
+            
+            var _corner = _innerCorners[_k];
+            var _x1 = _corner.x;
+            var _y1 = _corner.y;
+            
+            draw_vertex(_x1, _y1 + _yOffset);
+            
+            _corner = _outerCorners[_k];
+            _x1 = _corner.x;
+            _y1 = _corner.y;
+            
+            draw_vertex(_x1, _y1 + _yOffset);
+        }
+        draw_primitive_end();
+    }
+    
     
     static drawHexBg = function() {
         for (var _r = grid.minR; _r <= grid.maxR; _r++) {
@@ -177,16 +219,19 @@ function HexMap(_orientation, _size, _origin) constructor {
                 var _drawHighlight = !is_undefined(_highlightHex) && _hex.equals(_highlightHex);
                 var _highlightColor = highlightColor;
                 
-                if (_selectedTile != pointer_null && _hexTile == _selectedTile) {
-                    _drawHighlight = true;
-                    _highlightColor = highlightSelectedColor;
-                }
-                
                 if (_drawHighlight) {
                     draw_set_alpha(highlightAlpha);
                     draw_set_color(_highlightColor);
                 
                     drawFlatHex(_hex, getTileYOffset(_hexTile));
+                    var _unit = _hexTile.getTopUnit();
+                    if (_unit) {
+                        drawUnitHighlight(_hex, c_red, getTileYOffset(_hexTile), 0.5);
+                    }
+                }
+                
+                if (_selectedTile != pointer_null && _hexTile == _selectedTile) {
+                    drawUnitHighlight(_hex, highlightSelectedColor, getTileYOffset(_hexTile), 0.5);
                 }
                 
                 if (drawTileCoords) {
