@@ -18,7 +18,7 @@ function landUnitType(_id, _name) {
     _unitType.ground = true;
     _unitType.animMovementSpeed = 300;
     _unitType.shadowRadius = 70;
-	_unitType.actionPoints = 4;
+    _unitType.actionPoints = 4;
     
     return _unitType;
 }
@@ -29,7 +29,7 @@ function flyingUnitType(_id, _name) {
     _unitType.flying = true;
     _unitType.yOffset = -100;
     _unitType.animMovementSpeed = 600;
-	_unitType.actionPoints = 6;
+    _unitType.actionPoints = 6;
     
     return _unitType;
 }

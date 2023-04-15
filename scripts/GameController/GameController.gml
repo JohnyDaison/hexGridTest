@@ -4,7 +4,7 @@ function GameController() constructor {
     hexMap = pointer_null;
     selectedUnit = pointer_null;
     unitTargetTile = pointer_null;
-	endTurnButtonPressed = false;
+    endTurnButtonPressed = false;
     
     unitQueue = new UnitQueue(self);
     useUnitQueue = true;
@@ -125,17 +125,17 @@ function GameController() constructor {
     }
     
     static gameUpdate = function () {
-		if (endTurnButtonPressed) {
-			if (selectedUnit != pointer_null && selectedUnit.currentAction == pointer_null) {
-				selectedUnit.startNextAction();
-			}
-			
-			if (selectedUnit == pointer_null || selectedUnit.currentAction == pointer_null) {
-				endTurnButtonPressed = false;
-				endUnitTurn();
-			}
-		}
-		
+        if (endTurnButtonPressed) {
+            if (selectedUnit != pointer_null && selectedUnit.currentAction == pointer_null) {
+                selectedUnit.startNextAction();
+            }
+            
+            if (selectedUnit == pointer_null || selectedUnit.currentAction == pointer_null) {
+                endTurnButtonPressed = false;
+                endUnitTurn();
+            }
+        }
+        
         var _unitCount = ds_list_size(units);
         
         for (var i = _unitCount - 1; i >= 0; i--) {
@@ -207,26 +207,26 @@ function GameController() constructor {
             _unit.onRoundStart();
         }
     }
-	
-	static canPlanBeCleared = function () {
-		if (endTurnButtonPressed) {
-			return false;	
-		}
-		
+    
+    static canPlanBeCleared = function () {
+        if (endTurnButtonPressed) {
+            return false;    
+        }
+        
         if (selectedUnit != pointer_null && ds_list_size(selectedUnit.actionQueue) > 0) {
             return true;
         }
         
         return false;
     }
-	
-	static clearUnitPlan = function () {
-		if (selectedUnit == pointer_null) {
+    
+    static clearUnitPlan = function () {
+        if (selectedUnit == pointer_null) {
             return;
         }
-		
-		selectedUnit.clearActionQueue();
-	}
+        
+        selectedUnit.clearActionQueue();
+    }
     
     static canTurnBeEnded = function () {
         if (selectedUnit != pointer_null && selectedUnit.currentAction != pointer_null) {

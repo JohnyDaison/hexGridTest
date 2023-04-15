@@ -1,10 +1,10 @@
 function MovementModule(_unit, _stats) constructor {
     myUnit = _unit;
     stats = _stats.copy();
-	
-	static destroy = function () {
-		stats.destroy();	
-	}
+    
+    static destroy = function () {
+        stats.destroy();    
+    }
     
     static canMove = function () {
         return stats.mobile;
@@ -23,29 +23,29 @@ function MovementModule(_unit, _stats) constructor {
         
         return true;
     }
-	
-	// this method assumes the two hexes are neighbors
-	static getMovementCost = function(_fromTile, _action) {
-		var _toTile = myUnit.hexMap.getTile(_action.hex);
-		
-		if (_fromTile == pointer_null || _toTile == pointer_null) {
-			return undefined;	
-		}
-		
-		var _fromRelations = stats.terrainRelations[? _fromTile.terrainType];
-		var _toRelations = stats.terrainRelations[? _toTile.terrainType];
-		
-		if (!_toRelations.possible) {
-			return undefined;
-		}
-		
-		var _fromModifier = _fromRelations.pointCostModifier;
-		var _fromMultiplier = _fromRelations.pointCostMultiplier;
-		var _toModifier = _toRelations.pointCostModifier;
-		var _toMultiplier = _toRelations.pointCostMultiplier;
-		
-		return _action.pointCost * _fromMultiplier * _toMultiplier + _fromModifier + _toModifier;
-	}
+    
+    // this method assumes the two hexes are neighbors
+    static getMovementCost = function(_fromTile, _action) {
+        var _toTile = myUnit.hexMap.getTile(_action.hex);
+        
+        if (_fromTile == pointer_null || _toTile == pointer_null) {
+            return undefined;    
+        }
+        
+        var _fromRelations = stats.terrainRelations[? _fromTile.terrainType];
+        var _toRelations = stats.terrainRelations[? _toTile.terrainType];
+        
+        if (!_toRelations.possible) {
+            return undefined;
+        }
+        
+        var _fromModifier = _fromRelations.pointCostModifier;
+        var _fromMultiplier = _fromRelations.pointCostMultiplier;
+        var _toModifier = _toRelations.pointCostModifier;
+        var _toMultiplier = _toRelations.pointCostMultiplier;
+        
+        return _action.pointCost * _fromMultiplier * _toMultiplier + _fromModifier + _toModifier;
+    }
     
     static moveToHex = function (_hex) {
         var _endTile = myUnit.hexMap.getTile(_hex);

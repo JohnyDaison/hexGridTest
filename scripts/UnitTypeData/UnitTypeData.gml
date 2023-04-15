@@ -4,7 +4,7 @@ function UnitTypeData(_id, _name) constructor {
     name = _name;
     
     initiative = 0;
-	actionPoints = 0;
+    actionPoints = 0;
     ground = false;
     flying = false;
     water = false;

@@ -5,7 +5,7 @@ if (clearPlanButton == noone) {
     var _yPos = objGameCamera.baseViewportHeight - endTurnButtonMargin;
     
     clearPlanButton = instance_create_layer(_xPos, _yPos, "GUI", objBasicSpriteButton);
-	clearPlanButton.sprite_index = sprClearPlanButton;
+    clearPlanButton.sprite_index = sprClearPlanButton;
     
     clearPlanButton.onClick = method(self, function () {
         gameController.clearUnitPlan();
@@ -52,7 +52,7 @@ debugText += "\n";
 debugText += string("{0}\n", string(_selectedUnit));
 
 if (_selectedUnit != pointer_null) {
-	debugText += string("Action points: {0}/{1}", string(_selectedUnit.actionPoints - _selectedUnit.actionPointsUsed), string(_selectedUnit.actionPoints));
+    debugText += string("Action points: {0}/{1}", string(_selectedUnit.actionPoints - _selectedUnit.actionPointsUsed), string(_selectedUnit.actionPoints));
     debugText += "\n";
     debugText += string("Target tile: {0} {1}", _unitTargetTile ? string(_unitTargetTile.position) : "", string(_unitTargetTile));
     debugText += "\n";

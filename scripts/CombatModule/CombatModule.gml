@@ -33,17 +33,17 @@ function CombatModule(_unit, _stats) constructor {
     static planAttackOnUnit = function (_unit) {
         myUnit.enqueueAction(new AttackUnitAction(_unit));
     }
-	
-	// TODO: add logic
-	static getAttackCost = function(_fromTile, _action) {
-		var _endTile = myUnit.hexMap.getTile(_action.hex);
-		
-		if (_fromTile == pointer_null || _endTile == pointer_null) {
-			return undefined;	
-		}
-		
-		return _action.pointCost;
-	}
+    
+    // TODO: add logic
+    static getAttackCost = function(_fromTile, _action) {
+        var _endTile = myUnit.hexMap.getTile(_action.hex);
+        
+        if (_fromTile == pointer_null || _endTile == pointer_null) {
+            return undefined;    
+        }
+        
+        return _action.pointCost;
+    }
     
     static attackHex = function (_hex) {
         var _endTile = myUnit.hexMap.getTile(_hex);
