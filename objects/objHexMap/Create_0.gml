@@ -30,6 +30,27 @@ handleTap = function() {
     gameController.handleTileClicked(cursorTile);
 }
 
+handleDrag = function(_startTile, _endHex) {
+    gameController.handleTileDragged(_startTile, _endHex);
+}
+
+drawFacingDragArrow = function() {
+        if (!gameController.selectedUnit) {
+            return;
+        }
+    
+        var _input = objInputController;
+        if (!_input.facingDragValid) {
+            return;
+        }
+        
+        var _fromPosition = hexMap.getTileXY(_input.dragStartTile);
+        var _toPosition = hexMap.getTileXY(_input.facingDragTile);
+        
+        draw_set_color(c_orange);
+        drawSimpleArrow(_fromPosition, _toPosition, 20);
+    }
+
 createTestTiles = function() {
     var _swordSkeleton = hexMap.addTile(-1, 0, TerrainType.Snow);
     gameController.addUnit(_swordSkeleton, UnitType.SkeletonSwordBasic);

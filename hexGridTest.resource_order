@@ -80,6 +80,7 @@
     {"name":"sprSkeleton_Die_Sword","order":2,"path":"sprites/sprSkeleton_Die_Sword/sprSkeleton_Die_Sword.yy",},
     {"name":"sprKnight_Hit_Sword","order":4,"path":"sprites/sprKnight_Hit_Sword/sprKnight_Hit_Sword.yy",},
     {"name":"sprSpider_Walk","order":4,"path":"sprites/sprSpider_Walk/sprSpider_Walk.yy",},
+    {"name":"FaceHexAction","order":6,"path":"scripts/FaceHexAction/FaceHexAction.yy",},
     {"name":"hex_get_path","order":17,"path":"scripts/hex_get_path/hex_get_path.yy",},
     {"name":"objBasicSpriteButton","order":3,"path":"objects/objBasicSpriteButton/objBasicSpriteButton.yy",},
     {"name":"qoffset_from_cube","order":38,"path":"scripts/qoffset_from_cube/qoffset_from_cube.yy",},

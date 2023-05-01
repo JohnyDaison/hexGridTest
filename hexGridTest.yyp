@@ -107,6 +107,7 @@
     {"id":{"name":"sprSkeleton_Die_Sword","path":"sprites/sprSkeleton_Die_Sword/sprSkeleton_Die_Sword.yy",},},
     {"id":{"name":"sprKnight_Hit_Sword","path":"sprites/sprKnight_Hit_Sword/sprKnight_Hit_Sword.yy",},},
     {"id":{"name":"sprSpider_Walk","path":"sprites/sprSpider_Walk/sprSpider_Walk.yy",},},
+    {"id":{"name":"FaceHexAction","path":"scripts/FaceHexAction/FaceHexAction.yy",},},
     {"id":{"name":"hex_get_path","path":"scripts/hex_get_path/hex_get_path.yy",},},
     {"id":{"name":"objBasicSpriteButton","path":"objects/objBasicSpriteButton/objBasicSpriteButton.yy",},},
     {"id":{"name":"qoffset_from_cube","path":"scripts/qoffset_from_cube/qoffset_from_cube.yy",},},

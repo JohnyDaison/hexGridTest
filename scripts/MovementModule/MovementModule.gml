@@ -3,11 +3,23 @@ function MovementModule(_unit, _stats) constructor {
     stats = _stats.copy();
     
     static destroy = function () {
-        stats.destroy();    
+        stats.destroy();
     }
     
     static canMove = function () {
         return stats.mobile;
+    }
+    
+    static planFacingHex = function (_hex) {
+        var _lastAction = myUnit.getQueueEndAction();
+        
+        if (_lastAction && _lastAction.type == ActionType.FaceHex) {
+            _lastAction.hex = _hex;
+        } else {
+            myUnit.enqueueAction(new FaceHexAction(_hex));
+        }
+        
+        return true;
     }
     
     static planMovementToHex = function (_hex) {
@@ -29,7 +41,7 @@ function MovementModule(_unit, _stats) constructor {
         var _toTile = myUnit.hexMap.getTile(_action.hex);
         
         if (_fromTile == pointer_null || _toTile == pointer_null) {
-            return undefined;    
+            return undefined;
         }
         
         var _fromRelations = stats.terrainRelations[? _fromTile.terrainType];
@@ -47,11 +59,15 @@ function MovementModule(_unit, _stats) constructor {
         return _action.pointCost * _fromMultiplier * _toMultiplier + _fromModifier + _toModifier;
     }
     
-    static moveToHex = function (_hex) {
-        var _endTile = myUnit.hexMap.getTile(_hex);
+    static faceHex = function (_hex) {
         var _newFacing = _hex.subtract(myUnit.currentTile.position).toFacing();
         myUnit.updateFacing(_newFacing);
+    }
+    
+    static moveToHex = function (_hex) {
+        faceHex(_hex);
         
+        var _endTile = myUnit.hexMap.getTile(_hex);
         var _movementAnimation = new BasicMovementAnimation(myUnit.gameController, myUnit, _endTile);
         myUnit.hexMap.displaceUnit(myUnit);
     

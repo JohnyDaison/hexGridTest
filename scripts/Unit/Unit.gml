@@ -158,6 +158,13 @@ function Unit(_unitType) constructor {
     }
     
     static enqueueAction = function(_action) {
+        var _actionCount = ds_list_size(actionQueue);
+        var _lastAction = actionQueue[| _actionCount - 1];
+        
+        if (!is_undefined(_lastAction) && _lastAction.type == ActionType.FaceHex) {
+            ds_list_delete(actionQueue, _actionCount - 1);
+        }
+        
         ds_list_add(actionQueue, _action);
         
         if (_action.type == ActionType.MoveToHex) {
@@ -188,6 +195,9 @@ function Unit(_unitType) constructor {
     
     static getActionCost = function (_fromTile, _action) {
         switch (_action.type) {
+            case ActionType.FaceHex: {
+                return movement.getMovementCost(_fromTile, _action);
+            }
             case ActionType.MoveToHex: {
                 return movement.getMovementCost(_fromTile, _action);
             }
@@ -251,6 +261,10 @@ function Unit(_unitType) constructor {
         
         if (!actionStarted) {
             switch (currentAction.type) {
+                case ActionType.FaceHex: {
+                    movement.faceHex(currentAction.hex);
+                    break;
+                }
                 case ActionType.MoveToHex: {
                     movement.moveToHex(currentAction.hex);
                     break;
@@ -262,7 +276,16 @@ function Unit(_unitType) constructor {
             }
             
             actionStarted = true;
+            
+            if (currentAction.instant) {
+                endCurrentAction();
+            }
         }
+    }
+    
+    static getQueueEndAction = function () {
+        var _actionCount = ds_list_size(actionQueue);
+        return actionQueue[| _actionCount - 1];
     }
     
     static die = function () {

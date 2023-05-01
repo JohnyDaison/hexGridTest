@@ -161,6 +161,7 @@ function GameController() constructor {
         var _cursorUnit = _cursorTile.getTopUnit();
         
         if (useUnitQueue) {
+            unitTargetTile = pointer_null;
             if (_cursorUnit != selectedUnit) {
                 unitTargetTile = _cursorTile;
             }
@@ -194,7 +195,25 @@ function GameController() constructor {
             }
         }
     }
-
+    
+    static handleTileDragged = function(_startTile, _endHex) {
+        if (selectedUnit == pointer_null) {
+            return;
+        }
+        
+        if (!_startTile.position.equals(selectedUnit.nextPosition)) {
+            handleTileClicked(_startTile);
+        }
+        
+        if (selectedUnit.plannedFinalPosition.equals(_startTile.position)) {
+            selectedUnit.movement.planFacingHex(_endHex);
+            
+            if (selectedUnit.currentAction == pointer_null) {
+                selectedUnit.startNextAction();
+            }
+        }
+    }
+    
     static getActiveUnit = function () {
         return unitQueue.activeUnit;
     }
