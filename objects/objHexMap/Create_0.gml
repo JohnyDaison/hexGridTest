@@ -1,3 +1,4 @@
+var _colors = new Colors();
 tileSize = new Vector(160, 150); // tuned to our sprites
 clearPlanButtonMargin = 190;
 endTurnButtonMargin = 30;
@@ -60,6 +61,19 @@ createTestTiles = function() {
 }
 
 createTestTiles();
+
+createDirectionTestTiles = function() {
+    var _dirs = global.hexDirections;
+
+    hexMap.addTile(_dirs[0].q, _dirs[0].r, TerrainType.Snow, 1);
+    hexMap.addTile(_dirs[1].q, _dirs[1].r, TerrainType.Water, 2);
+    hexMap.addTile(_dirs[2].q, _dirs[2].r, TerrainType.Rock, 3);
+    hexMap.addTile(_dirs[3].q, _dirs[3].r, TerrainType.Sand, 1);
+    hexMap.addTile(_dirs[4].q, _dirs[4].r, TerrainType.Rock, 2);
+    hexMap.addTile(_dirs[5].q, _dirs[5].r, TerrainType.Grass, 3);
+}
+
+// createDirectionTestTiles();
 
 gameController.init();
 

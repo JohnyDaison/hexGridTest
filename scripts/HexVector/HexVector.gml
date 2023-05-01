@@ -49,6 +49,34 @@ function HexVector(_q, _r) constructor {
         return subtract(_otherVector).length();
     }
     
+    static normalize = function () {
+        var _normalized = self.scale(1 / self.length());
+        _normalized.makeRound();
+        
+        return _normalized;
+    }
+    
+    static toFacing = function () {
+        var _normalized = self;
+        var _origLength = self.length();
+        
+        if (_origLength == 0) {
+            return -1;
+        }
+        
+        if (_origLength != 1) {
+            _normalized = self.normalize();
+        }
+        
+        for (var i = 0; i < 6; i++) {
+            if (_normalized.equals(global.hexDirections[i])) {
+                return i;
+            }
+        }
+        
+        return -1;
+    }
+    
     static getRing = function (_radius) {
         var _results = [];
         var _c = 0;

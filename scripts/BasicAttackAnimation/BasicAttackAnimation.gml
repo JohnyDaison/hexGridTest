@@ -43,11 +43,6 @@ function BasicAttackAnimation(_gameController, _unit, _endTile) : GameAnimation(
             setDrawingTile(endTile);
         }
         
-        var _xDiff = _unitEndPosition.x - _unitStartPosition.x;
-        if (_xDiff != 0) {
-            unit.facing = sign(_xDiff);
-        }
-        
         unit.setNextAnimState(UnitAnimState.Attacking);
     }
     

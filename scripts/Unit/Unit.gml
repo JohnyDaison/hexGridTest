@@ -3,6 +3,7 @@ function Unit(_unitType) constructor {
     scale = type.scale;
     initiative = type.initiative;
     actionPoints = type.actionPoints;
+    facing = 0;
     
     static shadowAlpha = 0.3;
     static shadowRatio = 0.4;
@@ -12,7 +13,7 @@ function Unit(_unitType) constructor {
     initiativeAccumulated = 0;
     actionPointsUsed = 0;
     turnCounter = 0;
-    facing = 1;
+    spriteFacing = 1;
     hexMap = pointer_null;
     currentTile = pointer_null;
     animState = undefined;
@@ -143,7 +144,17 @@ function Unit(_unitType) constructor {
         
         draw_sprite_ext(animSprite, animProgress,
             _x, _y + scale * _yOffset,
-            scale * facing, scale, 0, c_white, 1);
+            scale * spriteFacing, scale, 0, c_white, 1);
+    }
+    
+    static drawFacingArrow = function (_x, _y, _alpha) {
+        var _tint = Colors.enemyRed;
+        
+        if (gameController.selectedUnit == self) {
+            _tint = Colors.friendlyGreen;
+        }
+        
+        draw_sprite_ext(sprHexFacingArrow, facing, _x, _y, 1, 1, 0, _tint, _alpha);
     }
     
     static enqueueAction = function(_action) {
@@ -269,5 +280,13 @@ function Unit(_unitType) constructor {
         updateInitiative();
         
         actionPointsUsed = 0;
+    }
+    
+    static updateFacing = function (_facing = -1) {
+        if (_facing != -1) {
+            facing = _facing;
+        }
+        
+        spriteFacing = sign(2.5 - facing);
     }
 }

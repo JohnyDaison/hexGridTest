@@ -10,6 +10,7 @@ if (gameController.selectedUnit != pointer_null && gameController.selectedUnit.c
 }
 
 hexMap.drawHexes(_highlightHex, _selectedTile);
+hexMap.drawUnitsOverlay(gameController.units);
 
 if (gameController.selectedUnit != pointer_null) {
     gameController.selectedUnit.drawPlannedActions();

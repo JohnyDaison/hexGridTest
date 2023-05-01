@@ -210,7 +210,7 @@ function GameController() constructor {
     
     static canPlanBeCleared = function () {
         if (endTurnButtonPressed) {
-            return false;    
+            return false;
         }
         
         if (selectedUnit != pointer_null && ds_list_size(selectedUnit.actionQueue) > 0) {
@@ -263,7 +263,9 @@ function GameController() constructor {
         roundCounter++;
         
         unitsRoundStart();
-        endUnitTurn();
+        if (useUnitQueue) {
+            endUnitTurn();
+        }
     }
 
     static drawUnitQueue = function () {

@@ -49,6 +49,9 @@ function MovementModule(_unit, _stats) constructor {
     
     static moveToHex = function (_hex) {
         var _endTile = myUnit.hexMap.getTile(_hex);
+        var _newFacing = _hex.subtract(myUnit.currentTile.position).toFacing();
+        myUnit.updateFacing(_newFacing);
+        
         var _movementAnimation = new BasicMovementAnimation(myUnit.gameController, myUnit, _endTile);
         myUnit.hexMap.displaceUnit(myUnit);
     

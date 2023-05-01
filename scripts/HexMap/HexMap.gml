@@ -3,8 +3,8 @@ function HexMap(_orientation, _size, _origin) constructor {
     grid = new HexGrid();
     stackHeight = 1;
     highlightColor = c_white;
-    highlightSelectedColor = merge_color(c_white, merge_color(c_lime, c_green, 0.5), 0.8);
     highlightAlpha = 0.5;
+    facingArrowAlpha = 0.5;
     terrainPainter = new TerrainPainter(self);
     drawTileCoords = true;
     
@@ -186,6 +186,7 @@ function HexMap(_orientation, _size, _origin) constructor {
         for (var i = 0; i < _count; i++) {
             var _unit = _hexTile.getUnit(i);
             
+            _unit.drawFacingArrow(_vector.x, _vector.y, facingArrowAlpha);
             _unit.draw(_vector.x, _vector.y);
         }
     }
@@ -224,14 +225,15 @@ function HexMap(_orientation, _size, _origin) constructor {
                     draw_set_color(_highlightColor);
                 
                     drawFlatHex(_hex, getTileYOffset(_hexTile));
+                    
                     var _unit = _hexTile.getTopUnit();
                     if (_unit) {
-                        drawUnitHighlight(_hex, c_red, getTileYOffset(_hexTile), 0.5);
+                        drawUnitHighlight(_hex, Colors.enemyRed, getTileYOffset(_hexTile), 0.5);
                     }
                 }
                 
                 if (_selectedTile != pointer_null && _hexTile == _selectedTile) {
-                    drawUnitHighlight(_hex, highlightSelectedColor, getTileYOffset(_hexTile), 0.5);
+                    drawUnitHighlight(_hex, Colors.friendlyGreen, getTileYOffset(_hexTile), 0.5);
                 }
                 
                 if (drawTileCoords) {
@@ -248,6 +250,21 @@ function HexMap(_orientation, _size, _origin) constructor {
                 drawHexUnits(_hexTile);
                 drawHexAnimations(_hexTile);
             }
+        }
+    }
+    
+    static drawUnitsOverlay = function(_units) {
+        var _count = ds_list_size(_units);
+        
+        for (var i = 0; i < _count; i++) {
+            var _unit = _units[| i];
+            
+            if (!_unit.currentTile) {
+                continue;
+            }
+            
+            var _vector = getTileXY(_unit.currentTile);
+            _unit.drawFacingArrow(_vector.x, _vector.y, facingArrowAlpha);
         }
     }
     
