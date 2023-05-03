@@ -12,6 +12,14 @@ function HexMap(_orientation, _size, _origin) constructor {
         grid.destroy();
     }
     
+    static isValidPosition = function(_hex) {
+        if (gameController.trixagon) {
+            return modulo(_hex.q, 3) != modulo(_hex.r, 3);
+        }
+        
+        return true;
+    }
+    
     static getTileYOffset = function(_hexTile) {
         return (_hexTile.height - 1) * -stackHeight;
     }

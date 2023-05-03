@@ -24,7 +24,7 @@ function TerrainPainter(_hexMap) constructor {
         
         if (_brushShape == TerrainBrushShape.Hexagon) {
             var _brushHeight = _brush.centerHeight;
-            paintHex(_centerHex.q, _centerHex.r, _centerHex, _brushHeight, _generatorFunction, _options);
+            paintHex(_centerHex, _centerHex, _brushHeight, _generatorFunction, _options);
         
             for (var _currentRadius = 0; _currentRadius <= _radius; _currentRadius++) {
                 var _ringArray = _centerHex.getRing(_currentRadius);
@@ -33,20 +33,21 @@ function TerrainPainter(_hexMap) constructor {
                 
                 for (var _hexIndex = 0; _hexIndex < _hexCount; _hexIndex++) {
                     var _hex = _ringArray[_hexIndex];
-                    paintHex(_hex.q, _hex.r, _centerHex, _brushHeight, _generatorFunction, _options);
+                    paintHex(_hex, _centerHex, _brushHeight, _generatorFunction, _options);
                 }
             }
         }
     }
     
-    static paintHex = function (_q, _r, _centerHex, _brushHeight, _generatorFunction, _options = undefined) {
-        var _existingTile = hexMap.grid.getTileQR(_q, _r);
-        if (!is_undefined(_existingTile)) {
+    static paintHex = function (_hex, _centerHex, _brushHeight, _generatorFunction, _options = undefined) {
+        var _existingTile = hexMap.grid.getTile(_hex);
+        
+        if (_existingTile || !hexMap.isValidPosition(_hex)) {
             return pointer_null;
         }
         
         var _height = _brushHeight;
-        var _generated = _generatorFunction(_q, _r, hexMap, _options);
+        var _generated = _generatorFunction(_hex, hexMap, _options);
         
         if (!is_undefined(_generated.height)) {
             _height = _generated.height;
@@ -54,11 +55,11 @@ function TerrainPainter(_hexMap) constructor {
         
         var _type = _generated.type;
         
-        return hexMap.addTile(_q, _r, _type, _height);
+        return hexMap.addTile(_hex.q, _hex.r, _type, _height);
     }
 }
 
-function randomTerrainGenerator(_q, _r, _hexMap, _options) {
+function randomTerrainGenerator(_hex, _hexMap, _options) {
     var _type = choose(TerrainType.Grass, TerrainType.Rock, TerrainType.Sand, TerrainType.Snow, TerrainType.Water);
     var _height = undefined;
     
@@ -71,7 +72,7 @@ function randomTerrainGenerator(_q, _r, _hexMap, _options) {
     return { type: _type, height: _height };
 }
 
-function wavesTerrainGenerator(_q, _r, _hexMap, _options) {
+function wavesTerrainGenerator(_hex, _hexMap, _options) {
     var _type = TerrainType.Water;
     var _height = undefined;
     var _maxHeight = 3;
@@ -81,7 +82,7 @@ function wavesTerrainGenerator(_q, _r, _hexMap, _options) {
     
     if (!is_undefined(_options)) {
         if (_options.height) {
-            var _rem = abs(_r mod _waveLengthMaxIndex);
+            var _rem = abs(_hex.r mod _waveLengthMaxIndex);
             
             var _ratio = _rem / _waveLengthMaxIndex;
             if (_ratio > 0.5) {

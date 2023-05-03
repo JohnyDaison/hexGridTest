@@ -60,6 +60,7 @@
     "IDEVersion": "2023.2.1.75",
   },
   "resources": [
+    {"id":{"name":"Utils","path":"scripts/Utils/Utils.yy",},},
     {"id":{"name":"draw_hex_borders","path":"scripts/draw_hex_borders/draw_hex_borders.yy",},},
     {"id":{"name":"sprKnight_Die_Spikes_Sword","path":"sprites/sprKnight_Die_Spikes_Sword/sprKnight_Die_Spikes_Sword.yy",},},
     {"id":{"name":"fontDebug","path":"fonts/fontDebug/fontDebug.yy",},},

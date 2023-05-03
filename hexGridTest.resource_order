@@ -42,6 +42,7 @@
     {"name":"Timelines","order":8,"path":"folders/Timelines.yy",},
   ],
   "ResourceOrderSettings": [
+    {"name":"Utils","order":6,"path":"scripts/Utils/Utils.yy",},
     {"name":"draw_hex_borders","order":3,"path":"scripts/draw_hex_borders/draw_hex_borders.yy",},
     {"name":"sprKnight_Die_Spikes_Sword","order":2,"path":"sprites/sprKnight_Die_Spikes_Sword/sprKnight_Die_Spikes_Sword.yy",},
     {"name":"AttackUnitAction","order":4,"path":"scripts/AttackUnitAction/AttackUnitAction.yy",},

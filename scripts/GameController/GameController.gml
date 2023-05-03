@@ -12,6 +12,8 @@ function GameController() constructor {
     initiativeThreshold = 60;
     roundCounter = 1;
     
+    trixagon = false;
+    
     static destroy = function() {
         destroyMap();
         unitQueue.destroy();
@@ -35,6 +37,7 @@ function GameController() constructor {
         }
         
         hexMap = new HexMap(_orientation, _size, _origin);
+        hexMap.gameController = self;
         hexMap.stackHeight = 60;
         
         return hexMap;
