@@ -10,7 +10,7 @@ if (!is_undefined(cursorHex)) {
 
 if (mouse_check_button(mb_right)) {
     if (is_undefined(lastPaintedPos) || !_paintPos.equals(lastPaintedPos)) {
-        hexMap.paintTerrain(_paintPos, activeTerrainBrush, randomTerrainGenerator, terrainGeneratorOptions);
+        hexMap.paintTerrain(_paintPos, activeTerrainBrush, mainTerrainGenerator, terrainGeneratorOptions);
         lastPaintedPos = _paintPos;
     }
 } else {

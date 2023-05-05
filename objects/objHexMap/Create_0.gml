@@ -19,8 +19,13 @@ cursorPos = undefined;
 cursorTile = pointer_null;
 
 activeTerrainBrush = new TerrainBrush(TerrainBrushShape.Hexagon, 2, 1);
+mainTerrainGenerator = randomTerrainGenerator;
 terrainGeneratorOptions = { height: true };
 lastPaintedPos = undefined;
+
+if (gameController.trixagon) {
+    mainTerrainGenerator = trixagonTerrainGenerator;
+}
 
 handleTap = function() {
     if (is_undefined(cursorHex)) {
@@ -78,7 +83,11 @@ createTestTiles = function() {
     var _spider = hexMap.addTile(2, 0, TerrainType.Rock, 2);
     gameController.addUnit(_spider, UnitType.SpiderBasic);
     
-    hexMap.paintTerrain(new HexVector(0, 0), new TerrainBrush(TerrainBrushShape.Hexagon, 4, 3, 1), randomTerrainGenerator);
+    if (gameController.trixagon) {
+        hexMap.paintTerrain(new HexVector(0, 0), new TerrainBrush(TerrainBrushShape.Hexagon, 6, 3, 1), trixagonTerrainGenerator);
+    } else {
+        hexMap.paintTerrain(new HexVector(0, 0), new TerrainBrush(TerrainBrushShape.Hexagon, 4, 3, 1), randomTerrainGenerator);
+    }
 }
 
 createTestTiles();

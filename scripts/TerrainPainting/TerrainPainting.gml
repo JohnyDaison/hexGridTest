@@ -96,3 +96,15 @@ function wavesTerrainGenerator(_hex, _hexMap, _options) {
     
     return { type: _type, height: _height };
 }
+
+function trixagonTerrainGenerator(_hex, _hexMap, _options) {
+    var _height = 1;
+    var _type = modulo(_hex.s, 2) == 0 ? TerrainType.TrixagonUp : TerrainType.TrixagonDown;
+    var _diffMod = modulo(_hex.q - _hex.r, 6);
+    
+    if (_diffMod == 0 || _diffMod >= 3) {
+        _type = modulo(_hex.s, 2) == 0 ? TerrainType.TrixagonDown : TerrainType.TrixagonUp;
+    }
+    
+    return { type: _type, height: _height };
+}
