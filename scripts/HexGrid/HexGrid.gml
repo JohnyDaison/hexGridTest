@@ -53,12 +53,16 @@ function HexGrid() constructor {
     }
     
     static getTile = function(_position) {
-        var _column = tileGrid[? _position.q];
+        return getTileQR(_position.q, _position.r);
+    }
+    
+    static getTileQR = function(_q, _r) {
+        var _column = tileGrid[? _q];
         if (is_undefined(_column)) {
             return pointer_null;
         }
         
-        var _tile = _column[? _position.r];
+        var _tile = _column[? _r];
         if (is_undefined(_tile)) {
             return pointer_null;
         }

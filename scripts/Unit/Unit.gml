@@ -132,6 +132,7 @@ function Unit(_unitType) constructor {
     
     static draw = function (_x, _y) {
         var _yOffset = type.yOffset;
+        var _tint = type.tint;
         
         var _shadowRadiusX = type.shadowRadius * scale;
         var _shadowRadiusY = type.shadowRadius * scale * shadowRatio;
@@ -144,13 +145,17 @@ function Unit(_unitType) constructor {
         
         draw_sprite_ext(animSprite, animProgress,
             _x, _y + scale * _yOffset,
-            scale * spriteFacing, scale, 0, c_white, 1);
+            scale * spriteFacing, scale, 0, _tint, 1);
     }
     
     static drawFacingArrow = function (_x, _y, _alpha) {
         var _tint = Colors.enemyRed;
         
         if (gameController.selectedUnit == self) {
+            _tint = Colors.friendlyGreen;
+        }
+        
+        if (gameController.trixagon) {
             _tint = Colors.friendlyGreen;
         }
         

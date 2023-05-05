@@ -10,7 +10,7 @@ if (gameController.selectedUnit != pointer_null && gameController.selectedUnit.c
 }
 
 hexMap.drawHexes(_highlightHex, _selectedTile);
-hexMap.drawUnitsOverlay(gameController.units);
+hexMap.drawUnitsOverlay(gameController.units, _highlightHex, _selectedTile);
 
 drawFacingDragArrow();
 

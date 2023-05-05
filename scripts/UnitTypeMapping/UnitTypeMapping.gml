@@ -6,7 +6,9 @@ enum UnitType {
     SkeletonBowBasic,
     BatBasic,
     SpiderBasic,
-    TrainingDummy
+    TrainingDummy,
+    TrixagonRed,
+    TrixagonBlue
 }
 
 global.unitTypeMap = ds_map_create();
@@ -30,6 +32,17 @@ function flyingUnitType(_id, _name) {
     _unitType.yOffset = -100;
     _unitType.animMovementSpeed = 600;
     _unitType.actionPoints = 6;
+    
+    return _unitType;
+}
+
+function trixagonUnitType(_id, _name) {
+    var _unitType = new UnitTypeData(_id, _name);
+    
+    _unitType.animMovementSpeed = 500;
+    
+    _unitType.combat.attackRange = 2;
+    _unitType.actionPoints = 4;
     
     return _unitType;
 }
@@ -126,3 +139,13 @@ _unitType.scale = 0.5;
 _unitType.shadowRadius = 40;
 _unitType.setAnim(UnitAnimState.Idle, sprDummy_Idle);
 _unitType.setAnim(UnitAnimState.ReceivingHit, sprDummy_Hit);
+
+
+_unitType = trixagonUnitType(UnitType.TrixagonRed, "Red Trixagon unit");
+_unitType.tint = Colors.trixagonRed;
+_unitType.setAnim(UnitAnimState.Idle, sprTrixagonUnit);
+
+
+_unitType = trixagonUnitType(UnitType.TrixagonBlue, "Blue Trixagon unit");
+_unitType.tint = Colors.trixagonBlue;
+_unitType.setAnim(UnitAnimState.Idle, sprTrixagonUnit);

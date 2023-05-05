@@ -2,6 +2,7 @@ function UnitTypeData(_id, _name) constructor {
     global.unitTypeMap[? _id] = self;
     typeId = _id;
     name = _name;
+    tint = c_white;
     
     initiative = 0;
     actionPoints = 0;

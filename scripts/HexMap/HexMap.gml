@@ -233,15 +233,15 @@ function HexMap(_orientation, _size, _origin) constructor {
                     draw_set_color(_highlightColor);
                 
                     drawFlatHex(_hex, getTileYOffset(_hexTile));
-                    
-                    var _unit = _hexTile.getTopUnit();
-                    if (_unit) {
-                        drawUnitHighlight(_hex, Colors.enemyRed, getTileYOffset(_hexTile), 0.5);
-                    }
                 }
                 
                 if (_selectedTile != pointer_null && _hexTile == _selectedTile) {
                     drawUnitHighlight(_hex, Colors.friendlyGreen, getTileYOffset(_hexTile), 0.5);
+                } else if (_drawHighlight) {
+                    var _unit = _hexTile.getTopUnit();
+                    if (_unit) {
+                        drawUnitHighlight(_hex, Colors.enemyRed, getTileYOffset(_hexTile), 0.5);
+                    }
                 }
                 
                 if (drawTileCoords) {
@@ -261,7 +261,7 @@ function HexMap(_orientation, _size, _origin) constructor {
         }
     }
     
-    static drawUnitsOverlay = function(_units) {
+    static drawUnitsOverlay = function(_units, _highlightHex, _selectedTile) {
         var _count = ds_list_size(_units);
         
         for (var i = 0; i < _count; i++) {
@@ -269,6 +269,18 @@ function HexMap(_orientation, _size, _origin) constructor {
             
             if (!_unit.currentTile) {
                 continue;
+            }
+            
+            if (gameController.trixagon) {
+                var _hexTile = _unit.currentTile;
+                var _hex = _hexTile.position;
+                var _drawHighlight = !is_undefined(_highlightHex) && _hex.equals(_highlightHex);
+                
+                if (_selectedTile != pointer_null && _hexTile == _selectedTile) {
+                    drawUnitHighlight(_hex, Colors.friendlyGreen, getTileYOffset(_hexTile), 0.5);
+                } else if (_drawHighlight) {
+                    drawUnitHighlight(_hex, Colors.enemyRed, getTileYOffset(_hexTile), 0.5);
+                }
             }
             
             var _vector = getTileXY(_unit.currentTile);
@@ -291,6 +303,10 @@ function HexMap(_orientation, _size, _origin) constructor {
     
     static getTile = function (_hex) {
         return grid.getTile(_hex);
+    }
+    
+    static getTileQR = function(_q, _r) {
+        return grid.getTileQR(_q, _r);
     }
     
     static paintTerrain = function (_centerHex, _brush, _generatorFunction, _options = undefined) {

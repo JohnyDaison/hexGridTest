@@ -14,6 +14,10 @@ function GameController() constructor {
     
     trixagon = false;
     
+    if (trixagon) {
+        useUnitQueue = false;
+    }
+    
     static destroy = function() {
         destroyMap();
         unitQueue.destroy();

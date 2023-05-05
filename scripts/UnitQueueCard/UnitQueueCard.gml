@@ -48,6 +48,7 @@ function UnitQueueCard(_unitQueue, _unit) constructor {
     static draw = function (_isActive, _isInRound) {
         var _yOffset = unit.type.yOffset;
         var _scale = unitQueue.scale * unit.scale;
+        var _tint = unit.type.tint;
         
         var _centerX = currentPosition.x;
         var _spriteCenterY = currentPosition.y + _scale * _yOffset;
@@ -79,7 +80,7 @@ function UnitQueueCard(_unitQueue, _unit) constructor {
             draw_roundrect(_cardLeft, _cardTop, _cardRight, _cardBottom, true);
         }
         
-        draw_sprite_ext(sprite, 0, _centerX, _spriteCenterY, _scale, _scale, 0, c_white, 1);
+        draw_sprite_ext(sprite, 0, _centerX, _spriteCenterY, _scale, _scale, 0, _tint, 1);
         
         if (_drawCard) {
             draw_set_color(c_white);

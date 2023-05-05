@@ -206,6 +206,7 @@
     {"id":{"name":"hex_rotate_left","path":"scripts/hex_rotate_left/hex_rotate_left.yy",},},
     {"id":{"name":"return_diagonals","path":"scripts/return_diagonals/return_diagonals.yy",},},
     {"id":{"name":"Layout","path":"scripts/Layout/Layout.yy",},},
+    {"id":{"name":"sprTrixagonUnit","path":"sprites/sprTrixagonUnit/sprTrixagonUnit.yy",},},
     {"id":{"name":"TerrainPainting","path":"scripts/TerrainPainting/TerrainPainting.yy",},},
     {"id":{"name":"hex_get_los","path":"scripts/hex_get_los/hex_get_los.yy",},},
     {"id":{"name":"check_circle_object","path":"scripts/check_circle_object/check_circle_object.yy",},},

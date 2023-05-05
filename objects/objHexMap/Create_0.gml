@@ -1,4 +1,3 @@
-var _colors = new Colors();
 tileSize = new Vector(160, 150); // tuned to our sprites
 clearPlanButtonMargin = 190;
 endTurnButtonMargin = 30;
@@ -83,14 +82,38 @@ createTestTiles = function() {
     var _spider = hexMap.addTile(2, 0, TerrainType.Rock, 2);
     gameController.addUnit(_spider, UnitType.SpiderBasic);
     
-    if (gameController.trixagon) {
-        hexMap.paintTerrain(new HexVector(0, 0), new TerrainBrush(TerrainBrushShape.Hexagon, 6, 3, 1), trixagonTerrainGenerator);
-    } else {
-        hexMap.paintTerrain(new HexVector(0, 0), new TerrainBrush(TerrainBrushShape.Hexagon, 4, 3, 1), randomTerrainGenerator);
+    hexMap.paintTerrain(new HexVector(0, 0), new TerrainBrush(TerrainBrushShape.Hexagon, 4, 3, 1), randomTerrainGenerator);
+}
+
+createTrixagonTestTiles = function() {
+    hexMap.paintTerrain(new HexVector(0, 0), new TerrainBrush(TerrainBrushShape.Hexagon, 6, 3, 1), trixagonTerrainGenerator);
+    var _q = -2;
+    var _rStart = -2;
+    var _rDist = 6;
+    var _tile;
+    
+    for (var _r = _rStart; _r < _rStart + _rDist; _r++) {
+        _tile = hexMap.getTileQR(_q, _r);
+    
+        if (_tile)
+            gameController.addUnit(_tile, UnitType.TrixagonRed);
+    }
+    
+    _q = _q + 4;
+    _rStart = _rStart -2;
+    for (var _r = _rStart; _r < _rStart + _rDist; _r++) {
+        _tile = hexMap.getTileQR(_q, _r);
+    
+        if (_tile)
+            gameController.addUnit(_tile, UnitType.TrixagonBlue);
     }
 }
 
-createTestTiles();
+if (gameController.trixagon) {
+    createTrixagonTestTiles();
+} else {
+    createTestTiles();
+}
 
 createDirectionTestTiles = function() {
     var _dirs = global.hexDirections;
