@@ -158,7 +158,8 @@ function Unit(_unitType) constructor {
         }
         
         if (gameController.trixagon) {
-            _tint = Colors.friendlyGreen;
+            _tint = c_black;
+            _alpha = 1;
         }
         
         draw_sprite_ext(sprHexFacingArrow, facing, _x, _y, 1, 1, 0, _tint, _alpha);

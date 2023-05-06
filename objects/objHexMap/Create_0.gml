@@ -89,7 +89,7 @@ createTrixagonTestTiles = function() {
     hexMap.paintTerrain(new HexVector(0, 0), new TerrainBrush(TerrainBrushShape.Hexagon, 6, 3, 1), trixagonTerrainGenerator);
     var _q = -2;
     var _rStart = -2;
-    var _rDist = 6;
+    var _rDist = 8;
     var _tile;
     
     for (var _r = _rStart; _r < _rStart + _rDist; _r++) {
@@ -102,7 +102,7 @@ createTrixagonTestTiles = function() {
     }
     
     _q = _q + 4;
-    _rStart = _rStart -2;
+    _rStart = _rStart -3;
     for (var _r = _rStart; _r < _rStart + _rDist; _r++) {
         _tile = hexMap.getTileQR(_q, _r);
     

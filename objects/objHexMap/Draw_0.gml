@@ -14,7 +14,7 @@ hexMap.drawUnitsOverlay(gameController.units, _highlightHex, _selectedTile);
 
 drawFacingDragArrow();
 
-if (gameController.selectedUnit != pointer_null) {
+if (!gameController.trixagon && gameController.selectedUnit != pointer_null) {
     gameController.selectedUnit.drawPlannedActions();
 }
 
