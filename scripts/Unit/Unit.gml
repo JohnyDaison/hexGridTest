@@ -9,6 +9,8 @@ function Unit(_unitType) constructor {
     static shadowRatio = 0.4;
     static actionPlanStartAlpha = 0.7;
     static actionPlanEndAlpha = 0.4;
+    static healthBarSize = new Vector(120, 20);
+    static healthBarColor = Colors.friendlyGreen;
     
     initiativeAccumulated = 0;
     actionPointsUsed = 0;
@@ -160,6 +162,11 @@ function Unit(_unitType) constructor {
         }
         
         draw_sprite_ext(sprHexFacingArrow, facing, _x, _y, 1, 1, 0, _tint, _alpha);
+    }
+    
+    static drawHealthBar = function (_position, _halign = fa_center, _valign = fa_middle) {
+        var _healthRatio = combat.stats.health / combat.stats.maxHealth;
+        drawBar(_position, healthBarSize, healthBarColor, _healthRatio, _halign, _valign);
     }
     
     static enqueueAction = function(_action) {

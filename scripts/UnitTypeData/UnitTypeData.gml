@@ -15,6 +15,7 @@ function UnitTypeData(_id, _name) constructor {
     shadowRadius = 100;
     scale = 1;
     yOffset = 0;
+    healthBarOffset = new Vector(0, -110);
     animMovementSpeed = 1000;
     animAttackSpeed = 1000;
     animationMap = ds_map_create();

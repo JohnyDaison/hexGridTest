@@ -285,6 +285,9 @@ function HexMap(_orientation, _size, _origin) constructor {
             
             var _vector = getTileXY(_unit.currentTile);
             _unit.drawFacingArrow(_vector.x, _vector.y, facingArrowAlpha);
+            
+            var _healthBarPosition = _vector.add(_unit.type.healthBarOffset);
+            _unit.drawHealthBar(_healthBarPosition);
         }
     }
     
