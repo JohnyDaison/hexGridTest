@@ -219,6 +219,30 @@ function Unit(_unitType) constructor {
         }
     }
     
+    static getNextAction = function () {
+        var _nextAction = actionQueue[| 0];
+        
+        if (is_undefined(_nextAction)) {
+            return pointer_null;
+        }
+        
+        return _nextAction;
+    }
+    
+    static getFirstFacingAction = function () {
+        if (currentAction && currentAction.type == ActionType.FaceHex) {
+            return currentAction;
+        }
+        
+        var _nextAction = getNextAction();
+        
+        if (_nextAction && _nextAction.type == ActionType.FaceHex) {
+            return _nextAction;
+        }
+        
+        return pointer_null;
+    }
+    
     static startNextAction = function () {
         if (currentAction != pointer_null) {
             return;
@@ -274,7 +298,13 @@ function Unit(_unitType) constructor {
         if (!actionStarted) {
             switch (currentAction.type) {
                 case ActionType.FaceHex: {
+                    var _origFacing = facing;
                     movement.faceHex(currentAction.hex);
+                    
+                    if (_origFacing == facing) {
+                        var _actionCost = getActionCost(currentTile, currentAction);
+                        actionPointsUsed -= _actionCost;
+                    }
                     break;
                 }
                 case ActionType.MoveToHex: {
@@ -322,6 +352,35 @@ function Unit(_unitType) constructor {
             facing = _facing;
         }
         
+        if (gameController.trixagon && currentTile) {
+            constrainTrixagonFacing();
+        }
+        
         spriteFacing = sign(2.5 - facing);
+    }
+    
+    static constrainTrixagonFacing = function () {
+        var _triangleUp = hexMap.isTrixagonUp(currentTile.position);
+        var _facingOdd = facing % 2;
+            
+        if ((_triangleUp && !_facingOdd) || (!_triangleUp && _facingOdd)) {
+            var _updateDone = false;
+            var _prevFacing = modulo(facing - 1, 6);
+            var _nextFacing = modulo(facing + 1, 6);
+            var _facingAction = getFirstFacingAction();
+            
+            if (_facingAction) {
+                var _actionFacing = movement.getFacingToHex(_facingAction.hex);
+                    
+                if (_actionFacing == _prevFacing || _actionFacing == _nextFacing) {
+                    facing = _actionFacing;
+                    _updateDone = true;
+                }
+            }
+            
+            if (!_updateDone) {
+                facing = _prevFacing;
+            }
+        }
     }
 }

@@ -283,10 +283,10 @@ function HexMap(_orientation, _size, _origin) constructor {
                 }
             }
             
-            var _vector = getTileXY(_unit.currentTile);
-            _unit.drawFacingArrow(_vector.x, _vector.y, facingArrowAlpha);
+            var _tileCenter = getTileXY(_unit.currentTile);
+            _unit.drawFacingArrow(_tileCenter.x, _tileCenter.y, facingArrowAlpha);
             
-            var _healthBarPosition = _vector.add(_unit.type.healthBarOffset);
+            var _healthBarPosition = _tileCenter.add(_unit.type.healthBarOffset);
             _unit.drawHealthBar(_healthBarPosition);
         }
     }
@@ -363,5 +363,16 @@ function HexMap(_orientation, _size, _origin) constructor {
         }
         
         return _actionArray;
+    }
+    
+    static isTrixagonUp = function (_hex) {
+        var _result = modulo(_hex.s, 2) == 0;
+        var _diffMod = modulo(_hex.q - _hex.r, 6);
+    
+        if (_diffMod == 0 || _diffMod >= 3) {
+            _result = !_result;
+        }
+        
+        return _result;
     }
 }

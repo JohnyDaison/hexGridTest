@@ -59,8 +59,12 @@ function MovementModule(_unit, _stats) constructor {
         return _action.pointCost * _fromMultiplier * _toMultiplier + _fromModifier + _toModifier;
     }
     
+    static getFacingToHex = function (_hex) {
+        return _hex.subtract(myUnit.currentTile.position).toFacing();
+    }
+    
     static faceHex = function (_hex) {
-        var _newFacing = _hex.subtract(myUnit.currentTile.position).toFacing();
+        var _newFacing = getFacingToHex(_hex);
         myUnit.updateFacing(_newFacing);
     }
     

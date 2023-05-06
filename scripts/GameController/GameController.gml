@@ -82,7 +82,7 @@ function GameController() constructor {
             unitQueue.addUnit(_unit);
         }
         
-        return true;
+        return _unit;
     }
     
     /**

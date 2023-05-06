@@ -35,6 +35,8 @@ function HexTile(_position, _terrainType = TerrainType.Base) constructor {
         
         if (_unit.plannedFinalPosition == pointer_null)
             _unit.plannedFinalPosition = position;
+            
+        _unit.updateFacing();
         
         return true;
     }

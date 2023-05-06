@@ -95,8 +95,10 @@ createTrixagonTestTiles = function() {
     for (var _r = _rStart; _r < _rStart + _rDist; _r++) {
         _tile = hexMap.getTileQR(_q, _r);
     
-        if (_tile)
-            gameController.addUnit(_tile, UnitType.TrixagonRed);
+        if (_tile) {
+            var _unit = gameController.addUnit(_tile, UnitType.TrixagonRed);
+            _unit.updateFacing(1);
+        }
     }
     
     _q = _q + 4;
@@ -104,8 +106,10 @@ createTrixagonTestTiles = function() {
     for (var _r = _rStart; _r < _rStart + _rDist; _r++) {
         _tile = hexMap.getTileQR(_q, _r);
     
-        if (_tile)
-            gameController.addUnit(_tile, UnitType.TrixagonBlue);
+        if (_tile) {
+            var _unit = gameController.addUnit(_tile, UnitType.TrixagonBlue);
+            _unit.updateFacing(4);
+        }
     }
 }
 
