@@ -161,6 +161,32 @@ function HexMap(_orientation, _size, _origin) constructor {
         draw_primitive_end();
     }
     
+    static drawTrixagonUnitHighlight = function(_hex, _bandColor, _unitColor, _yOffset = 0, _radius = 80) {
+        var _lineThickness = 4;
+        var _bandThickness = 12;
+        
+        var _outerRadius = _radius;
+        var _outerBandRadius = _outerRadius - _lineThickness;
+        var _innerBandRadius = _outerBandRadius - _bandThickness;
+        var _innerRadius = _innerBandRadius - _lineThickness;
+        
+        var _center = hexToPixel(_hex);
+        var _yWithOffset = _center.y + _yOffset;
+        
+        draw_set_alpha(0.8);
+        
+        draw_set_color(c_black);
+        draw_circle(_center.x, _yWithOffset, _outerRadius, false);
+        
+        draw_set_color(_bandColor);
+        draw_circle(_center.x, _yWithOffset, _outerBandRadius, false);
+        
+        draw_set_color(c_black);
+        draw_circle(_center.x, _yWithOffset, _innerBandRadius, false);
+        
+        draw_set_color(_unitColor);
+        draw_circle(_center.x, _yWithOffset, _innerRadius, false);
+    }
     
     static drawHexBg = function() {
         for (var _r = grid.minR; _r <= grid.maxR; _r++) {
@@ -277,9 +303,10 @@ function HexMap(_orientation, _size, _origin) constructor {
                 var _drawHighlight = !is_undefined(_highlightHex) && _hex.equals(_highlightHex);
                 
                 if (_selectedTile != pointer_null && _hexTile == _selectedTile) {
-                    drawUnitHighlight(_hex, Colors.friendlyGreen, getTileYOffset(_hexTile), 0.5);
+                    drawTrixagonUnitHighlight(_hex, Colors.trixagonSelection, _unit.type.tint, getTileYOffset(_hexTile));
                 } else if (_drawHighlight) {
-                    drawUnitHighlight(_hex, Colors.enemyRed, getTileYOffset(_hexTile), 0.5);
+                    var _highlightColor = gameController.selectedUnit ? Colors.trixagonTarget : Colors.trixagonHover;
+                    drawTrixagonUnitHighlight(_hex, _highlightColor, _unit.type.tint, getTileYOffset(_hexTile));
                 }
             }
             
@@ -287,7 +314,12 @@ function HexMap(_orientation, _size, _origin) constructor {
             _unit.drawFacingArrow(_tileCenter.x, _tileCenter.y, facingArrowAlpha);
             
             var _healthBarPosition = _tileCenter.add(_unit.type.healthBarOffset);
-            _unit.drawHealthBar(_healthBarPosition);
+            
+            if (gameController.trixagon) {
+                _unit.drawHealthNumber(_healthBarPosition);
+            } else {
+                _unit.drawHealthBar(_healthBarPosition);
+            }
         }
     }
     

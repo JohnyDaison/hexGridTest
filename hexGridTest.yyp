@@ -203,6 +203,7 @@
     {"id":{"name":"hex_passable","path":"scripts/hex_passable/hex_passable.yy",},},
     {"id":{"name":"Drawing","path":"scripts/Drawing/Drawing.yy",},},
     {"id":{"name":"sprDummy_Hit","path":"sprites/sprDummy_Hit/sprDummy_Hit.yy",},},
+    {"id":{"name":"fontHealthNumber","path":"fonts/fontHealthNumber/fontHealthNumber.yy",},},
     {"id":{"name":"hex_rotate_left","path":"scripts/hex_rotate_left/hex_rotate_left.yy",},},
     {"id":{"name":"return_diagonals","path":"scripts/return_diagonals/return_diagonals.yy",},},
     {"id":{"name":"Layout","path":"scripts/Layout/Layout.yy",},},

@@ -170,6 +170,18 @@ function Unit(_unitType) constructor {
         drawBar(_position, healthBarSize, healthBarColor, _healthRatio, _halign, _valign);
     }
     
+    static drawHealthNumber = function (_position, _halign = fa_center, _valign = fa_middle) {
+        draw_set_alpha(0.8);
+        draw_set_color(c_black);
+        draw_circle(_position.x, _position.y, 48, false);
+        
+        draw_set_color(c_white);
+        draw_set_halign(fa_center);
+        draw_set_valign(fa_middle);
+        draw_set_font(fontHealthNumber);
+        draw_text(_position.x + 2, _position.y + 4, string(combat.stats.health));
+    }
+    
     static enqueueAction = function(_action) {
         var _actionCount = ds_list_size(actionQueue);
         var _lastAction = actionQueue[| _actionCount - 1];
