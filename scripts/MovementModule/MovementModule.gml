@@ -29,6 +29,32 @@ function MovementModule(_unit, _stats) constructor {
         
         var _actionArray = myUnit.hexMap.findUnitPath(myUnit, myUnit.plannedFinalPosition, _hex);
         
+        if (myUnit.gameController.trixagon && myUnit.currentTile && !myUnit.currentAction && !myUnit.getNextAction()) {
+            var _actionCount = array_length(_actionArray);
+            var _skipCount = 0;
+            var _index = 0;
+            var _done = false;
+            var _currentHex = myUnit.currentTile.position;
+            
+            do {
+                _done = true;
+                var _nextAction = _actionArray[_index];
+                
+                if (_nextAction.type == ActionType.MoveToHex) {
+                    var _distance = _nextAction.hex.subtract(_currentHex).length();
+                    
+                    if (_distance <= 2) {
+                        _skipCount = _index;
+                        _done = false;
+                    }
+                }
+                
+                _index++;
+            } until (_done || _index >= _actionCount);
+            
+            array_delete(_actionArray, 0, _skipCount);
+        }
+        
         array_foreach(_actionArray, function(_action, _index) {
             myUnit.enqueueAction(_action);
         });
