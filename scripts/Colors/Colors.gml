@@ -7,6 +7,9 @@ function Colors() constructor {
     static trixagonHover = c_gray;
     static trixagonSelection = c_white;
     static trixagonTarget = c_black;
+    
+    static trixagonTrunc = c_gray;
+    static trixagonTruncRanged = c_dkgray;
 }
 
 var _colors = new Colors();

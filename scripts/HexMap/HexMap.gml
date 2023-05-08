@@ -7,6 +7,9 @@ function HexMap(_orientation, _size, _origin) constructor {
     facingArrowAlpha = 0.5;
     terrainPainter = new TerrainPainter(self);
     drawTileCoords = true;
+    truncForHex = pointer_null;
+    truncTiles = array_create(0);
+    truncTint = c_white;
     
     static destroy = function() {
         grid.destroy();
@@ -251,6 +254,9 @@ function HexMap(_orientation, _size, _origin) constructor {
                 
                 drawHexTile(_hexTile);
                 
+                var _center = getTileXY(_hexTile);
+                _hexTile.overlay.draw(_center);
+                
                 var _drawHighlight = !is_undefined(_highlightHex) && _hex.equals(_highlightHex);
                 var _highlightColor = highlightColor;
                 
@@ -406,5 +412,51 @@ function HexMap(_orientation, _size, _origin) constructor {
         }
         
         return _result;
+    }
+    
+    static updateTruncOverlay = function () {
+        var _desiredTruncHex = pointer_null;
+        
+        if (gameController.selectedUnit && gameController.selectedUnit.currentTile) {
+            _desiredTruncHex = gameController.selectedUnit.currentTile.position;
+        }
+        
+        if (_desiredTruncHex != truncForHex) {
+            array_foreach(truncTiles, function(_tile, _index) {
+                _tile.overlay.enabled = false;
+            });
+            
+            array_resize(truncTiles, 0);
+            
+            truncForHex = _desiredTruncHex;
+            
+            if (truncForHex) {
+                var _isUp = isTrixagonUp(truncForHex);
+                var _trunc = _isUp ? global.truncUp : global.truncDown;
+                
+                truncTint = Colors.trixagonTrunc;
+                array_foreach(_trunc.movement, self.setTruncTileOverlay);
+                
+                truncTint = Colors.trixagonTruncRanged;
+                array_foreach(_trunc.ranged, self.setTruncTileOverlay);
+            }
+        }
+    }
+    
+    static setTruncTileOverlay = function (_hexOffset, _index) {
+        var _hex = truncForHex.add(_hexOffset);
+        var _isUp = isTrixagonUp(_hex);
+        var _tile = getTile(_hex);
+        
+        if (!_tile) {
+            return;
+        }
+        
+        _tile.overlay.enabled = true;
+        _tile.overlay.sprite = _isUp ? sprTrixagonTileUp : sprTrixagonTileDown;
+        _tile.overlay.tint = truncTint;
+        _tile.overlay.alpha = 0.7;
+        
+        array_push(truncTiles, _tile);
     }
 }

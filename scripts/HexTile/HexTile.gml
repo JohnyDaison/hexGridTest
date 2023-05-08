@@ -6,6 +6,7 @@ function HexTile(_position, _terrainType = TerrainType.Base) constructor {
     neighbors = [];
     units = ds_list_create();
     animations = ds_list_create();
+    overlay = new SpriteDisplay();
     
     static toString = function() {
         var _typeName = terrainTypeInfo.name;
