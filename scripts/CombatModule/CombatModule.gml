@@ -54,7 +54,11 @@ function CombatModule(_unit, _stats) constructor {
         _attackAnimation.onAnimEnd = method(self, function (_animation) {
             var _targetUnit = _animation.endTile.getTopUnit();
             if (_targetUnit != pointer_null && _targetUnit != self.myUnit) {
-                dealDamage(stats.attack, _targetUnit);
+                var _attackRoll = random(1);
+                
+                if (_attackRoll <= stats.accuracy) {
+                    dealDamage(stats.attack, _targetUnit);
+                }
             }
             
             myUnit.endCurrentAction();
