@@ -166,7 +166,7 @@ function HexMap(_orientation, _size, _origin) constructor {
     
     static drawTrixagonUnitHighlight = function(_hex, _bandColor, _unitColor, _yOffset = 0, _radius = 80) {
         var _lineThickness = 4;
-        var _bandThickness = 12;
+        var _bandThickness = 24;
         
         var _outerRadius = _radius;
         var _outerBandRadius = _outerRadius - _lineThickness;
