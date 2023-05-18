@@ -99,7 +99,7 @@ function wavesTerrainGenerator(_hex, _hexMap, _options) {
 
 function trixagonTerrainGenerator(_hex, _hexMap, _options) {
     var _height = 1;
-    var _type = _hexMap.isTrixagonUp(_hex) ? TerrainType.TrixagonUp : TerrainType.TrixagonDown;
+    var _type = _hexMap.isTrixagonRight(_hex) ? TerrainType.TrixagonRight : TerrainType.TrixagonLeft;
     
     return { type: _type, height: _height };
 }

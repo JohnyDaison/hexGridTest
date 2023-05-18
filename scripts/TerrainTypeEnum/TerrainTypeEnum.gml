@@ -5,7 +5,7 @@ enum TerrainType {
     Sand,
     Snow,
     Water,
-    TrixagonDown,
-    TrixagonUp,
+    TrixagonLeft,
+    TrixagonRight,
     Length // hack for iterating the enum
 }

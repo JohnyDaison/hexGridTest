@@ -403,7 +403,7 @@ function HexMap(_orientation, _size, _origin) constructor {
         return _actionArray;
     }
     
-    static isTrixagonUp = function (_hex) {
+    static isTrixagonRight = function (_hex) {
         var _result = modulo(_hex.s, 2) == 0;
         var _diffMod = modulo(_hex.q - _hex.r, 6);
     
@@ -431,8 +431,8 @@ function HexMap(_orientation, _size, _origin) constructor {
             truncForHex = _desiredTruncHex;
             
             if (truncForHex) {
-                var _isUp = isTrixagonUp(truncForHex);
-                var _trunc = _isUp ? global.truncUp : global.truncDown;
+                var _isRight = isTrixagonRight(truncForHex);
+                var _trunc = _isRight ? global.truncRight : global.truncLeft;
                 
                 truncTint = Colors.trixagonTrunc;
                 array_foreach(_trunc.movement, self.setTruncTileOverlay);
@@ -445,7 +445,7 @@ function HexMap(_orientation, _size, _origin) constructor {
     
     static setTruncTileOverlay = function (_hexOffset, _index) {
         var _hex = truncForHex.add(_hexOffset);
-        var _isUp = isTrixagonUp(_hex);
+        var _isRight = isTrixagonRight(_hex);
         var _tile = getTile(_hex);
         
         if (!_tile) {
@@ -453,7 +453,7 @@ function HexMap(_orientation, _size, _origin) constructor {
         }
         
         _tile.overlay.enabled = true;
-        _tile.overlay.sprite = _isUp ? sprTrixagonTileUp : sprTrixagonTileDown;
+        _tile.overlay.sprite = _isRight ? sprTrixagonTileRight : sprTrixagonTileLeft;
         _tile.overlay.tint = truncTint;
         _tile.overlay.alpha = 0.7;
         

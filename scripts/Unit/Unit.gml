@@ -152,6 +152,7 @@ function Unit(_unitType) constructor {
     
     static drawFacingArrow = function (_x, _y, _alpha) {
         var _tint = Colors.enemyRed;
+        var _arrowSprite = sprHexFacingArrow;
         
         if (gameController.selectedUnit == self) {
             _tint = Colors.friendlyGreen;
@@ -160,9 +161,10 @@ function Unit(_unitType) constructor {
         if (gameController.trixagon) {
             _tint = c_black;
             _alpha = 1;
+            _arrowSprite = sprHexFacingArrowTrixagon;
         }
         
-        draw_sprite_ext(sprHexFacingArrow, facing, _x, _y, 1, 1, 0, _tint, _alpha);
+        draw_sprite_ext(_arrowSprite, facing, _x, _y, 1, 1, 0, _tint, _alpha);
     }
     
     static drawHealthBar = function (_position, _halign = fa_center, _valign = fa_middle) {
@@ -373,10 +375,10 @@ function Unit(_unitType) constructor {
     }
     
     static constrainTrixagonFacing = function () {
-        var _triangleUp = hexMap.isTrixagonUp(currentTile.position);
+        var _triangleRight = hexMap.isTrixagonRight(currentTile.position);
         var _facingOdd = facing % 2;
             
-        if ((_triangleUp && !_facingOdd) || (!_triangleUp && _facingOdd)) {
+        if ((_triangleRight && !_facingOdd) || (!_triangleRight && _facingOdd)) {
             var _updateDone = false;
             var _prevFacing = modulo(facing - 1, 6);
             var _nextFacing = modulo(facing + 1, 6);

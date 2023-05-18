@@ -30,13 +30,13 @@ global.terrainTypeMap[? TerrainType.Water] = {
     sprStack: sprWaterStack
 }
 
-global.terrainTypeMap[? TerrainType.TrixagonDown] = {
+global.terrainTypeMap[? TerrainType.TrixagonLeft] = {
     name: "Triangle",
-    sprBasic: sprTrixagonTileDownGreen,
+    sprBasic: sprTrixagonTileLeftGreen,
     sprStack: pointer_null
 }
-global.terrainTypeMap[? TerrainType.TrixagonUp] = {
+global.terrainTypeMap[? TerrainType.TrixagonRight] = {
     name: "Triangle",
-    sprBasic: sprTrixagonTileUpGreen,
+    sprBasic: sprTrixagonTileRightGreen,
     sprStack: pointer_null
 }

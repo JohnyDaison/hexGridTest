@@ -8,7 +8,13 @@ startPosition = new Vector(_halfRoomWidth, _halfRoomHeight);
 debugText = "TEST";
 
 gameController = new GameController();
-hexMap = gameController.createMap(layout_flat, tileSize, startPosition);
+var _layout = gameController.trixagon ? layout_pointy : layout_flat;
+if (gameController.trixagon) {
+    var _tempY = tileSize.y;
+    tileSize.y = tileSize.x;
+    tileSize.x = _tempY;
+}
+hexMap = gameController.createMap(_layout, tileSize, startPosition);
 
 clearPlanButton = noone;
 endTurnButton = noone;

@@ -1,13 +1,13 @@
 global.hexDirections = [new HexVector(1, 0), new HexVector(1, -1), new HexVector(0, -1), new HexVector(-1, 0), new HexVector(-1, 1), new HexVector(0, 1)];
 global.hexDirectionsDown = [global.hexDirections[0], global.hexDirections[4], global.hexDirections[5]];
 
-global.truncUp = {
+global.truncRight = {
     melee: [new HexVector(-1, 0), new HexVector(1, -1), new HexVector(0, 1)],
     movement: [new HexVector(-1, -1), new HexVector(1, -2), new HexVector(-2, 1), new HexVector(2, -1), new HexVector(-1, 2), new HexVector(1, 1)],
     ranged: [new HexVector(0, -2), new HexVector(-2, 2), new HexVector(2, 0)]
 }
 
-global.truncDown = {
+global.truncLeft = {
     melee: [new HexVector(0, -1), new HexVector(-1, 1), new HexVector(1, 0)],
     movement: [new HexVector(-1, -1), new HexVector(1, -2), new HexVector(-2, 1), new HexVector(2, -1), new HexVector(-1, 2), new HexVector(1, 1)],
     ranged: [new HexVector(-2, 0), new HexVector(2, -2), new HexVector(0, 2)]
