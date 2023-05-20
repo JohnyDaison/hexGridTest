@@ -46,7 +46,9 @@ function CombatModule(_unit, _stats) constructor {
     }
     
     static attackHex = function (_hex) {
-        myUnit.movement.faceHex(_hex);
+        if (myUnit.gameController.otherActionsChangeFacing) {
+            myUnit.movement.faceHex(_hex);
+        }
         
         var _endTile = myUnit.hexMap.getTile(_hex);
         var _attackAnimation = new BasicAttackAnimation(myUnit.gameController, myUnit, _endTile);

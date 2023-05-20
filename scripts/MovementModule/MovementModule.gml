@@ -95,7 +95,9 @@ function MovementModule(_unit, _stats) constructor {
     }
     
     static moveToHex = function (_hex) {
-        faceHex(_hex);
+        if (myUnit.gameController.otherActionsChangeFacing) {
+            faceHex(_hex);
+        }
         
         var _endTile = myUnit.hexMap.getTile(_hex);
         var _movementAnimation = new BasicMovementAnimation(myUnit.gameController, myUnit, _endTile);

@@ -8,14 +8,16 @@ function GameController() constructor {
     
     unitQueue = new UnitQueue(self);
     useUnitQueue = true;
+    otherActionsChangeFacing = true;
     
     initiativeThreshold = 60;
     roundCounter = 1;
     
-    trixagon = false;
+    trixagon = true;
     
     if (trixagon) {
         useUnitQueue = false;
+        otherActionsChangeFacing = false;
     }
     
     static destroy = function() {
