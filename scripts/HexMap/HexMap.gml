@@ -4,7 +4,6 @@ function HexMap(_orientation, _size, _origin) constructor {
     stackHeight = 1;
     highlightColor = c_white;
     highlightAlpha = 0.5;
-    facingArrowAlpha = 0.5;
     terrainPainter = new TerrainPainter(self);
     drawTileCoords = false;
     truncForHex = pointer_null;
@@ -223,20 +222,18 @@ function HexMap(_orientation, _size, _origin) constructor {
         for (var i = 0; i < _count; i++) {
             var _unit = _hexTile.getUnit(i);
             
-            _unit.drawFacingArrow(_vector.x, _vector.y, facingArrowAlpha);
+            _unit.drawFacingArrow(_vector.x, _vector.y, Unit.facingArrowAlpha);
             _unit.draw(_vector.x, _vector.y);
         }
     }
     
-    static drawHexAnimations = function(_hexTile) {
-        var _count = ds_list_size(_hexTile.animations);
+    static drawAnimations = function(_animations) {
+        var _count = ds_list_size(_animations);
         
         for (var i = 0; i < _count; i++) {
-            var _animation = _hexTile.animations[| i];
+            var _animation = _animations[| i];
             
-            if (_animation.started && !_animation.ended) {
-                _animation.draw(_hexTile);
-            }
+            _animation.draw();
         }
     }
     
@@ -287,7 +284,7 @@ function HexMap(_orientation, _size, _origin) constructor {
                 }
                 
                 drawHexUnits(_hexTile);
-                drawHexAnimations(_hexTile);
+                drawAnimations(_hexTile.animations);
             }
         }
     }
@@ -297,6 +294,10 @@ function HexMap(_orientation, _size, _origin) constructor {
         
         for (var i = 0; i < _count; i++) {
             var _unit = _units[| i];
+            
+            if (gameController.trixagon) {
+                drawAnimations(_unit.animations);
+            }
             
             if (!_unit.currentTile) {
                 continue;
@@ -316,15 +317,7 @@ function HexMap(_orientation, _size, _origin) constructor {
             }
             
             var _tileCenter = getTileXY(_unit.currentTile);
-            _unit.drawFacingArrow(_tileCenter.x, _tileCenter.y, facingArrowAlpha);
-            
-            var _healthBarPosition = _tileCenter.add(_unit.type.healthBarOffset);
-            
-            if (gameController.trixagon) {
-                _unit.drawHealthNumber(_healthBarPosition);
-            } else {
-                _unit.drawHealthBar(_healthBarPosition);
-            }
+            _unit.drawOverlay(_tileCenter);
         }
     }
     

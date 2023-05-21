@@ -4,6 +4,7 @@ function Unit(_unitType) constructor {
     initiative = type.initiative;
     actionPoints = type.actionPoints;
     facing = 0;
+    animations = ds_list_create();
     
     static shadowAlpha = 0.3;
     static shadowRatio = 0.4;
@@ -11,6 +12,7 @@ function Unit(_unitType) constructor {
     static actionPlanEndAlpha = 0.4;
     static healthBarSize = new Vector(120, 20);
     static healthBarColor = Colors.friendlyGreen;
+    static facingArrowAlpha = 0.5;
     
     initiativeAccumulated = 0;
     actionPointsUsed = 0;
@@ -48,6 +50,7 @@ function Unit(_unitType) constructor {
         currentTile = pointer_null;
         ds_list_destroy(actionQueue);
         movement.destroy();
+        ds_list_destroy(animations);
     };
     
     static setNextAnimState = function (_state, _loop = false) {
@@ -148,6 +151,18 @@ function Unit(_unitType) constructor {
         draw_sprite_ext(animSprite, animProgress,
             _x, _y + scale * _yOffset,
             scale * spriteFacing, scale, 0, _tint, 1);
+    }
+    
+    static drawOverlay = function(_center) {
+        drawFacingArrow(_center.x, _center.y, facingArrowAlpha);
+            
+        var _healthBarPosition = _center.add(type.healthBarOffset);
+            
+        if (gameController.trixagon) {
+            drawHealthNumber(_healthBarPosition);
+        } else {
+            drawHealthBar(_healthBarPosition);
+        }
     }
     
     static drawFacingArrow = function (_x, _y, _alpha) {

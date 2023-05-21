@@ -31,6 +31,8 @@ function GameAnimation(_gameController) constructor {
             } else {
                 animationStep();
             }
+        } else if (ended) {
+            destroy();
         }
     }
     

@@ -1,5 +1,4 @@
-function BasicMovementAnimation(_gameController, _unit, _endTile) : GameAnimation(_gameController) constructor {
-    unit = _unit;
+function BasicMovementAnimation(_gameController, _unit, _endTile) : UnitAnimation(_gameController, _unit) constructor {
     startTile = unit.currentTile;
     endTile = _endTile;
     drawingTile = pointer_null;
@@ -61,13 +60,19 @@ function BasicMovementAnimation(_gameController, _unit, _endTile) : GameAnimatio
         setDrawingTile(pointer_null);
         
         unit.setNextAnimState(UnitAnimState.Moving, false);
+        
+        setUnit(pointer_null);
     }
     
-    static draw = function(_tile) {
-        var _basePos = hexMap.getTileXY(drawingTile);
-        var _finalX = _basePos.x + unitRelativePosition.x;
-        var _finalY = _basePos.y + unitRelativePosition.y;
+    static draw = function() {
+        if (!started || ended) {
+            return;
+        }
         
-        unit.draw(_finalX, _finalY);
+        var _basePos = hexMap.getTileXY(drawingTile);
+        var _finalPos = _basePos.add(unitRelativePosition);
+        
+        unit.draw(_finalPos.x, _finalPos.y);
+        unit.drawOverlay(_finalPos);
     }
 }

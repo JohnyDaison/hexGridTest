@@ -127,7 +127,7 @@ function GameController() constructor {
     static gameAnimationsUpdate = function () {
         var _gameAnimationCount = ds_list_size(gameAnimations);
         
-        for (var i = 0; i < _gameAnimationCount; i++) {
+        for (var i = _gameAnimationCount - 1; i >= 0; i--) {
             var _gameAnimation = gameAnimations[| i];
             
             _gameAnimation.update();

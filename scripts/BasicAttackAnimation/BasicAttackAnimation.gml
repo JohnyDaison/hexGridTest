@@ -1,5 +1,4 @@
-function BasicAttackAnimation(_gameController, _unit, _endTile) : GameAnimation(_gameController) constructor {
-    unit = _unit;
+function BasicAttackAnimation(_gameController, _unit, _endTile) : UnitAnimation(_gameController, _unit) constructor {
     startTile = unit.currentTile;
     endTile = _endTile;
     drawingTile = pointer_null;
@@ -59,6 +58,7 @@ function BasicAttackAnimation(_gameController, _unit, _endTile) : GameAnimation(
     
     static animationEnd = function() {
         setDrawingTile(pointer_null);
+        setUnit(pointer_null);
     }
     
     static draw = function(_tile) {
