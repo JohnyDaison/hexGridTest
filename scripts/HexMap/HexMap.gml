@@ -281,8 +281,7 @@ function HexMap(_orientation, _size, _origin) constructor {
                     draw_set_color(c_black);
                     draw_set_font(fontDebug);
                     draw_set_halign(fa_center);
-                
-                    var _center = getTileXY(_hexTile);
+                    
                     var _coordsOffset = 35;
                     draw_text(_center.x, _center.y + _coordsOffset, string("[{0}, {1}]", _q, _r));
                 }

@@ -374,6 +374,10 @@ function Unit(_unitType) constructor {
         spriteFacing = sign(2.5 - facing);
     }
     
+    static rotateFacing = function (_angle) {
+        updateFacing(modulo(facing + _angle, 6));
+    }
+    
     static constrainTrixagonFacing = function () {
         var _triangleRight = hexMap.isTrixagonRight(currentTile.position);
         var _facingOdd = facing % 2;
@@ -397,5 +401,20 @@ function Unit(_unitType) constructor {
                 facing = _prevFacing;
             }
         }
+    }
+    
+    static getUnitInFrontOfMe = function () {
+        if (!nextPosition) {
+            return pointer_null;
+        }
+        
+        var _frontPosition = nextPosition.add(global.hexDirections[facing]);
+        var _frontTile = hexMap.getTile(_frontPosition);
+        
+        if (_frontTile) {
+            return _frontTile.getTopUnit();
+        }
+        
+        return pointer_null;
     }
 }

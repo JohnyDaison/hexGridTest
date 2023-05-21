@@ -1,3 +1,4 @@
+randomize();
 tileSize = new Vector(160, 150); // tuned to our sprites
 clearPlanButtonMargin = 190;
 endTurnButtonMargin = 30;
@@ -92,31 +93,67 @@ createTestTiles = function() {
 }
 
 createTrixagonTestTiles = function() {
-    hexMap.paintTerrain(new HexVector(0, 0), new TerrainBrush(TerrainBrushShape.Hexagon, 6, 3, 1), trixagonTerrainGenerator);
-    var _q = -2;
-    var _rStart = -2;
-    var _rDist = 8;
-    var _tile;
+    hexMap.paintTerrain(new HexVector(0, 0), new TerrainBrush(TerrainBrushShape.Hexagon, 6, 1), trixagonTerrainGenerator);
+    
+    var _unitsPerSide = 6;
+    var _sidesSeparation = 2; // if _sidesSeparation is 0 and _randomRange is 0, you will only get red units
+    var _randomRange = 2; // if _randomRange is 0, you will only get 2/3 of _unitsPerSide
+    
+    // red units
+    var _q = -_sidesSeparation;
+    var _rStart = -floor((_unitsPerSide - (_sidesSeparation - 2)) / 3);
+    var _rDist = _unitsPerSide;
     
     for (var _r = _rStart; _r < _rStart + _rDist; _r++) {
-        _tile = hexMap.getTileQR(_q, _r);
-    
-        if (_tile) {
-            var _unit = gameController.addUnit(_tile, UnitType.TrixagonRed);
-            _unit.updateFacing(1);
-        }
+        placeUnitNearPosition(_q, _r, _randomRange, UnitType.TrixagonRed, 1);
     }
     
-    _q = _q + 4;
-    _rStart = _rStart -3;
+    // blue units
+    _q = _q + 2 * _sidesSeparation;
+    _rStart = _rStart - _sidesSeparation;
+    
     for (var _r = _rStart; _r < _rStart + _rDist; _r++) {
-        _tile = hexMap.getTileQR(_q, _r);
+        placeUnitNearPosition(_q, _r, _randomRange, UnitType.TrixagonBlue, 4);
+    }
     
-        if (_tile) {
-            var _unit = gameController.addUnit(_tile, UnitType.TrixagonBlue);
-            _unit.updateFacing(4);
+    // rotate units to not face friends if possible
+    var _unitCount = ds_list_size(gameController.units);
+    
+    for (var _index = 0; _index < _unitCount; _index++) {
+        var _unit = gameController.units[| _index];
+        var _facingFriend = true;
+        
+        for (var _tries = 3; _tries > 0; _tries--) {
+            var _facingUnit = _unit.getUnitInFrontOfMe();
+            
+            if (!_facingUnit) {
+                break;
+            }
+            
+            _facingFriend = _unit.type.typeId == _facingUnit.type.typeId;
+            
+            if (_facingFriend) {
+                _unit.rotateFacing(-2);
+            } else {
+                break;
+            }
         }
     }
+}
+
+placeUnitNearPosition = function (_q, _r, _range, _unitType, _facing) {
+    for(var _tries = 10; _tries > 0; _tries--) {
+        var _tile = hexMap.getTileQR(_q + irandom_range(-_range, _range), _r + irandom_range(-_range, _range));
+    
+        if (_tile && ds_list_size(_tile.units) == 0) {
+            var _unit = gameController.addUnit(_tile, _unitType);
+            _unit.updateFacing(_facing);
+            
+            return _unit;
+        } 
+    }
+    
+    return pointer_null;
 }
 
 if (gameController.trixagon) {
