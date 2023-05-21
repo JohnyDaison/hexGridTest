@@ -6,7 +6,7 @@ function HexMap(_orientation, _size, _origin) constructor {
     highlightAlpha = 0.5;
     facingArrowAlpha = 0.5;
     terrainPainter = new TerrainPainter(self);
-    drawTileCoords = true;
+    drawTileCoords = false;
     truncForHex = pointer_null;
     truncTiles = array_create(0);
     truncTint = c_white;

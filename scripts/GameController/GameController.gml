@@ -18,6 +18,7 @@ function GameController() constructor {
     if (trixagon) {
         useUnitQueue = false;
         otherActionsChangeFacing = false;
+        objGameCamera.updateZoomLevel(objGameCamera.maxZoomLevel);
     }
     
     static destroy = function() {

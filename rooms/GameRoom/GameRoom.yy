@@ -7,8 +7,8 @@
   "inheritCreationOrder": false,
   "inheritLayers": false,
   "instanceCreationOrder": [
-    {"name":"inst_70E46101","path":"rooms/GameRoom/GameRoom.yy",},
     {"name":"inst_3F74D4A2","path":"rooms/GameRoom/GameRoom.yy",},
+    {"name":"inst_70E46101","path":"rooms/GameRoom/GameRoom.yy",},
     {"name":"inst_202DFE05","path":"rooms/GameRoom/GameRoom.yy",},
   ],
   "isDnd": false,
