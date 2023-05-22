@@ -1,21 +1,35 @@
 function GameController() constructor {
+    players = ds_map_create();
+    playerCount = 0;
     units = ds_list_create();
     gameAnimations = ds_list_create();
     hexMap = pointer_null;
     selectedUnit = pointer_null;
     unitTargetTile = pointer_null;
     endTurnButtonPressed = false;
-    
+    roundCounter = 1;
+    activePlayer = pointer_null;
     unitQueue = new UnitQueue(self);
+    
+    playerListDisplay = {
+        margin: 12,
+        lineHeight: 60,
+        outlineWidth: 4,
+        position: new Vector(0,0),
+        size: new Vector(0,0),
+        font: fontPlayerList,
+    }
+    
+    alternatePlayerTurns = false;
     useUnitQueue = true;
     otherActionsChangeFacing = true;
     
     initiativeThreshold = 60;
-    roundCounter = 1;
     
     trixagon = true;
     
     if (trixagon) {
+        alternatePlayerTurns = true;
         useUnitQueue = false;
         otherActionsChangeFacing = false;
         objGameCamera.updateZoomLevel(objGameCamera.maxZoomLevel);
@@ -27,11 +41,16 @@ function GameController() constructor {
 
         ds_list_destroy(gameAnimations);
         ds_list_destroy(units);
+        ds_map_destroy(players);
     }
     
     static init = function() {
         unitsRoundStart();
         unitQueue.init();
+        
+        if (alternatePlayerTurns && !activePlayer) {
+            selectNextPlayer();
+        }
         
         if (useUnitQueue) {
             selectedUnit = unitQueue.activeUnit;
@@ -71,6 +90,21 @@ function GameController() constructor {
         }
         
         ds_list_clear(units);
+    }
+    
+    static addPlayer = function(_name, _color) {
+        var _number = playerCount + 1;
+        var _player = new Player(_number, _name, _color);
+        
+        _player.gameController = self;
+        _player.hexMap = hexMap;
+        
+        players[? _number] = _player;
+        playerCount++;
+        
+        updatePlayerListDisplay();
+        
+        return _player;
     }
     
     static addUnit = function(_hexTile, _unitType) {
@@ -167,7 +201,27 @@ function GameController() constructor {
         unitQueue.updateCards();
     }
     
-    static handleTileClicked = function(_cursorTile) {
+    static canUnitBeSelected = function (_unit) {
+        if (!_unit || _unit.dying) {
+            return false;
+        }
+        
+        if (activePlayer && _unit.player != activePlayer) {
+            return false;
+        }
+        
+        return true;
+    }
+    
+    static canUnitBeDeselected = function (_unit) {
+        if (alternatePlayerTurns && _unit.actionPointsUsed > 0) {
+            return false;
+        }
+        
+        return true;
+    }
+    
+    static handleTileClicked = function (_cursorTile) {
         var _cursorUnit = _cursorTile.getTopUnit();
         
         if (useUnitQueue) {
@@ -177,12 +231,15 @@ function GameController() constructor {
             }
         } else {
             if (selectedUnit == pointer_null) {
-                if (_cursorUnit != pointer_null && !_cursorUnit.dying) {
+                if (canUnitBeSelected(_cursorUnit)) {
                     selectedUnit = _cursorUnit;
+                    unitTargetTile = pointer_null;
                 }
             } else if (_cursorUnit == selectedUnit) {
-                selectedUnit = pointer_null;
-                unitTargetTile = pointer_null;
+                if (canUnitBeDeselected(selectedUnit)) {
+                    selectedUnit = pointer_null;
+                    unitTargetTile = pointer_null;
+                }
             } else {
                 unitTargetTile = _cursorTile;
             }
@@ -206,7 +263,7 @@ function GameController() constructor {
         }
     }
     
-    static handleTileDragged = function(_startTile, _endHex) {
+    static handleTileDragged = function (_startTile, _endHex) {
         if (selectedUnit == pointer_null) {
             return;
         }
@@ -281,7 +338,11 @@ function GameController() constructor {
             selectedUnit = unitQueue.activeUnit;
         }
         
-        if (selectedUnit == pointer_null) {
+        if (alternatePlayerTurns) {
+            endPlayerTurn();
+        }
+        
+        if (selectedUnit == pointer_null || alternatePlayerTurns) {
             endRound();
         }
     }
@@ -294,6 +355,80 @@ function GameController() constructor {
         unitsRoundStart();
         if (useUnitQueue) {
             endUnitTurn();
+        }
+    }
+    
+    static endPlayerTurn = function () {
+        show_debug_message("endPlayerTurn called");
+        selectNextPlayer();
+    }
+    
+    static selectNextPlayer = function () {
+        if (activePlayer) {
+            var _number = activePlayer.number;
+            _number = _number == playerCount ? 1 : _number + 1;
+            
+            activePlayer = players[? _number];
+        }
+        
+        if (playerCount > 0 && !activePlayer) {
+            activePlayer = players[? 1];
+        }
+    }
+    
+    static updatePlayerListDisplay = function () {
+        var _maxNameWidth = 0;
+        draw_set_font(playerListDisplay.font);
+        
+        for (var i = 1; i <= playerCount; i++) {
+            var _name = players[? i].name;
+            var _width = string_width(_name);
+            
+            if (_width > _maxNameWidth) {
+                _maxNameWidth = _width;
+            }
+        }
+        
+        playerListDisplay.size.x = _maxNameWidth;
+        playerListDisplay.size.y = playerListDisplay.lineHeight * playerCount;
+        
+        playerListDisplay.position.x = objGameCamera.baseViewportWidth - playerListDisplay.margin - playerListDisplay.size.x;
+        playerListDisplay.position.y = playerListDisplay.margin;
+    }
+    
+    static drawPlayerListDisplay = function () {
+        var _x = playerListDisplay.position.x;
+        var _y = playerListDisplay.position.y;
+        
+        draw_set_alpha(1);
+        
+        for (var i = 1; i <= playerCount; i++) {
+            var _player = players[? i];
+            var _name = _player.name;
+            var _color = _player.color;
+            var _font = playerListDisplay.font;
+            
+            draw_set_halign(fa_left);
+            draw_set_valign(fa_top);
+            draw_set_font(_font);
+            
+            if (_player == activePlayer) {
+                _color = merge_color(_color, c_white, 0.2);
+
+                var _offset = playerListDisplay.outlineWidth;
+                draw_set_color(c_white);
+                
+                draw_text(_x - _offset, _y, _name);
+                draw_text(_x + _offset, _y, _name);
+                draw_text(_x, _y + _offset, _name);
+                draw_text(_x, _y - _offset, _name);
+            }
+            
+            draw_set_color(_color);
+            
+            draw_text(_x, _y, _name);
+            
+            _y += playerListDisplay.lineHeight;
         }
     }
 

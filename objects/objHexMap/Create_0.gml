@@ -92,6 +92,11 @@ createTestTiles = function() {
     hexMap.paintTerrain(new HexVector(0, 0), new TerrainBrush(TerrainBrushShape.Hexagon, 4, 3, 1), randomTerrainGenerator);
 }
 
+createTrixagonPlayers = function() {
+    gameController.addPlayer("Red", Colors.trixagonRed);
+    gameController.addPlayer("Blue", Colors.trixagonBlue);
+}
+
 createTrixagonTestTiles = function() {
     hexMap.paintTerrain(new HexVector(0, 0), new TerrainBrush(TerrainBrushShape.Hexagon, 6, 1), trixagonTerrainGenerator);
     
@@ -103,17 +108,19 @@ createTrixagonTestTiles = function() {
     var _q = -_sidesSeparation;
     var _rStart = -floor((_unitsPerSide - (_sidesSeparation - 2)) / 3);
     var _rDist = _unitsPerSide;
+    var _player = gameController.players[? 1];
     
     for (var _r = _rStart; _r < _rStart + _rDist; _r++) {
-        placeUnitNearPosition(_q, _r, _randomRange, UnitType.TrixagonRed, 1);
+        placeUnitNearPosition(_q, _r, _randomRange, UnitType.TrixagonRed, 1, _player);
     }
     
     // blue units
     _q = _q + 2 * _sidesSeparation;
     _rStart = _rStart - _sidesSeparation;
+    _player = gameController.players[? 2];
     
     for (var _r = _rStart; _r < _rStart + _rDist; _r++) {
-        placeUnitNearPosition(_q, _r, _randomRange, UnitType.TrixagonBlue, 4);
+        placeUnitNearPosition(_q, _r, _randomRange, UnitType.TrixagonBlue, 4, _player);
     }
     
     // rotate units to not face friends if possible
@@ -141,13 +148,14 @@ createTrixagonTestTiles = function() {
     }
 }
 
-placeUnitNearPosition = function (_q, _r, _range, _unitType, _facing) {
+placeUnitNearPosition = function (_q, _r, _range, _unitType, _facing, _player) {
     for(var _tries = 10; _tries > 0; _tries--) {
         var _tile = hexMap.getTileQR(_q + irandom_range(-_range, _range), _r + irandom_range(-_range, _range));
     
         if (_tile && ds_list_size(_tile.units) == 0) {
             var _unit = gameController.addUnit(_tile, _unitType);
             _unit.updateFacing(_facing);
+            _player.addUnit(_unit);
             
             return _unit;
         } 
@@ -157,6 +165,7 @@ placeUnitNearPosition = function (_q, _r, _range, _unitType, _facing) {
 }
 
 if (gameController.trixagon) {
+    createTrixagonPlayers();
     createTrixagonTestTiles();
 } else {
     createTestTiles();

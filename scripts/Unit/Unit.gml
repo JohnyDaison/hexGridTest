@@ -5,6 +5,7 @@ function Unit(_unitType) constructor {
     actionPoints = type.actionPoints;
     facing = 0;
     animations = ds_list_create();
+    player = pointer_null;
     
     static shadowAlpha = 0.3;
     static shadowRatio = 0.4;
@@ -47,6 +48,10 @@ function Unit(_unitType) constructor {
     }
     
     static destroy = function () {
+        if (player) {
+            player.removeUnit(self);
+        }
+        
         currentTile = pointer_null;
         ds_list_destroy(actionQueue);
         movement.destroy();

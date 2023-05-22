@@ -1,5 +1,7 @@
 gameController.drawUnitQueue();
 
+gameController.drawPlayerListDisplay();
+
 if (debugText != "") {
     var _xPos = 10
     var _yPos = 10;
