@@ -5,7 +5,7 @@
   "isCompatibility": false,
   "isDnD": false,
   "parent": {
-    "name": "HexMap",
-    "path": "folders/Scripts/HexMap.yy",
+    "name": "Terrain",
+    "path": "folders/Scripts/HexMap/Terrain.yy",
   },
 }

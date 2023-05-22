@@ -27,6 +27,7 @@
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Animations","folderPath":"folders/Scripts/HexMap/Animations.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Combat","folderPath":"folders/Scripts/HexMap/Animations/Combat.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Movement","folderPath":"folders/Scripts/HexMap/Animations/Movement.yy",},
+    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Terrain","folderPath":"folders/Scripts/HexMap/Terrain.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Units","folderPath":"folders/Scripts/HexMap/Units.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Sequences","folderPath":"folders/Sequences.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Shaders","folderPath":"folders/Shaders.yy",},
