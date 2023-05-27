@@ -45,7 +45,6 @@ function trixagonUnitType(_id, _name) {
     _unitType.combat.health = 2;
     _unitType.combat.maxHealth = 2;
     _unitType.combat.attackRange = 2;
-    _unitType.combat.accuracy = 0.5;
     _unitType.actionPoints = 1;
     
     return _unitType;

@@ -31,7 +31,9 @@ function GameController() constructor {
     }
     
     trixagon = {
-        active: true
+        active: true,
+        highAttackChance: 0.7,
+        lowAttackChance: 0.4
     }
     
     if (trixagon.active) {
