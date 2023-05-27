@@ -15,7 +15,7 @@ function HexMap(_orientation, _size, _origin) constructor {
     }
     
     static isValidPosition = function(_hex) {
-        if (gameController.trixagon) {
+        if (gameController.trixagon.active) {
             return modulo(_hex.q, 3) != modulo(_hex.r, 3);
         }
         
@@ -295,7 +295,7 @@ function HexMap(_orientation, _size, _origin) constructor {
         for (var i = 0; i < _count; i++) {
             var _unit = _units[| i];
             
-            if (gameController.trixagon) {
+            if (gameController.trixagon.active) {
                 drawAnimations(_unit.animations);
             }
             
@@ -303,7 +303,7 @@ function HexMap(_orientation, _size, _origin) constructor {
                 continue;
             }
             
-            if (gameController.trixagon) {
+            if (gameController.trixagon.active) {
                 var _hexTile = _unit.currentTile;
                 var _hex = _hexTile.position;
                 var _drawHighlight = !is_undefined(_highlightHex) && _hex.equals(_highlightHex);

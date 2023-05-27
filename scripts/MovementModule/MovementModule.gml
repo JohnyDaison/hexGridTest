@@ -29,7 +29,7 @@ function MovementModule(_unit, _stats) constructor {
         
         var _path = myUnit.hexMap.findUnitPath(myUnit, myUnit.plannedFinalPosition, _hex);
         
-        if (myUnit.gameController.trixagon && myUnit.currentTile && !myUnit.currentAction && !myUnit.getNextAction()) {
+        if (myUnit.gameController.trixagon.active && myUnit.currentTile && !myUnit.currentAction && !myUnit.getNextAction()) {
             var _actionCount = array_length(_path.actionArray);
             var _skipCount = 0;
             var _index = 0;
@@ -59,7 +59,7 @@ function MovementModule(_unit, _stats) constructor {
             array_delete(_path.actionArray, 0, _skipCount);
         }
         
-        if (!myUnit.gameController.planForFutureTurns && _path.totalCost > myUnit.getRemainingActionPoints()) {
+        if (!myUnit.gameController.rules.planForFutureTurns && _path.totalCost > myUnit.getRemainingActionPoints()) {
             return;
         }
         
@@ -103,7 +103,7 @@ function MovementModule(_unit, _stats) constructor {
     }
     
     static moveToHex = function (_hex) {
-        if (myUnit.gameController.otherActionsChangeFacing) {
+        if (myUnit.gameController.rules.otherActionsChangeFacing) {
             faceHex(_hex);
         }
         

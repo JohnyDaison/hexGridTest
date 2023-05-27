@@ -9,12 +9,16 @@ startPosition = new Vector(_halfRoomWidth, _halfRoomHeight);
 debugText = "TEST";
 
 gameController = new GameController();
-var _layout = gameController.trixagon ? layout_pointy : layout_flat;
-if (gameController.trixagon) {
+
+var _layout = layout_flat;
+if (gameController.trixagon.active) {
+    _layout = layout_pointy;
+
     var _tempY = tileSize.y;
     tileSize.y = tileSize.x;
     tileSize.x = _tempY;
 }
+
 hexMap = gameController.createMap(_layout, tileSize, startPosition);
 
 clearPlanButton = noone;
@@ -29,7 +33,7 @@ mainTerrainGenerator = randomTerrainGenerator;
 terrainGeneratorOptions = { height: true };
 lastPaintedPos = undefined;
 
-if (gameController.trixagon) {
+if (gameController.trixagon.active) {
     mainTerrainGenerator = trixagonTerrainGenerator;
 }
 
@@ -164,7 +168,7 @@ placeUnitNearPosition = function (_q, _r, _range, _unitType, _facing, _player) {
     return pointer_null;
 }
 
-if (gameController.trixagon) {
+if (gameController.trixagon.active) {
     createTrixagonPlayers();
     createTrixagonTestTiles();
 } else {
@@ -187,7 +191,7 @@ createDirectionTestTiles = function() {
 gameController.init();
 
 testInitiativeSystem = function () {
-    while (gameController.roundCounter <= gameController.initiativeThreshold) {
+    while (gameController.roundCounter <= gameController.rules.initiativeThreshold) {
         gameController.endUnitTurn();
     }
 }

@@ -50,7 +50,7 @@ function CombatModule(_unit, _stats) constructor {
     }
     
     static attackHex = function (_hex, _animationScale = 1, _endAction = true) {
-        if (myUnit.gameController.otherActionsChangeFacing) {
+        if (myUnit.gameController.rules.otherActionsChangeFacing) {
             myUnit.movement.faceHex(_hex);
         }
         

@@ -168,7 +168,7 @@ function Unit(_unitType) constructor {
             
         var _healthBarPosition = _center.add(type.healthBarOffset);
             
-        if (gameController.trixagon) {
+        if (gameController.trixagon.active) {
             drawHealthNumber(_healthBarPosition);
         } else {
             drawHealthBar(_healthBarPosition);
@@ -183,7 +183,7 @@ function Unit(_unitType) constructor {
             _tint = Colors.friendlyGreen;
         }
         
-        if (gameController.trixagon) {
+        if (gameController.trixagon.active) {
             _tint = c_black;
             _alpha = 1;
             _arrowSprite = sprHexFacingArrowTrixagon;
@@ -214,7 +214,7 @@ function Unit(_unitType) constructor {
         var _lastAction = actionQueue[| _actionCount - 1];
         var _newActionCost = getActionCost(hexMap.getTile(plannedFinalPosition), _action);
         
-        if (!gameController.planForFutureTurns &&
+        if (!gameController.rules.planForFutureTurns &&
             getRemainingActionPoints() < (actionQueueTotalCost + _newActionCost))
             return;
         
@@ -413,7 +413,7 @@ function Unit(_unitType) constructor {
             facing = _facing;
         }
         
-        if (gameController.trixagon && currentTile) {
+        if (gameController.trixagon.active && currentTile) {
             constrainTrixagonFacing();
         }
         

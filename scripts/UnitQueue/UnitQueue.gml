@@ -60,7 +60,7 @@ function UnitQueue(_gameController) constructor {
     }
     
     static isInThisRound = function(_unitCard) {
-        return _unitCard.unit.initiativeAccumulated >= gameController.initiativeThreshold;
+        return _unitCard.unit.initiativeAccumulated >= gameController.rules.initiativeThreshold;
     }
     
     static roundsUntilActive = function(_unitCard) {
@@ -68,7 +68,7 @@ function UnitQueue(_gameController) constructor {
             return infinity;
         }
         
-        return ceil((gameController.initiativeThreshold - _unitCard.unit.initiativeAccumulated) / _unitCard.unit.initiative);
+        return ceil((gameController.rules.initiativeThreshold - _unitCard.unit.initiativeAccumulated) / _unitCard.unit.initiative);
     }
     
     static updateActiveUnit = function () {

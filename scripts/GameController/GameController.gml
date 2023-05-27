@@ -21,20 +21,25 @@ function GameController() constructor {
         font: fontPlayerList,
     }
     
-    alternatePlayerTurns = false;
-    useUnitQueue = true;
-    otherActionsChangeFacing = true;
-    planForFutureTurns = true;
+    rules = {
+        alternatePlayerTurns: false,
+        useUnitQueue: true,
+        otherActionsChangeFacing: true,
+        planForFutureTurns: true,
+        
+        initiativeThreshold: 60,
+    }
     
-    initiativeThreshold = 60;
+    trixagon = {
+        active: true
+    }
     
-    trixagon = true;
-    
-    if (trixagon) {
-        alternatePlayerTurns = true;
-        useUnitQueue = false;
-        otherActionsChangeFacing = false;
-        planForFutureTurns = false;
+    if (trixagon.active) {
+        rules.alternatePlayerTurns = true;
+        rules.useUnitQueue = false;
+        rules.otherActionsChangeFacing = false;
+        rules.planForFutureTurns = false;
+        
         objGameCamera.updateZoomLevel(objGameCamera.maxZoomLevel);
     }
     
@@ -51,11 +56,11 @@ function GameController() constructor {
         unitsRoundStart();
         unitQueue.init();
         
-        if (alternatePlayerTurns && !activePlayer) {
+        if (rules.alternatePlayerTurns && !activePlayer) {
             selectNextPlayer();
         }
         
-        if (useUnitQueue) {
+        if (rules.useUnitQueue) {
             selectedUnit = unitQueue.activeUnit;
         }
     }
@@ -118,7 +123,7 @@ function GameController() constructor {
         
         hexMap.placeUnit(_hexTile, _unit);
         
-        if (useUnitQueue) {
+        if (rules.useUnitQueue) {
             unitQueue.addUnit(_unit);
         }
         
@@ -184,7 +189,7 @@ function GameController() constructor {
         }
         
         if (playerTurnIsEnding) {
-            if (trixagon) {
+            if (trixagon.active) {
                 var _state = {totalActive: 0};
                 
                 array_foreach(activePlayer.units, method(_state, function (_unit) {
@@ -233,7 +238,7 @@ function GameController() constructor {
     }
     
     static canUnitBeDeselected = function (_unit) {
-        if (alternatePlayerTurns && _unit.actionPointsUsed > 0) {
+        if (rules.alternatePlayerTurns && _unit.actionPointsUsed > 0) {
             return false;
         }
         
@@ -243,7 +248,7 @@ function GameController() constructor {
     static handleTileClicked = function (_cursorTile) {
         var _cursorUnit = _cursorTile.getTopUnit();
         
-        if (useUnitQueue) {
+        if (rules.useUnitQueue) {
             unitTargetTile = pointer_null;
             if (_cursorUnit != selectedUnit) {
                 unitTargetTile = _cursorTile;
@@ -268,7 +273,7 @@ function GameController() constructor {
             var _planned = false;
     
             if (_cursorUnit != pointer_null && selectedUnit.combat.canAttack()) {
-                if (!trixagon) {
+                if (!trixagon.active) {
                     _planned = selectedUnit.combat.planAttackOnHex(unitTargetTile.position);
                 }
             } else if (selectedUnit.movement.canMove()) {
@@ -351,23 +356,23 @@ function GameController() constructor {
         show_debug_message("endUnitTurn called");
         
         if (selectedUnit != pointer_null) {
-            selectedUnit.initiativeAccumulated -= initiativeThreshold;
+            selectedUnit.initiativeAccumulated -= rules.initiativeThreshold;
             selectedUnit.turnCounter++;
         }
         
         selectedUnit = pointer_null;
         unitTargetTile = pointer_null;
         
-        if (useUnitQueue) {
+        if (rules.useUnitQueue) {
             unitQueue.update();
             selectedUnit = unitQueue.activeUnit;
         }
         
-        if (alternatePlayerTurns) {
+        if (rules.alternatePlayerTurns) {
             endPlayerTurn();
         }
         
-        if (selectedUnit == pointer_null && !alternatePlayerTurns) {
+        if (selectedUnit == pointer_null && !rules.alternatePlayerTurns) {
             endRound();
         }
     }
@@ -378,7 +383,7 @@ function GameController() constructor {
         roundCounter++;
         
         unitsRoundStart();
-        if (useUnitQueue) {
+        if (rules.useUnitQueue) {
             endUnitTurn();
         }
     }
@@ -386,7 +391,7 @@ function GameController() constructor {
     static endPlayerTurn = function () {
         show_debug_message("endPlayerTurn called");
         
-        if (trixagon) {
+        if (trixagon.active) {
             array_foreach(activePlayer.units, function (_unit) {
                 _unit.combat.planTrixagonAttack();
                 
@@ -475,7 +480,7 @@ function GameController() constructor {
     }
 
     static drawUnitQueue = function () {
-        if (useUnitQueue) {
+        if (rules.useUnitQueue) {
             unitQueue.draw();
         }
     }

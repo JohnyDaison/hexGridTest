@@ -9,7 +9,7 @@ if (gameController.selectedUnit != pointer_null && gameController.selectedUnit.c
     _selectedTile = gameController.selectedUnit.currentTile;
 }
 
-if (gameController.trixagon) {
+if (gameController.trixagon.active) {
     hexMap.updateTruncOverlay();
 }
 
@@ -18,7 +18,7 @@ hexMap.drawUnitsOverlay(gameController.units, _highlightHex, _selectedTile);
 
 drawFacingDragArrow();
 
-if (!gameController.trixagon && gameController.selectedUnit != pointer_null) {
+if (!gameController.trixagon.active && gameController.selectedUnit != pointer_null) {
     gameController.selectedUnit.drawPlannedActions();
 }
 
