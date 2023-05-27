@@ -167,4 +167,15 @@ function HexVector(_q, _r) constructor {
             s = 0;
         }
     }
+    
+    static isTrixagonRight = function () {
+        var _result = modulo(self.s, 2) == 0;
+        var _diffMod = modulo(self.q - self.r, 6);
+    
+        if (_diffMod == 0 || _diffMod >= 3) {
+            _result = !_result;
+        }
+        
+        return _result;
+    }
 }

@@ -9,6 +9,7 @@ function GameController() constructor {
     endTurnButtonPressed = false;
     roundCounter = 1;
     activePlayer = pointer_null;
+    playerTurnIsEnding = false;
     unitQueue = new UnitQueue(self);
     
     playerListDisplay = {
@@ -23,6 +24,7 @@ function GameController() constructor {
     alternatePlayerTurns = false;
     useUnitQueue = true;
     otherActionsChangeFacing = true;
+    planForFutureTurns = true;
     
     initiativeThreshold = 60;
     
@@ -32,6 +34,7 @@ function GameController() constructor {
         alternatePlayerTurns = true;
         useUnitQueue = false;
         otherActionsChangeFacing = false;
+        planForFutureTurns = false;
         objGameCamera.updateZoomLevel(objGameCamera.maxZoomLevel);
     }
     
@@ -180,6 +183,22 @@ function GameController() constructor {
             }
         }
         
+        if (playerTurnIsEnding) {
+            if (trixagon) {
+                var _state = {totalActive: 0};
+                
+                array_foreach(activePlayer.units, method(_state, function (_unit) {
+                    if (_unit.currentAction != pointer_null) {
+                        totalActive++;
+                    }
+                }));
+                
+                if (_state.totalActive == 0) {
+                    startPlayerTurn();
+                }
+            }
+        }
+        
         var _unitCount = ds_list_size(units);
         
         for (var i = _unitCount - 1; i >= 0; i--) {
@@ -249,7 +268,9 @@ function GameController() constructor {
             var _planned = false;
     
             if (_cursorUnit != pointer_null && selectedUnit.combat.canAttack()) {
-                _planned = selectedUnit.combat.planAttackOnHex(unitTargetTile.position);
+                if (!trixagon) {
+                    _planned = selectedUnit.combat.planAttackOnHex(unitTargetTile.position);
+                }
             } else if (selectedUnit.movement.canMove()) {
                 _planned = selectedUnit.movement.planMovementToHex(unitTargetTile.position);
             }
@@ -319,6 +340,10 @@ function GameController() constructor {
             return false;
         }
         
+        if (playerTurnIsEnding) {
+            return false;
+        }
+        
         return true;
     }
     
@@ -342,7 +367,7 @@ function GameController() constructor {
             endPlayerTurn();
         }
         
-        if (selectedUnit == pointer_null || alternatePlayerTurns) {
+        if (selectedUnit == pointer_null && !alternatePlayerTurns) {
             endRound();
         }
     }
@@ -360,6 +385,23 @@ function GameController() constructor {
     
     static endPlayerTurn = function () {
         show_debug_message("endPlayerTurn called");
+        
+        if (trixagon) {
+            array_foreach(activePlayer.units, function (_unit) {
+                _unit.combat.planTrixagonAttack();
+                
+                if (_unit.currentAction == pointer_null) {
+                    _unit.startNextAction();
+                }
+            });
+        }
+        
+        playerTurnIsEnding = true;
+    }
+    
+    static startPlayerTurn = function () {
+        endRound();
+        playerTurnIsEnding = false;
         selectNextPlayer();
     }
     

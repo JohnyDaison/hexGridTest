@@ -17,6 +17,7 @@ function Unit(_unitType) constructor {
     
     initiativeAccumulated = 0;
     actionPointsUsed = 0;
+    actionQueueTotalCost = 0;
     turnCounter = 0;
     spriteFacing = 1;
     hexMap = pointer_null;
@@ -25,6 +26,7 @@ function Unit(_unitType) constructor {
     loopAnimState = undefined;
     dying = false;
     dead = false;
+    destroyed = false;
     
     movement = new MovementModule(self, type.movement);
     combat = new CombatModule(self, type.combat);
@@ -56,6 +58,8 @@ function Unit(_unitType) constructor {
         ds_list_destroy(actionQueue);
         movement.destroy();
         ds_list_destroy(animations);
+        
+        destroyed = true;
     };
     
     static setNextAnimState = function (_state, _loop = false) {
@@ -140,12 +144,13 @@ function Unit(_unitType) constructor {
         }
     };
     
-    static draw = function (_x, _y) {
+    static draw = function (_x, _y, _scale = 1) {
         var _yOffset = type.yOffset;
         var _tint = type.tint;
+        var _finalScale = scale * _scale
         
-        var _shadowRadiusX = type.shadowRadius * scale;
-        var _shadowRadiusY = type.shadowRadius * scale * shadowRatio;
+        var _shadowRadiusX = type.shadowRadius * _finalScale;
+        var _shadowRadiusY = type.shadowRadius * _finalScale * shadowRatio;
         
         draw_set_color(c_black);
         draw_set_alpha(shadowAlpha);
@@ -154,8 +159,8 @@ function Unit(_unitType) constructor {
                     _x + _shadowRadiusX, _y + _shadowRadiusY, false);
         
         draw_sprite_ext(animSprite, animProgress,
-            _x, _y + scale * _yOffset,
-            scale * spriteFacing, scale, 0, _tint, 1);
+            _x, _y + _finalScale * _yOffset,
+            _finalScale * spriteFacing, _finalScale, 0, _tint, 1);
     }
     
     static drawOverlay = function(_center) {
@@ -207,12 +212,19 @@ function Unit(_unitType) constructor {
     static enqueueAction = function(_action) {
         var _actionCount = ds_list_size(actionQueue);
         var _lastAction = actionQueue[| _actionCount - 1];
+        var _newActionCost = getActionCost(hexMap.getTile(plannedFinalPosition), _action);
+        
+        if (!gameController.planForFutureTurns &&
+            getRemainingActionPoints() < (actionQueueTotalCost + _newActionCost))
+            return;
         
         if (!is_undefined(_lastAction) && _lastAction.type == ActionType.FaceHex) {
             ds_list_delete(actionQueue, _actionCount - 1);
         }
         
         ds_list_add(actionQueue, _action);
+        
+        actionQueueTotalCost += _newActionCost;
         
         if (_action.type == ActionType.MoveToHex) {
             plannedFinalPosition = _action.hex;
@@ -251,7 +263,13 @@ function Unit(_unitType) constructor {
             case ActionType.AttackHex: {
                 return combat.getAttackCost(_fromTile, _action);
             }
+            case ActionType.TrixagonAttack:
+                return 0;
         }
+    }
+    
+    static getRemainingActionPoints = function () {
+        return actionPoints - actionPointsUsed;
     }
     
     static getNextAction = function () {
@@ -297,11 +315,12 @@ function Unit(_unitType) constructor {
             return;
         }
         
-        if (_actionCost > actionPoints - actionPointsUsed) {
+        if (_actionCost > getRemainingActionPoints()) {
             return;
         }
         
         actionPointsUsed += _actionCost;
+        actionQueueTotalCost -= _actionCost;
         currentAction = _nextAction;
         actionStarted = false;
         nextPosition = _nextAction.getEndPosition(self, nextPosition);
@@ -314,6 +333,10 @@ function Unit(_unitType) constructor {
     static endCurrentAction = function () {
         lastAction = currentAction;
         currentAction = pointer_null;
+        
+        if (destroyed) {
+            return;
+        }
         
         if (!is_undefined(onActionEnd))
             onActionEnd();
@@ -349,6 +372,9 @@ function Unit(_unitType) constructor {
                 case ActionType.AttackHex: {
                     combat.attackHex(currentAction.hex);
                     break;
+                }
+                case ActionType.TrixagonAttack: {
+                    combat.trixagonAttack();
                 }
             }
             
@@ -399,7 +425,7 @@ function Unit(_unitType) constructor {
     }
     
     static constrainTrixagonFacing = function () {
-        var _triangleRight = hexMap.isTrixagonRight(currentTile.position);
+        var _triangleRight = currentTile.position.isTrixagonRight();
         var _facingOdd = facing % 2;
             
         if ((_triangleRight && !_facingOdd) || (!_triangleRight && _facingOdd)) {

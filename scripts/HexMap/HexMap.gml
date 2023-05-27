@@ -366,6 +366,7 @@ function HexMap(_orientation, _size, _origin) constructor {
 
     static findUnitPath = function (_unit, _fromHex, _toHex, _maxPathLength = 100) {
         var _actionArray = [];
+        var _totalCost = 0;
         
         var _startTile = getTile(_fromHex);
         if (_startTile == pointer_null) {
@@ -388,25 +389,18 @@ function HexMap(_orientation, _size, _origin) constructor {
                 break;
             }
         
-            array_push(_actionArray, new MoveToHexAction(_nextTile.position));
+            var _action = new MoveToHexAction(_nextTile.position);
+            _action.computedCost = _unit.getActionCost(_currentTile, _action);
+            _totalCost += _action.computedCost;
+            
+            array_push(_actionArray, _action);
             
             _previousTile = _currentTile;
             _currentTile = _nextTile;
             _counter++;
         }
         
-        return _actionArray;
-    }
-    
-    static isTrixagonRight = function (_hex) {
-        var _result = modulo(_hex.s, 2) == 0;
-        var _diffMod = modulo(_hex.q - _hex.r, 6);
-    
-        if (_diffMod == 0 || _diffMod >= 3) {
-            _result = !_result;
-        }
-        
-        return _result;
+        return {actionArray: _actionArray, totalCost: _totalCost};
     }
     
     static updateTruncOverlay = function () {
@@ -426,7 +420,7 @@ function HexMap(_orientation, _size, _origin) constructor {
             truncForHex = _desiredTruncHex;
             
             if (truncForHex) {
-                var _isRight = isTrixagonRight(truncForHex);
+                var _isRight = truncForHex.isTrixagonRight();
                 var _trunc = _isRight ? global.truncRight : global.truncLeft;
                 
                 truncTint = Colors.trixagonTrunc;
@@ -440,7 +434,7 @@ function HexMap(_orientation, _size, _origin) constructor {
     
     static setTruncTileOverlay = function (_hexOffset, _index) {
         var _hex = truncForHex.add(_hexOffset);
-        var _isRight = isTrixagonRight(_hex);
+        var _isRight = _hex.isTrixagonRight();
         var _tile = getTile(_hex);
         
         if (!_tile) {

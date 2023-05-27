@@ -27,10 +27,10 @@ function MovementModule(_unit, _stats) constructor {
             return false;
         }
         
-        var _actionArray = myUnit.hexMap.findUnitPath(myUnit, myUnit.plannedFinalPosition, _hex);
+        var _path = myUnit.hexMap.findUnitPath(myUnit, myUnit.plannedFinalPosition, _hex);
         
         if (myUnit.gameController.trixagon && myUnit.currentTile && !myUnit.currentAction && !myUnit.getNextAction()) {
-            var _actionCount = array_length(_actionArray);
+            var _actionCount = array_length(_path.actionArray);
             var _skipCount = 0;
             var _index = 0;
             var _done = false;
@@ -38,7 +38,7 @@ function MovementModule(_unit, _stats) constructor {
             
             do {
                 _done = true;
-                var _nextAction = _actionArray[_index];
+                var _nextAction = _path.actionArray[_index];
                 
                 if (_nextAction.type == ActionType.MoveToHex) {
                     var _distance = _nextAction.hex.subtract(_currentHex).length();
@@ -46,16 +46,24 @@ function MovementModule(_unit, _stats) constructor {
                     if (_distance <= 2) {
                         _skipCount = _index;
                         _done = false;
+                        
+                        if (_index > 0) {
+                            _path.totalCost -= _path.actionArray[_index - 1].computedCost;
+                        }
                     }
                 }
                 
                 _index++;
             } until (_done || _index >= _actionCount);
             
-            array_delete(_actionArray, 0, _skipCount);
+            array_delete(_path.actionArray, 0, _skipCount);
         }
         
-        array_foreach(_actionArray, function(_action, _index) {
+        if (!myUnit.gameController.planForFutureTurns && _path.totalCost > myUnit.getRemainingActionPoints()) {
+            return;
+        }
+        
+        array_foreach(_path.actionArray, function(_action, _index) {
             myUnit.enqueueAction(_action);
         });
         

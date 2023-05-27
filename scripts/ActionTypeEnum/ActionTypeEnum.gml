@@ -3,6 +3,7 @@ enum ActionType {
     MoveToHex,
     AttackHex,
     AttackUnit,
+    TrixagonAttack
 }
 
 global.actionTypeMap = ds_map_create();
@@ -13,3 +14,4 @@ _map[? ActionType.FaceHex] = FaceHexAction;
 _map[? ActionType.MoveToHex] = MoveToHexAction;
 _map[? ActionType.AttackHex] = AttackHexAction;
 _map[? ActionType.AttackUnit] = AttackUnitAction;
+_map[? ActionType.TrixagonAttack] = TrixagonAttackAction;

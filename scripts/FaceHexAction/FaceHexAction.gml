@@ -1,6 +1,7 @@
 function FaceHexAction(_hex) : GameAction() constructor {
     static type = ActionType.FaceHex;
     static planColor = c_orange;
+    static pointCost = 0;
     static instant = true;
     hex = _hex;
     

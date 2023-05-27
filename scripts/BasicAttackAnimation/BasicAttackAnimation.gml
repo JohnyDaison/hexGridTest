@@ -1,9 +1,11 @@
-function BasicAttackAnimation(_gameController, _unit, _endTile) : UnitAnimation(_gameController, _unit) constructor {
+function BasicAttackAnimation(_gameController, _unit, _endTile, _scale = 1) : UnitAnimation(_gameController, _unit) constructor {
     startTile = unit.currentTile;
     endTile = _endTile;
     drawingTile = pointer_null;
     originAtEnd = false;
     animSpeed = unit.type.animAttackSpeed;
+    unitScale = _scale;
+    endAction = true;
     
     static setDrawingTile = function(_hexTile) {
         if (drawingTile != pointer_null) {
@@ -66,6 +68,6 @@ function BasicAttackAnimation(_gameController, _unit, _endTile) : UnitAnimation(
         var _finalX = _basePos.x + unitRelativePosition.x;
         var _finalY = _basePos.y + unitRelativePosition.y;
         
-        unit.draw(_finalX, _finalY);
+        unit.draw(_finalX, _finalY, unitScale);
     }
 }

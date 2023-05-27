@@ -131,6 +131,7 @@
     {"id":{"name":"sprTrixagonTileDownGreen","path":"sprites/sprTrixagonTileDownGreen/sprTrixagonTileDownGreen.yy",},},
     {"id":{"name":"sprKnight_Arrow","path":"sprites/sprKnight_Arrow/sprKnight_Arrow.yy",},},
     {"id":{"name":"sprSkeleton_Idle_Bow","path":"sprites/sprSkeleton_Idle_Bow/sprSkeleton_Idle_Bow.yy",},},
+    {"id":{"name":"TrixagonAttackAction","path":"scripts/TrixagonAttackAction/TrixagonAttackAction.yy",},},
     {"id":{"name":"sprKnight_Die_Bow","path":"sprites/sprKnight_Die_Bow/sprKnight_Die_Bow.yy",},},
     {"id":{"name":"sprTrixagonTileDown","path":"sprites/sprTrixagonTileDown/sprTrixagonTileDown.yy",},},
     {"id":{"name":"sprKnight_Idle_Sword","path":"sprites/sprKnight_Idle_Sword/sprKnight_Idle_Sword.yy",},},

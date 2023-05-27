@@ -16,8 +16,8 @@ function CombatModule(_unit, _stats) constructor {
                 return false;
             }
             
-            var _actionArray = myUnit.hexMap.findUnitPath(myUnit, _hex, myUnit.plannedFinalPosition, stats.attackRange);
-            var _lastAction = array_last(_actionArray);
+            var _path = myUnit.hexMap.findUnitPath(myUnit, _hex, myUnit.plannedFinalPosition, stats.attackRange);
+            var _lastAction = array_last(_path.actionArray);
             var _lastHex = _lastAction.hex;
             
             if (!myUnit.movement.planMovementToHex(_lastHex)) {
@@ -34,24 +34,34 @@ function CombatModule(_unit, _stats) constructor {
         myUnit.enqueueAction(new AttackUnitAction(_unit));
     }
     
+    static planTrixagonAttack = function () {
+        myUnit.enqueueAction(new TrixagonAttackAction());
+    }
+    
     // TODO: add logic
     static getAttackCost = function(_fromTile, _action) {
         var _endTile = myUnit.hexMap.getTile(_action.hex);
         
         if (_fromTile == pointer_null || _endTile == pointer_null) {
-            return undefined;    
+            return undefined;
         }
         
         return _action.pointCost;
     }
     
-    static attackHex = function (_hex) {
+    static attackHex = function (_hex, _animationScale = 1, _endAction = true) {
         if (myUnit.gameController.otherActionsChangeFacing) {
             myUnit.movement.faceHex(_hex);
         }
         
         var _endTile = myUnit.hexMap.getTile(_hex);
-        var _attackAnimation = new BasicAttackAnimation(myUnit.gameController, myUnit, _endTile);
+        
+        if (!_endTile) {
+            return;
+        }
+        
+        var _attackAnimation = new BasicAttackAnimation(myUnit.gameController, myUnit, _endTile, _animationScale);
+        _attackAnimation.endAction = _endAction;
         
         _attackAnimation.onAnimEnd = method(self, function (_animation) {
             var _targetUnit = _animation.endTile.getTopUnit();
@@ -63,12 +73,33 @@ function CombatModule(_unit, _stats) constructor {
                 }
             }
             
-            myUnit.endCurrentAction();
+            if (_animation.endAction)
+                myUnit.endCurrentAction();
         });
     }
     
     static attackUnit = function (_unit) {
         
+    }
+    
+    static trixagonAttack = function () {
+        var _myHex = myUnit.nextPosition;
+        var _meleeHex = _myHex.add(global.hexDirections[myUnit.facing]);
+        var _isRight = _myHex.isTrixagonRight();
+        var _trunc = _isRight ? global.truncRight : global.truncLeft;
+        var _rangedPositions = _trunc.ranged;
+        
+        var _rangedMapperFunction = method({myHex: _myHex}, function (_position) {
+            return myHex.add(_position);
+        });
+        
+        var _rangedHexes = array_map(_rangedPositions, _rangedMapperFunction);
+        
+        attackHex(_meleeHex, 0.5, false);
+        
+        array_foreach(_rangedHexes, function (_hex) {
+            attackHex(_hex, 0.5);
+        });
     }
     
     static dealDamage = function (_damage, _toUnit) {
