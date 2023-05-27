@@ -165,6 +165,7 @@
     {"id":{"name":"Colors","path":"scripts/Colors/Colors.yy",},},
     {"id":{"name":"GameAnimation","path":"scripts/GameAnimation/GameAnimation.yy",},},
     {"id":{"name":"sprKnight_Jump_Fall_Sword","path":"sprites/sprKnight_Jump_Fall_Sword/sprKnight_Jump_Fall_Sword.yy",},},
+    {"id":{"name":"sprRockObstacle","path":"sprites/sprRockObstacle/sprRockObstacle.yy",},},
     {"id":{"name":"SpriteDisplay","path":"scripts/SpriteDisplay/SpriteDisplay.yy",},},
     {"id":{"name":"sprSkeleton_Attack_Sword_Light","path":"sprites/sprSkeleton_Attack_Sword_Light/sprSkeleton_Attack_Sword_Light.yy",},},
     {"id":{"name":"InputEvents","path":"scripts/InputEvents/InputEvents.yy",},},

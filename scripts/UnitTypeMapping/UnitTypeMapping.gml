@@ -8,7 +8,8 @@ enum UnitType {
     SpiderBasic,
     TrainingDummy,
     TrixagonRed,
-    TrixagonBlue
+    TrixagonBlue,
+    TrixagonRock
 }
 
 global.unitTypeMap = ds_map_create();
@@ -160,3 +161,12 @@ _unitType.setAnim(UnitAnimState.Idle, sprTrixagonUnit);
 _unitType = trixagonUnitType(UnitType.TrixagonBlue, "Blue Trixagon unit");
 _unitType.tint = Colors.trixagonBlue;
 _unitType.setAnim(UnitAnimState.Idle, sprTrixagonUnit);
+
+_unitType = trixagonUnitType(UnitType.TrixagonRock, "Trixagon Rock");
+_unitType.movement.mobile = false;
+_unitType.combat.passive = true;
+_unitType.combat.armor = 1;
+_unitType.initiative = 1;
+_unitType.drawOverlay = false;
+_unitType.setAnim(UnitAnimState.Idle, sprRockObstacle);
+

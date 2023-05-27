@@ -164,6 +164,10 @@ function Unit(_unitType) constructor {
     }
     
     static drawOverlay = function(_center) {
+        if (!type.drawOverlay) {
+            return;
+        }
+        
         drawFacingArrow(_center.x, _center.y, facingArrowAlpha);
             
         var _healthBarPosition = _center.add(type.healthBarOffset);

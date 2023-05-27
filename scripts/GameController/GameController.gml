@@ -393,7 +393,7 @@ function GameController() constructor {
     static endPlayerTurn = function () {
         show_debug_message("endPlayerTurn called");
         
-        if (trixagon.active) {
+        if (trixagon.active && roundCounter > 1) {
             array_foreach(activePlayer.units, function (_unit) {
                 _unit.combat.planTrixagonAttack();
                 
