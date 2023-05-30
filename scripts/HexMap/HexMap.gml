@@ -222,7 +222,9 @@ function HexMap(_orientation, _size, _origin) constructor {
         for (var i = 0; i < _count; i++) {
             var _unit = _hexTile.getUnit(i);
             
-            _unit.drawFacingArrow(_vector.x, _vector.y, Unit.facingArrowAlpha);
+            if (_unit.type.drawOverlay) {
+                _unit.drawFacingArrow(_vector.x, _vector.y, Unit.facingArrowAlpha);
+            }
             _unit.draw(_vector.x, _vector.y);
         }
     }
@@ -448,7 +450,7 @@ function HexMap(_orientation, _size, _origin) constructor {
         _tile.overlay.enabled = true;
         _tile.overlay.sprite = _isRight ? sprTrixagonTileRight : sprTrixagonTileLeft;
         _tile.overlay.tint = truncTint;
-        _tile.overlay.alpha = 0.7;
+        _tile.overlay.alpha = 0.6;
         
         array_push(truncTiles, _tile);
     }
