@@ -21,6 +21,8 @@ function HexVector(_q, _r) constructor {
     r = _r;
     s = -(_q+_r);
     
+    static zero = pointer_null;
+    
     static toString = function() {
         return string("[{0}, {1}]", q, r);
     }
@@ -179,3 +181,5 @@ function HexVector(_q, _r) constructor {
         return _result;
     }
 }
+
+HexVector.zero = new HexVector(0, 0);

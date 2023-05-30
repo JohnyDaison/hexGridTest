@@ -173,7 +173,7 @@
     {"id":{"name":"sprSkeleton_Hit_Bow","path":"sprites/sprSkeleton_Hit_Bow/sprSkeleton_Hit_Bow.yy",},},
     {"id":{"name":"sprKnight_Jump_Airborne_Bow","path":"sprites/sprKnight_Jump_Airborne_Bow/sprKnight_Jump_Airborne_Bow.yy",},},
     {"id":{"name":"sprSpider_Idle","path":"sprites/sprSpider_Idle/sprSpider_Idle.yy",},},
-    {"id":{"name":"HexVector","path":"scripts/HexVector/HexVector.yy",},},
+    {"id":{"name":"HexVectorScript","path":"scripts/HexVectorScript/HexVectorScript.yy",},},
     {"id":{"name":"sprKnight_Walk","path":"sprites/sprKnight_Walk/sprKnight_Walk.yy",},},
     {"id":{"name":"sprKnight_Jump_Fall","path":"sprites/sprKnight_Jump_Fall/sprKnight_Jump_Fall.yy",},},
     {"id":{"name":"MovementStats","path":"scripts/MovementStats/MovementStats.yy",},},

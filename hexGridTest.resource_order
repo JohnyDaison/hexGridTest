@@ -137,7 +137,7 @@
     {"name":"sprSkeleton_Hit_Bow","order":2,"path":"sprites/sprSkeleton_Hit_Bow/sprSkeleton_Hit_Bow.yy",},
     {"name":"sprKnight_Jump_Airborne_Bow","order":5,"path":"sprites/sprKnight_Jump_Airborne_Bow/sprKnight_Jump_Airborne_Bow.yy",},
     {"name":"sprSpider_Idle","order":3,"path":"sprites/sprSpider_Idle/sprSpider_Idle.yy",},
-    {"name":"HexVector","order":2,"path":"scripts/HexVector/HexVector.yy",},
+    {"name":"HexVectorScript","order":2,"path":"scripts/HexVectorScript/HexVectorScript.yy",},
     {"name":"sprKnight_Walk","order":10,"path":"sprites/sprKnight_Walk/sprKnight_Walk.yy",},
     {"name":"sprKnight_Jump_Fall","order":5,"path":"sprites/sprKnight_Jump_Fall/sprKnight_Jump_Fall.yy",},
     {"name":"MovementStats","order":8,"path":"scripts/MovementStats/MovementStats.yy",},

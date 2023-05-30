@@ -423,6 +423,10 @@ function HexMap(_orientation, _size, _origin) constructor {
                 var _isRight = truncForHex.isTrixagonRight();
                 var _trunc = _isRight ? global.truncRight : global.truncLeft;
                 
+                truncTint = Colors.trixagonTruncMelee;
+                self.setTruncTileOverlay(HexVector.zero);
+                array_foreach(_trunc.melee, self.setTruncTileOverlay);
+                
                 truncTint = Colors.trixagonTrunc;
                 array_foreach(_trunc.movement, self.setTruncTileOverlay);
                 
@@ -432,7 +436,7 @@ function HexMap(_orientation, _size, _origin) constructor {
         }
     }
     
-    static setTruncTileOverlay = function (_hexOffset, _index) {
+    static setTruncTileOverlay = function (_hexOffset) {
         var _hex = truncForHex.add(_hexOffset);
         var _isRight = _hex.isTrixagonRight();
         var _tile = getTile(_hex);

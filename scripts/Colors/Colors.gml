@@ -8,6 +8,7 @@ function Colors() constructor {
     static trixagonSelection = c_white;
     static trixagonTarget = c_black;
     
+    static trixagonTruncMelee = c_ltgray;
     static trixagonTrunc = c_gray;
     static trixagonTruncRanged = c_dkgray;
 }
