@@ -94,13 +94,12 @@ function CombatModule(_unit, _stats) constructor {
         var _meleeTile = myUnit.hexMap.getTile(_meleeHex);
         var _meleeTarget = _meleeTile ? _meleeTile.getTopUnit() : pointer_null;
         var _meleeAttackChance = _trixagon.highAttackChance;
-                
+        
         if (_meleeTarget && _meleeTarget.getUnitInFrontOfMe() == myUnit) {
             _meleeAttackChance = _trixagon.lowAttackChance;
         }
         
-        var _isRight = _myHex.isTrixagonRight();
-        var _trunc = _isRight ? global.truncRight : global.truncLeft;
+        var _trunc = _myHex.getTrixagonTrunc();
         var _rangedPositions = _trunc.ranged;
         var _rangedAttackChance = _trixagon.lowAttackChance;
         

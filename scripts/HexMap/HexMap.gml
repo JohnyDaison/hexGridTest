@@ -422,8 +422,7 @@ function HexMap(_orientation, _size, _origin) constructor {
             truncForHex = _desiredTruncHex;
             
             if (truncForHex) {
-                var _isRight = truncForHex.isTrixagonRight();
-                var _trunc = _isRight ? global.truncRight : global.truncLeft;
+                var _trunc = truncForHex.getTrixagonTrunc();
                 
                 truncTint = Colors.trixagonTruncMelee;
                 self.setTruncTileOverlay(HexVector.zero);

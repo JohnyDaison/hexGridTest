@@ -7,7 +7,34 @@ function MovementModule(_unit, _stats) constructor {
     }
     
     static canMove = function () {
-        return stats.mobile;
+        if (!stats.mobile)
+            return false;
+            
+        if (myUnit.gameController.trixagon.active) {
+            var _hex = myUnit.nextPosition;
+            var _trunc = _hex.getTrixagonTrunc();
+            
+            var _meleeHexes = _trunc.melee;
+            var _count = 3;
+            
+            for (var i = 0; i < _count; i++) {
+                var _meleeHex = _hex.add(_meleeHexes[i]);
+                var _meleeTile = myUnit.hexMap.getTile(_meleeHex);
+                
+                if (!_meleeTile)
+                    continue;
+                    
+                var _unit = _meleeTile.getTopUnit();
+                
+                if (!_unit)
+                    continue;
+                    
+                if (_unit.player && _unit.player != myUnit.player && _unit.getUnitInFrontOfMe() == myUnit)
+                    return false;
+            }
+        }
+        
+        return true;
     }
     
     static planFacingHex = function (_hex) {

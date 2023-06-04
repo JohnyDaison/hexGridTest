@@ -18,6 +18,7 @@ function Unit(_unitType) constructor {
     initiativeAccumulated = 0;
     actionPointsUsed = 0;
     actionQueueTotalCost = 0;
+    tookActionThisRound = false;
     turnCounter = 0;
     spriteFacing = 1;
     hexMap = pointer_null;
@@ -327,6 +328,7 @@ function Unit(_unitType) constructor {
         actionQueueTotalCost -= _actionCost;
         currentAction = _nextAction;
         actionStarted = false;
+        tookActionThisRound = true;
         nextPosition = _nextAction.getEndPosition(self, nextPosition);
         ds_list_delete(actionQueue, 0);
         
@@ -410,6 +412,7 @@ function Unit(_unitType) constructor {
         updateInitiative();
         
         actionPointsUsed = 0;
+        tookActionThisRound = false;
     }
     
     static updateFacing = function (_facing = -1) {

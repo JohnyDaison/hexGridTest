@@ -240,7 +240,7 @@ function GameController() constructor {
     }
     
     static canUnitBeDeselected = function (_unit) {
-        if (rules.alternatePlayerTurns && _unit.actionPointsUsed > 0) {
+        if (rules.alternatePlayerTurns && _unit.tookActionThisRound) {
             return false;
         }
         

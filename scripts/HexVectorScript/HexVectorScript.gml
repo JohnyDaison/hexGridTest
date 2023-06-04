@@ -180,6 +180,10 @@ function HexVector(_q, _r) constructor {
         
         return _result;
     }
+    
+    static getTrixagonTrunc = function () {
+        return isTrixagonRight() ? global.truncRight : global.truncLeft;
+    }
 }
 
 HexVector.zero = new HexVector(0, 0);
