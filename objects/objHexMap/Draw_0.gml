@@ -16,11 +16,11 @@ if (gameController.trixagon.active) {
 hexMap.drawHexes(_highlightHex, _selectedTile);
 hexMap.drawUnitsOverlay(gameController.units, _highlightHex, _selectedTile);
 
-drawFacingDragArrow();
-
 if (!gameController.trixagon.active && gameController.selectedUnit != pointer_null) {
     gameController.selectedUnit.drawPlannedActions();
 }
+
+drawFacingDragArrow();
 
 // show tileSize as rectangle
 /*

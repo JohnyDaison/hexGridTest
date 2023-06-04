@@ -6,7 +6,42 @@ function HexTile(_position, _terrainType = TerrainType.Base) constructor {
     neighbors = [];
     units = ds_list_create();
     animations = ds_list_create();
-    overlay = new SpriteDisplay();
+    overlaysArray = [];
+    overlaysCount = 0;
+    overlays = {};
+    
+    static createOverlay = function(_depth) {
+        return {
+            display: new SpriteDisplay(),
+            depth: _depth
+        }
+    }
+    
+    static updateOverlaysArray = function () {
+        var _keys = variable_struct_get_names(overlays);
+        var _keyCount = array_length(_keys);
+        
+        array_foreach(_keys, function (_key) {
+            var _overlay = variable_struct_get(overlays, _key)
+            var _index = array_get_index(overlaysArray, _overlay);
+            
+            if (_index == -1) {
+                array_push(overlaysArray, _overlay);
+                overlaysCount = array_length(overlaysArray);
+            }
+        });
+        
+        array_sort(overlaysArray, function (_overlayA, _overlayB) {
+            return sign(_overlayB.depth - _overlayA.depth);
+        });
+    }
+    
+    static drawOverlays = function (_center) {
+        for (var i = 0; i < overlaysCount; i++) {
+            var _overlay = overlaysArray[i];
+            _overlay.display.draw(_center);
+        }
+    }
     
     static toString = function() {
         var _typeName = terrainTypeInfo.name;
@@ -64,5 +99,10 @@ function HexTile(_position, _terrainType = TerrainType.Base) constructor {
         _unit.currentTile = pointer_null;
         
         return true;
+    }
+    
+    static getRelativeTile = function(_hexOffset) {
+        var _hex = position.add(_hexOffset);
+        return hexMap.getTile(_hex);
     }
 }

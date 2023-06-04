@@ -278,7 +278,7 @@ function GameController() constructor {
                 if (!trixagon.active) {
                     _planned = selectedUnit.combat.planAttackOnHex(unitTargetTile.position);
                 }
-            } else if (selectedUnit.movement.canMove()) {
+            } else {
                 _planned = selectedUnit.movement.planMovementToHex(unitTargetTile.position);
             }
     

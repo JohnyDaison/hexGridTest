@@ -11,6 +11,7 @@ function Colors() constructor {
     static trixagonTruncMelee = c_ltgray;
     static trixagonTrunc = c_gray;
     static trixagonTruncRanged = c_dkgray;
+    static trixagonTruncMovementBlocked = c_black;
 }
 
 var _colors = new Colors();

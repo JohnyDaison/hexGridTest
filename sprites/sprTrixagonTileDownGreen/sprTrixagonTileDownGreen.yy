@@ -26,8 +26,8 @@
   "nineSlice": null,
   "origin": 9,
   "parent": {
-    "name": "Trixagon",
-    "path": "folders/Sprites/Basic tiles/Trixagon.yy",
+    "name": "flat layout(unused)",
+    "path": "folders/Sprites/Basic tiles/Trixagon/flat layout(unused).yy",
   },
   "preMultiplyAlpha": false,
   "sequence": {

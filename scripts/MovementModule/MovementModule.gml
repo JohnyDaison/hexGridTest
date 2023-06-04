@@ -37,6 +37,23 @@ function MovementModule(_unit, _stats) constructor {
         return true;
     }
     
+    static canMoveToTile = function(_hexTile) {
+        if (_hexTile == myUnit.currentTile)
+            return true;
+        
+        if (!canMove())
+            return false;
+            
+        if (myUnit.gameController.trixagon.active) {
+            var _unitOnTile = _hexTile.getTopUnit();
+            if (_unitOnTile) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
     static planFacingHex = function (_hex) {
         var _lastAction = myUnit.getQueueEndAction();
         
@@ -50,7 +67,9 @@ function MovementModule(_unit, _stats) constructor {
     }
     
     static planMovementToHex = function (_hex) {
-        if (!canMove()) {
+        var _hexTile = myUnit.hexMap.getTile(_hex);
+        
+        if (!_hexTile || !canMoveToTile(_hexTile) || _hexTile == myUnit.currentTile) {
             return false;
         }
         

@@ -13,4 +13,37 @@ function SpriteDisplay() constructor {
             draw_sprite_ext(sprite, imageIndex, _position.x, _position.y, xScale, yScale, rotation, tint, alpha);
         }
     }
+    
+    /**
+     * Function setState
+     * @param {bool} _enabled
+     * @param {asset.gmsprite} [_sprite]
+     * @param {constant.color} [_tint]
+     * @param {real} [_alpha]
+     */
+    static setState = function (_enabled, _sprite = pointer_null, _tint = undefined, _alpha = undefined) {
+        if (!_enabled) {
+            enabled = false;
+            return;
+        }
+        
+        if (!_sprite && !sprite) {
+            enabled = false;
+            return;
+        }
+        
+        if (_sprite) {
+            sprite = _sprite;
+        }
+        
+        enabled = true;
+        
+        if (!is_undefined(_tint)) {
+            tint = _tint;
+        }
+        
+        if (!is_undefined(_alpha)) {
+            alpha = _alpha;
+        }
+    }
 }
