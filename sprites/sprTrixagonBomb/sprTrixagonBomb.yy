@@ -20,7 +20,7 @@
   "height": 326,
   "HTile": false,
   "layers": [
-    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"acb24b0d-f322-4415-961c-1132aa70c6d3","blendMode":0,"displayName":"accent","isLocked":false,"opacity":100.0,"visible":true,},
+    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"acb24b0d-f322-4415-961c-1132aa70c6d3","blendMode":0,"displayName":"accent","isLocked":false,"opacity":100.0,"visible":false,},
     {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"f75866c3-b773-4612-9d43-8a8bb957de8b","blendMode":0,"displayName":"Design 1","isLocked":false,"opacity":100.0,"visible":false,},
     {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"071d4913-e339-4e58-b68e-303f5a598e35","blendMode":0,"displayName":"Design 2","isLocked":false,"opacity":100.0,"visible":true,},
     {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"bf10ffed-cc36-40ca-baec-f3338674ba90","blendMode":0,"displayName":"guide triangles","isLocked":false,"opacity":100.0,"visible":true,},
@@ -55,7 +55,7 @@
     "lockOrigin": false,
     "moments": {"resourceType":"KeyframeStore<MomentsEventKeyframe>","resourceVersion":"1.0","Keyframes":[],},
     "playback": 1,
-    "playbackSpeed": 30.0,
+    "playbackSpeed": 4.0,
     "playbackSpeedType": 0,
     "showBackdrop": true,
     "showBackdropImage": false,

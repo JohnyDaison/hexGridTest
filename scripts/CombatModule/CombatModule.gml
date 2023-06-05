@@ -38,6 +38,10 @@ function CombatModule(_unit, _stats) constructor {
         myUnit.enqueueAction(new TrixagonAttackAction());
     }
     
+    static planTrixagonExplode = function () {
+        myUnit.enqueueAction(new TrixagonExplodeAction());
+    }
+    
     // TODO: add logic
     static getAttackCost = function(_fromTile, _action) {
         var _endTile = myUnit.hexMap.getTile(_action.hex);
@@ -85,12 +89,8 @@ function CombatModule(_unit, _stats) constructor {
         
     }
     
-    static trixagonAttack = function () {
+    static getTrixagonMeleeAttackChance = function (_meleeHex) {
         var _trixagon = myUnit.gameController.trixagon;
-        var _combat = self;
-        var _myHex = myUnit.nextPosition;
-        
-        var _meleeHex = _myHex.add(global.hexDirections[myUnit.facing]);
         var _meleeTile = myUnit.hexMap.getTile(_meleeHex);
         var _meleeTarget = _meleeTile ? _meleeTile.getTopUnit() : pointer_null;
         var _meleeAttackChance = _trixagon.highAttackChance;
@@ -99,20 +99,42 @@ function CombatModule(_unit, _stats) constructor {
             _meleeAttackChance = _trixagon.lowAttackChance;
         }
         
+        return _meleeAttackChance;
+    }
+    
+    static trixagonAttack = function () {
+        var _trixagon = myUnit.gameController.trixagon;
+        var _myHex = myUnit.nextPosition;
         var _trunc = _myHex.getTrixagonTrunc();
-        var _rangedPositions = _trunc.ranged;
         var _rangedAttackChance = _trixagon.lowAttackChance;
         
-        var _rangedMapperFunction = method({myHex: _myHex}, function (_position) {
-            return myHex.add(_position);
-        });
-        
-        var _rangedHexes = array_map(_rangedPositions, _rangedMapperFunction);
+        var _meleeHex = _myHex.add(global.hexDirections[myUnit.facing]);
+        var _meleeAttackChance = getTrixagonMeleeAttackChance(_meleeHex);
         
         attackHex(_meleeHex, _meleeAttackChance, _meleeAttackChance, false);
         
         for (var _index = 0; _index < 3; _index++) {
-            var _hex = _rangedHexes[_index];
+            var _hex = _myHex.add(_trunc.ranged[_index]);
+            
+            attackHex(_hex, _rangedAttackChance, _rangedAttackChance);
+        }
+    }
+    
+    static trixagonExplode = function () {
+        var _trixagon = myUnit.gameController.trixagon;
+        var _myHex = myUnit.nextPosition;
+        var _trunc = _myHex.getTrixagonTrunc();
+        var _rangedAttackChance = _trixagon.lowAttackChance;
+        
+        for (var _index = 0; _index < 3; _index++) {
+            var _hex = _myHex.add(_trunc.melee[_index]);
+            var _meleeAttackChance = getTrixagonMeleeAttackChance(_hex);
+            
+            attackHex(_hex, _meleeAttackChance, _meleeAttackChance, false);
+        }
+        
+        for (var _index = 0; _index < 6; _index++) {
+            var _hex = _myHex.add(_trunc.movement[_index]);
             
             attackHex(_hex, _rangedAttackChance, _rangedAttackChance);
         }
@@ -124,9 +146,11 @@ function CombatModule(_unit, _stats) constructor {
     
     static receiveDamage = function (_damage, _fromUnit) {
         stats.health -= max(0, _damage - stats.armor);
+        stats.health = max(0, stats.health);
+        
         myUnit.setNextAnimState(UnitAnimState.ReceivingHit);
         
-        if (stats.health <= 0) {
+        if (stats.health <= 0 && !myUnit.dying) {
             myUnit.die();
         }
     }

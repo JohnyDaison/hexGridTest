@@ -80,7 +80,7 @@ function UnitQueue(_gameController) constructor {
             return;
         }
         
-        var _firstCard = array_first(unitCards)
+        var _firstCard = array_first(unitCards);
         
         if (isInThisRound(_firstCard)) {
             activeUnit = _firstCard.unit;

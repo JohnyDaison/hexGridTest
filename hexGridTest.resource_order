@@ -52,6 +52,7 @@
     {"name":"hex_get_spiral","order":20,"path":"scripts/hex_get_spiral/hex_get_spiral.yy",},
     {"name":"sprEndTurnButton","order":1,"path":"sprites/sprEndTurnButton/sprEndTurnButton.yy",},
     {"name":"sprSpider_Die","order":1,"path":"sprites/sprSpider_Die/sprSpider_Die.yy",},
+    {"name":"TrixagonExplodeAction","order":8,"path":"scripts/TrixagonExplodeAction/TrixagonExplodeAction.yy",},
     {"name":"TerrainTypeEnum","order":4,"path":"scripts/TerrainTypeEnum/TerrainTypeEnum.yy",},
     {"name":"hex_direction","order":9,"path":"scripts/hex_direction/hex_direction.yy",},
     {"name":"hex_get_cost","order":12,"path":"scripts/hex_get_cost/hex_get_cost.yy",},

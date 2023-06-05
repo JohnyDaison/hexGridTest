@@ -21,6 +21,7 @@ function UnitTypeData(_id, _name) constructor {
     animationMap = ds_map_create();
     drawOverlay = true;
     hasFace = true;
+    explodesOnDeath = false;
     
     static getAnim = function(_state) {
         return animationMap[? _state];

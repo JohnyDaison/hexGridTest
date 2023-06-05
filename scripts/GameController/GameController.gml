@@ -142,8 +142,6 @@ function GameController() constructor {
             endUnitTurn();
         }
         
-        unitQueue.deleteUnit(_unit);
-        
         hexMap.displaceUnit(_unit);
         
         _unit.destroy();
@@ -211,7 +209,7 @@ function GameController() constructor {
         for (var i = _unitCount - 1; i >= 0; i--) {
             var _unit = units[| i];
             
-            if (_unit.dying) {
+            if (_unit.dead) {
                 deleteUnit(_unit);
             }
         }

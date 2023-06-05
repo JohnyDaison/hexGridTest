@@ -271,6 +271,7 @@ function Unit(_unitType) constructor {
                 return combat.getAttackCost(_fromTile, _action);
             }
             case ActionType.TrixagonAttack:
+            case ActionType.TrixagonExplode:
                 return 0;
         }
     }
@@ -383,6 +384,11 @@ function Unit(_unitType) constructor {
                 }
                 case ActionType.TrixagonAttack: {
                     combat.trixagonAttack();
+                    break;
+                }
+                case ActionType.TrixagonExplode: {
+                    combat.trixagonExplode();
+                    break;
                 }
             }
             
@@ -401,6 +407,20 @@ function Unit(_unitType) constructor {
     
     static die = function () {
         dying = true;
+        
+        if (gameController.rules.useUnitQueue) {
+            gameController.unitQueue.deleteUnit(self);
+        }
+        
+        if (type.explodesOnDeath) {
+            if (gameController.trixagon.active) {
+                combat.planTrixagonExplode();
+                
+                if (currentAction == pointer_null) {
+                    startNextAction();
+                }
+            }
+        }
     }
     
     static updateInitiative = function () {

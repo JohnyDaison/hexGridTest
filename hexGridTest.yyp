@@ -72,6 +72,7 @@
     {"id":{"name":"hex_get_spiral","path":"scripts/hex_get_spiral/hex_get_spiral.yy",},},
     {"id":{"name":"sprEndTurnButton","path":"sprites/sprEndTurnButton/sprEndTurnButton.yy",},},
     {"id":{"name":"sprSpider_Die","path":"sprites/sprSpider_Die/sprSpider_Die.yy",},},
+    {"id":{"name":"TrixagonExplodeAction","path":"scripts/TrixagonExplodeAction/TrixagonExplodeAction.yy",},},
     {"id":{"name":"TerrainTypeEnum","path":"scripts/TerrainTypeEnum/TerrainTypeEnum.yy",},},
     {"id":{"name":"sprSnowBasic","path":"sprites/sprSnowBasic/sprSnowBasic.yy",},},
     {"id":{"name":"sprSandBasic","path":"sprites/sprSandBasic/sprSandBasic.yy",},},

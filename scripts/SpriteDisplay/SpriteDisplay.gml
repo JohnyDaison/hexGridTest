@@ -17,7 +17,7 @@ function SpriteDisplay() constructor {
     /**
      * Function setState
      * @param {bool} _enabled
-     * @param {asset.gmsprite} [_sprite]
+     * @param {asset.GMSprite} [_sprite]
      * @param {constant.color} [_tint]
      * @param {real} [_alpha]
      */

@@ -180,5 +180,7 @@ _unitType.movement.mobile = false;
 _unitType.combat.passive = true;
 _unitType.initiative = 1;
 _unitType.hasFace = false;
+_unitType.explodesOnDeath = true;
 _unitType.setAnim(UnitAnimState.Idle, sprTrixagonBomb);
+_unitType.setAnim(UnitAnimState.Death, sprTrixagonBomb);
 

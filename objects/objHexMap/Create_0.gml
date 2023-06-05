@@ -116,7 +116,7 @@ createTrixagonTestTiles = function() {
     var _rockCount = 5;
     var _rocksRandomRange = 3;
     
-    var _bombCount = 1;
+    var _bombCount = 2;
     var _bombsRandomRange = 2;
     
     // red units
