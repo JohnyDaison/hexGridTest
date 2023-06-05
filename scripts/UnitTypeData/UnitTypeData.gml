@@ -20,6 +20,7 @@ function UnitTypeData(_id, _name) constructor {
     animAttackSpeed = 1000;
     animationMap = ds_map_create();
     drawOverlay = true;
+    hasFace = true;
     
     static getAnim = function(_state) {
         return animationMap[? _state];

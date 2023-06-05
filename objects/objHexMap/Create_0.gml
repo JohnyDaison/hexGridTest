@@ -116,6 +116,9 @@ createTrixagonTestTiles = function() {
     var _rockCount = 5;
     var _rocksRandomRange = 3;
     
+    var _bombCount = 1;
+    var _bombsRandomRange = 2;
+    
     // red units
     var _q = -_sidesSeparation;
     var _rStart = -floor((_unitsPerSide - (_sidesSeparation - 2)) / 3);
@@ -138,6 +141,11 @@ createTrixagonTestTiles = function() {
     // rocks
     for (var i = 0; i < _rockCount; i++) {
         placeUnitNearPosition(0, 0, _rocksRandomRange, UnitType.TrixagonRock);
+    }
+    
+    // bombs
+    for (var i = 0; i < _bombCount; i++) {
+        placeUnitNearPosition(0, 0, _bombsRandomRange, UnitType.TrixagonBomb);
     }
     
     // rotate units to not face friends if possible

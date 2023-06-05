@@ -169,7 +169,9 @@ function Unit(_unitType) constructor {
             return;
         }
         
-        drawFacingArrow(_center.x, _center.y, facingArrowAlpha);
+        if (type.hasFace) {
+            drawFacingArrow(_center.x, _center.y, facingArrowAlpha);
+        }
             
         var _healthBarPosition = _center.add(type.healthBarOffset);
             
@@ -205,13 +207,13 @@ function Unit(_unitType) constructor {
     static drawHealthNumber = function (_position, _halign = fa_center, _valign = fa_middle) {
         draw_set_alpha(0.8);
         draw_set_color(c_black);
-        draw_circle(_position.x, _position.y, 48, false);
+        draw_circle(_position.x - 1, _position.y - 1, 48, false);
         
         draw_set_color(c_white);
         draw_set_halign(fa_center);
         draw_set_valign(fa_middle);
         draw_set_font(fontHealthNumber);
-        draw_text(_position.x + 2, _position.y + 4, string(combat.stats.health));
+        draw_text(_position.x + 1, _position.y + 3, string(combat.stats.health));
     }
     
     static enqueueAction = function(_action) {
@@ -457,7 +459,7 @@ function Unit(_unitType) constructor {
     }
     
     static getUnitInFrontOfMe = function () {
-        if (!nextPosition) {
+        if (!nextPosition || !type.hasFace) {
             return pointer_null;
         }
         

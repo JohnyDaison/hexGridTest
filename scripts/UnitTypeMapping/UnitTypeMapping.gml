@@ -9,7 +9,8 @@ enum UnitType {
     TrainingDummy,
     TrixagonRed,
     TrixagonBlue,
-    TrixagonRock
+    TrixagonRock,
+    TrixagonBomb
 }
 
 global.unitTypeMap = ds_map_create();
@@ -145,6 +146,7 @@ _unitType = landUnitType(UnitType.TrainingDummy, "Training Dummy");
 _unitType.movement.mobile = false;
 _unitType.combat.passive = true;
 _unitType.initiative = 1;
+_unitType.hasFace = false;
 
 _unitType.scale = 0.5;
 _unitType.shadowRadius = 40;
@@ -162,11 +164,21 @@ _unitType = trixagonUnitType(UnitType.TrixagonBlue, "Blue Trixagon unit");
 _unitType.tint = Colors.trixagonBlue;
 _unitType.setAnim(UnitAnimState.Idle, sprTrixagonUnit);
 
+
 _unitType = trixagonUnitType(UnitType.TrixagonRock, "Trixagon Rock");
 _unitType.movement.mobile = false;
 _unitType.combat.passive = true;
 _unitType.combat.armor = 1;
 _unitType.initiative = 1;
 _unitType.drawOverlay = false;
+_unitType.hasFace = false;
 _unitType.setAnim(UnitAnimState.Idle, sprRockObstacle);
+
+
+_unitType = trixagonUnitType(UnitType.TrixagonBomb, "Trixagon Bomb");
+_unitType.movement.mobile = false;
+_unitType.combat.passive = true;
+_unitType.initiative = 1;
+_unitType.hasFace = false;
+_unitType.setAnim(UnitAnimState.Idle, sprTrixagonBomb);
 

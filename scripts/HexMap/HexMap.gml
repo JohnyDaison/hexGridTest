@@ -178,21 +178,23 @@ function HexMap(_orientation, _size, _origin) constructor {
         var _innerRadius = _innerBandRadius - _lineThickness;
         
         var _center = hexToPixel(_hex);
-        var _yWithOffset = _center.y + _yOffset;
+        var _x = _center.x - 1;
+        var _yWithOffset = _center.y + _yOffset - 1;
+        
         
         draw_set_alpha(0.8);
         
         draw_set_color(c_black);
-        draw_circle(_center.x, _yWithOffset, _outerRadius, false);
+        draw_circle(_x, _yWithOffset, _outerRadius, false);
         
         draw_set_color(_bandColor);
-        draw_circle(_center.x, _yWithOffset, _outerBandRadius, false);
+        draw_circle(_x, _yWithOffset, _outerBandRadius, false);
         
         draw_set_color(c_black);
-        draw_circle(_center.x, _yWithOffset, _innerBandRadius, false);
+        draw_circle(_x, _yWithOffset, _innerBandRadius, false);
         
         draw_set_color(_unitColor);
-        draw_circle(_center.x, _yWithOffset, _innerRadius, false);
+        draw_circle(_x, _yWithOffset, _innerRadius, false);
     }
     
     static drawHexBg = function() {

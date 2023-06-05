@@ -150,6 +150,7 @@
     {"name":"pixel_to_hex","order":35,"path":"scripts/pixel_to_hex/pixel_to_hex.yy",},
     {"name":"sprKnight_Walk_Sword","order":10,"path":"sprites/sprKnight_Walk_Sword/sprKnight_Walk_Sword.yy",},
     {"name":"MoveToHexAction","order":1,"path":"scripts/MoveToHexAction/MoveToHexAction.yy",},
+    {"name":"sprTrixagonBomb","order":6,"path":"sprites/sprTrixagonBomb/sprTrixagonBomb.yy",},
     {"name":"sprKnight_Run_Bow","order":8,"path":"sprites/sprKnight_Run_Bow/sprKnight_Run_Bow.yy",},
     {"name":"sprDummy_Idle","order":1,"path":"sprites/sprDummy_Idle/sprDummy_Idle.yy",},
     {"name":"sprKnight_Jump_Fall_Bow","order":6,"path":"sprites/sprKnight_Jump_Fall_Bow/sprKnight_Jump_Fall_Bow.yy",},
