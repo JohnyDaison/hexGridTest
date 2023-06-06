@@ -2,6 +2,8 @@ gameController.drawUnitQueue();
 
 gameController.drawPlayerListDisplay();
 
+gameController.drawGameEndMessage();
+
 if (debugText != "") {
     var _xPos = 10
     var _yPos = 10;

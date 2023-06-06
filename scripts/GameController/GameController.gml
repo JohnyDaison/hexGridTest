@@ -11,6 +11,10 @@ function GameController() constructor {
     activePlayer = pointer_null;
     playerTurnIsEnding = false;
     unitQueue = new UnitQueue(self);
+    winner = pointer_null;
+    gameEnding = false;
+    gameEnded = false;
+    gameEndCounter = 0;
     
     playerListDisplay = {
         margin: 12,
@@ -28,6 +32,7 @@ function GameController() constructor {
         planForFutureTurns: true,
         
         initiativeThreshold: 60,
+        gameEndDelay: 60
     }
     
     trixagon = {
@@ -117,6 +122,10 @@ function GameController() constructor {
         return _player;
     }
     
+    static getPlayer = function(_number) {
+        return players[? _number];
+    }
+    
     static addUnit = function(_hexTile, _unitType) {
         var _unit = new Unit(_unitType);
         ds_list_add(units, _unit);
@@ -188,22 +197,6 @@ function GameController() constructor {
             }
         }
         
-        if (playerTurnIsEnding) {
-            if (trixagon.active) {
-                var _state = {totalActive: 0};
-                
-                array_foreach(activePlayer.units, method(_state, function (_unit) {
-                    if (_unit.currentAction != pointer_null) {
-                        totalActive++;
-                    }
-                }));
-                
-                if (_state.totalActive == 0) {
-                    startPlayerTurn();
-                }
-            }
-        }
-        
         var _unitCount = ds_list_size(units);
         
         for (var i = _unitCount - 1; i >= 0; i--) {
@@ -222,7 +215,37 @@ function GameController() constructor {
             _unit.handleCurrentAction();
         }
         
+        if (gameEnded) {
+            return;
+        }
+        
+        if (gameEnding) {
+            gameEndCounter++;
+            
+            if (gameEndCounter >= rules.gameEndDelay) {
+                gameEnded = true;
+            }
+        }
+        
         unitQueue.updateCards();
+        updatePlayersWinLossState();
+        
+        if (playerTurnIsEnding && !gameEnding) {
+            if (rules.alternatePlayerTurns) {
+                var _totalActive = 0;
+                
+                for(var i = 0; i < _unitCount; i++) {
+                    var _unit = units[| i];
+                    if (_unit.currentAction != pointer_null) {
+                        _totalActive++;
+                    }
+                }
+                
+                if (_totalActive == 0) {
+                    startPlayerTurn();
+                }
+            }
+        }
     }
     
     static canUnitBeSelected = function (_unit) {
@@ -380,6 +403,12 @@ function GameController() constructor {
     static endRound = function () {
         show_debug_message("endRound called");
         
+        updatePlayersWinLossState();
+        
+        if (gameEnding) {
+            return;
+        }
+        
         roundCounter++;
         
         unitsRoundStart();
@@ -406,6 +435,11 @@ function GameController() constructor {
     
     static startPlayerTurn = function () {
         endRound();
+        
+        if (gameEnding) {
+            return;
+        }
+        
         playerTurnIsEnding = false;
         selectNextPlayer();
     }
@@ -421,6 +455,45 @@ function GameController() constructor {
         if (playerCount > 0 && !activePlayer) {
             activePlayer = players[? 1];
         }
+    }
+    
+    static updatePlayersWinLossState = function () {
+        var _allLost = true;
+        var _someoneWon = false;
+        
+        for (var i = 1; i <= playerCount; i++) {
+            var _player = getPlayer(i);
+            _player.checkLossCondition();
+            
+            _allLost = _allLost && _player.hasLost;
+        }
+        
+        for (var i = 1; i <= playerCount; i++) {
+            var _player = getPlayer(i);
+            _player.checkWinCondition()
+            
+            _someoneWon = _someoneWon || _player.hasWon;
+            
+            if (!winner && _player.hasWon) {
+                winner = _player;
+            }
+        }
+        
+        if (_someoneWon) {
+            gameEndCounter++;
+            gameEnding = true;
+            
+            if (gameEndCounter >= rules.gameEndDelay) {
+                gameEnded = true;
+            }
+        }
+        
+        if (_allLost) {
+            gameEnding = true;
+            winner = pointer_null;
+        }
+        
+        gameEnding = _allLost || _someoneWon;
     }
     
     static updatePlayerListDisplay = function () {
@@ -461,19 +534,14 @@ function GameController() constructor {
             
             if (_player == activePlayer) {
                 _color = merge_color(_color, c_white, 0.2);
+                draw_set_color(_color);
 
-                var _offset = playerListDisplay.outlineWidth;
-                draw_set_color(c_white);
-                
-                draw_text(_x - _offset, _y, _name);
-                draw_text(_x + _offset, _y, _name);
-                draw_text(_x, _y + _offset, _name);
-                draw_text(_x, _y - _offset, _name);
+                drawLazilyOutlinedText(_x, _y, c_white, playerListDisplay.outlineWidth, _name);
+            } else {
+                draw_set_color(_color);
+            
+                draw_text(_x, _y, _name);
             }
-            
-            draw_set_color(_color);
-            
-            draw_text(_x, _y, _name);
             
             _y += playerListDisplay.lineHeight;
         }
@@ -482,6 +550,27 @@ function GameController() constructor {
     static drawUnitQueue = function () {
         if (rules.useUnitQueue) {
             unitQueue.draw();
+        }
+    }
+    
+    static drawGameEndMessage = function () {
+        if (!gameEnded)
+            return;
+            
+        draw_set_halign(fa_center);
+        draw_set_valign(fa_middle);
+        draw_set_font(fontPlayerList);
+        draw_set_color(c_black);
+        draw_set_alpha(1);
+        var _center = objGameCamera.viewCenter;
+        
+        if (winner) {
+            var _winMessage = string("{0} has Won!", winner.name);
+            draw_set_color(winner.color);
+            drawLazilyOutlinedText(_center.x, _center.y, c_white, playerListDisplay.outlineWidth, _winMessage);
+        } else {
+            var _drawMessage = "It's a Draw!";
+            drawLazilyOutlinedText(_center.x, _center.y, c_white, playerListDisplay.outlineWidth, _drawMessage);
         }
     }
 }

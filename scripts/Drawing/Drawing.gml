@@ -75,3 +75,18 @@ function drawBar(_position, _size, _color, _ratio, _halign = fa_center, _valign 
     draw_rectangle(_x2 - _borderSize, _y1, _x2, _y2, false);
     draw_rectangle(_x1, _y2 - _borderSize, _x2, _y2, false);
 }
+
+
+function drawLazilyOutlinedText(_x, _y, _outlineColor, _outlineWidth, _text) {
+    var _origColor = draw_get_color();
+    draw_set_color(_outlineColor);
+    
+    draw_text(_x - _outlineWidth, _y, _text);
+    draw_text(_x + _outlineWidth, _y, _text);
+    draw_text(_x, _y + _outlineWidth, _text);
+    draw_text(_x, _y - _outlineWidth, _text);
+    
+    draw_set_color(_origColor);
+    
+    draw_text(_x, _y, _text);
+}
