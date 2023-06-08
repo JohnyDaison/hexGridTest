@@ -27,6 +27,7 @@ function GameController() constructor {
     
     rules = {
         alternatePlayerTurns: false,
+        randomizeStartingPlayer: false,
         useUnitQueue: true,
         otherActionsChangeFacing: true,
         planForFutureTurns: true,
@@ -43,6 +44,7 @@ function GameController() constructor {
     
     if (trixagon.active) {
         rules.alternatePlayerTurns = true;
+        rules.randomizeStartingPlayer = true;
         rules.useUnitQueue = false;
         rules.otherActionsChangeFacing = false;
         rules.planForFutureTurns = false;
@@ -64,7 +66,13 @@ function GameController() constructor {
         unitQueue.init();
         
         if (rules.alternatePlayerTurns && !activePlayer) {
-            selectNextPlayer();
+            var _startingPlayerNumber = 1;
+            
+            if (rules.randomizeStartingPlayer) {
+                _startingPlayerNumber = irandom_range(1, playerCount);
+            }
+            
+            selectPlayerByNumber(_startingPlayerNumber);
         }
         
         if (rules.useUnitQueue) {
@@ -454,6 +462,12 @@ function GameController() constructor {
         
         if (playerCount > 0 && !activePlayer) {
             activePlayer = players[? 1];
+        }
+    }
+    
+    static selectPlayerByNumber = function (_number) {
+        if (playerCount >= _number) {
+            activePlayer = players[? _number];
         }
     }
     
