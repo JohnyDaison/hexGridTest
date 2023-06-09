@@ -42,6 +42,7 @@ function trixagonUnitType(_id, _name) {
     var _unitType = new UnitTypeData(_id, _name);
     
     _unitType.animMovementSpeed = 500;
+    _unitType.shadowRadius = 0;
     _unitType.healthBarOffset.y = 0;
     
     _unitType.combat.health = 2;
@@ -178,6 +179,8 @@ _unitType.setAnim(UnitAnimState.Idle, sprRockObstacle);
 _unitType = trixagonUnitType(UnitType.TrixagonBomb, "Trixagon Bomb");
 _unitType.movement.mobile = false;
 _unitType.combat.passive = true;
+_unitType.combat.health = 1;
+_unitType.combat.maxHealth = 1;
 _unitType.initiative = 1;
 _unitType.hasFace = false;
 _unitType.explodesOnDeath = true;
