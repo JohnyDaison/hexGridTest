@@ -320,10 +320,8 @@ function HexMap(_orientation, _size, _origin) constructor {
                 if (_selectedTile != pointer_null && _hexTile == _selectedTile) {
                     drawTrixagonUnitHighlight(_hex, Colors.trixagonSelection, _unit.type.tint, getTileYOffset(_hexTile));
                 } else if (_drawHighlight) {
-                    var _highlightColor = gameController.selectedUnit ? Colors.trixagonTarget : Colors.trixagonHover;
-                    
-                    if (!gameController.selectedUnit && gameController.canUnitBeSelected(_unit)) {
-                        drawTrixagonUnitHighlight(_hex, _highlightColor, _unit.type.tint, getTileYOffset(_hexTile));
+                    if (gameController.canUnitBeSelected(_unit)) {
+                        drawTrixagonUnitHighlight(_hex, Colors.trixagonHover, _unit.type.tint, getTileYOffset(_hexTile));
                     }
                 }
             }
