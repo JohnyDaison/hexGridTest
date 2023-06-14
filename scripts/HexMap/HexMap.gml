@@ -12,7 +12,7 @@ function HexMap(_orientation, _size, _origin) constructor {
     truncTiles = array_create(0);
     truncTint = c_white;
     truncAlpha = 0.6;
-    stripesAlpha = 0.6;
+    stripesAlpha = 0.1;
     
     static destroy = function() {
         grid.destroy();
@@ -442,11 +442,9 @@ function HexMap(_orientation, _size, _origin) constructor {
                 var _trunc = truncForHex.getTrixagonTrunc();
                 ds_map_clear(truncData);
                 
-                truncTint = Colors.trixagonTruncMelee;
+                truncTint = Colors.trixagonTrunc;
                 self.setTruncDataByOffset(HexVector.zero);
                 array_foreach(_trunc.melee, self.setTruncDataByOffset);
-                
-                truncTint = Colors.trixagonTrunc;
                 array_foreach(_trunc.movement, self.setTruncDataByOffset);
                 
                 truncTint = Colors.trixagonTruncRanged;
@@ -468,11 +466,13 @@ function HexMap(_orientation, _size, _origin) constructor {
         if (!_tile)
             return;
             
-        var _striped = !truncForUnit.movement.canMoveToTile(_tile);
+        var _blocked = !truncForUnit.movement.canMoveToTile(_tile);
         
-        truncData[? _tile] = {
-            tint: truncTint,
-            striped: _striped
+        if (!(gameController.trixagon.hideBlockedTiles && _blocked)) {
+            truncData[? _tile] = {
+                tint: truncTint,
+                striped: gameController.trixagon.stripeBlockedTiles && _blocked
+            }
         }
     }
     
