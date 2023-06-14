@@ -22,6 +22,7 @@ function UnitTypeData(_id, _name) constructor {
     drawOverlay = true;
     hasFace = true;
     explodesOnDeath = false;
+    indestructible = false;
     
     static getAnim = function(_state) {
         return animationMap[? _state];

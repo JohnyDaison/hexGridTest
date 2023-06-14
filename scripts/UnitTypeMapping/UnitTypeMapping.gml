@@ -169,7 +169,7 @@ _unitType.setAnim(UnitAnimState.Idle, sprTrixagonUnit);
 _unitType = trixagonUnitType(UnitType.TrixagonRock, "Trixagon Rock");
 _unitType.movement.mobile = false;
 _unitType.combat.passive = true;
-_unitType.combat.armor = 1;
+_unitType.indestructible = true;
 _unitType.initiative = 1;
 _unitType.drawOverlay = false;
 _unitType.hasFace = false;
