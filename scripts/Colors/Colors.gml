@@ -8,7 +8,7 @@ function Colors() constructor {
     static trixagonSelection = c_white;
     
     static trixagonTrunc = c_ltgray;
-    static trixagonTruncRanged = merge_color(trixagonTrunc, c_black, 0.1);
+    static trixagonTruncRanged = merge_color(trixagonTrunc, c_black, 0.2);
     static trixagonTruncMovementBlocked = c_black;
 }
 

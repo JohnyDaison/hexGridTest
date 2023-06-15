@@ -563,7 +563,9 @@ function HexMap(_orientation, _size, _origin) constructor {
         if (!_tile)
             return;
             
-        var _blocked = !truncForUnit.movement.canMoveToTile(_tile);
+        var _blocked = false;
+        var _unit = _tile.getTopUnit();
+        _blocked = _unit && _unit.type.indestructible;
         
         var _meleeTarget = false;
         if (truncMeleeTarget) {
