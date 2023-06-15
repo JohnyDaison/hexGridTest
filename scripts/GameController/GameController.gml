@@ -170,6 +170,20 @@ function GameController() constructor {
         return true;
     }
     
+    static getUnitsByType = function (_unitType) {
+        var _result = [];
+        var _unitCount = ds_list_size(units);
+        
+        for (var i = 0; i < _unitCount; i++) {
+            var _unit = units[| i];
+            if (_unit.type.typeId == _unitType) {
+                array_push(_result, _unit);
+            }
+        }
+        
+        return _result;
+    }
+    
     static animationUpdate = function () {
         gameAnimationsUpdate();
         unitsAnimUpdate();

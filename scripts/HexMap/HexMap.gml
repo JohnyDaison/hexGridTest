@@ -418,6 +418,57 @@ function HexMap(_orientation, _size, _origin) constructor {
         return {actionArray: _actionArray, totalCost: _totalCost};
     }
     
+    static getUnitOfTypeAtPosition = function (_unitType, _hex) {
+        var _hexTile = getTile(_hex);
+        if (!_hexTile) {
+            return pointer_null;
+        }
+        
+        var _topUnit = _hexTile.getTopUnit();
+        if (!_topUnit) {
+            return pointer_null;
+        }
+        
+        if (_topUnit.type.typeId == _unitType) {
+            return _topUnit;
+        }
+        
+        return pointer_null;
+    }
+    
+    static findNearestUnitOfTypeInRange = function (_hex, _unitType, _range = 1, _includeCenter = true) {
+        var _unit = pointer_null;
+        
+        if (_includeCenter) {
+            var _centerUnit = getUnitOfTypeAtPosition(_unitType, _hex);
+            
+            if (_centerUnit) {
+                return _centerUnit;
+            }
+        }
+        
+        for (var _radius = 1; _radius <= _range; _radius++) {
+            var _ring = _hex.getRing(_radius);
+            var _hexCount = array_length(_ring);
+                
+            for (var i = 0; i < _hexCount; i++) {
+                var _ringHex = _ring[i];
+                var _nearUnit = getUnitOfTypeAtPosition(_unitType, _ringHex);
+                
+                if (_nearUnit) {
+                    _unit = _nearUnit;
+                    break;
+                }
+            }
+            
+            if (_unit) {
+                break;
+            }
+        }
+        
+        return _unit;
+    }
+    
     static updateTruncOverlay = function () {
         var _desiredTruncHex = pointer_null;
         var _desiredTruncUnit = pointer_null;

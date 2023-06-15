@@ -483,7 +483,7 @@ function Unit(_unitType) constructor {
             return pointer_null;
         }
         
-        var _frontPosition = nextPosition.add(global.hexDirections[facing]);
+        var _frontPosition = nextPosition.neighbor(facing);
         var _frontTile = hexMap.getTile(_frontPosition);
         
         if (_frontTile) {

@@ -145,7 +145,7 @@ createTrixagonTestTiles = function() {
     
     // bombs
     for (var i = 0; i < _bombCount; i++) {
-        placeUnitNearPosition(0, 0, _bombsRandomRange, UnitType.TrixagonBomb);
+        placeUnitNearPosition(0, 0, _bombsRandomRange, UnitType.TrixagonBomb, 0, pointer_null, 2);
     }
     
     // rotate units to not face friends if possible
@@ -173,11 +173,16 @@ createTrixagonTestTiles = function() {
     }
 }
 
-placeUnitNearPosition = function (_q, _r, _range, _unitType, _facing = 0, _player = pointer_null) {
-    for(var _tries = 10; _tries > 0; _tries--) {
+placeUnitNearPosition = function (_q, _r, _range, _unitType, _facing = 0, _player = pointer_null, _spread = 0) {
+    for(var _tries = 32; _tries > 0; _tries--) {
         var _tile = hexMap.getTileQR(_q + irandom_range(-_range, _range), _r + irandom_range(-_range, _range));
+        var _valid = false;
     
         if (_tile && ds_list_size(_tile.units) == 0) {
+            _valid = !hexMap.findNearestUnitOfTypeInRange(_tile.position, _unitType, _spread, false);
+        }
+        
+        if (_valid) {
             var _unit = gameController.addUnit(_tile, _unitType);
             _unit.updateFacing(_facing);
             
