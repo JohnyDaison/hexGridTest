@@ -107,19 +107,28 @@ function CombatModule(_unit, _stats) constructor {
         return _meleeAttackChance;
     }
     
-    static trixagonMeleeAttack = function () {
+    static trixagonMeleeAttackValid = function () {
         var _meleeTarget = myUnit.getUnitInFrontOfMe();
         if (!_meleeTarget) {
-            return;
+            return false;
         }
         
         var _isFriend = _meleeTarget.player == myUnit.player;
         var _isIndestructible = _meleeTarget.type.indestructible;
         
         if (_isFriend || _isIndestructible) {
+            return false;
+        }
+        
+        return true;
+    }
+    
+    static trixagonMeleeAttack = function () {
+        if (!trixagonMeleeAttackValid()) {
             return;
         }
         
+        var _meleeTarget = myUnit.getUnitInFrontOfMe();
         var _meleeHex = _meleeTarget.nextPosition;
         var _meleeAttackChance = getTrixagonMeleeAttackChanceAgainstUnit(_meleeTarget);
         

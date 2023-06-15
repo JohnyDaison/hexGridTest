@@ -6,8 +6,10 @@ function HexTile(_position, _terrainType = TerrainType.Base) constructor {
     neighbors = [];
     units = ds_list_create();
     animations = ds_list_create();
-    overlaysArray = [];
-    overlaysCount = 0;
+    overlaysTopArray = [];
+    overlaysTopCount = 0;
+    overlaysBottomArray = [];
+    overlaysBottomCount = 0;
     overlays = {};
     
     static createOverlay = function(_depth) {
@@ -17,28 +19,44 @@ function HexTile(_position, _terrainType = TerrainType.Base) constructor {
         }
     }
     
-    static updateOverlaysArray = function () {
+    static updateOverlaysArrays = function () {
         var _keys = variable_struct_get_names(overlays);
         var _keyCount = array_length(_keys);
         
         array_foreach(_keys, function (_key) {
             var _overlay = variable_struct_get(overlays, _key)
-            var _index = array_get_index(overlaysArray, _overlay);
+            var _overlaysArray = _overlay.depth < 0 ? overlaysTopArray : overlaysBottomArray;
+            var _index = array_get_index(_overlaysArray, _overlay);
             
             if (_index == -1) {
-                array_push(overlaysArray, _overlay);
-                overlaysCount = array_length(overlaysArray);
+                array_push(_overlaysArray, _overlay);
+                if (_overlay.depth < 0) {
+                    overlaysTopCount = array_length(_overlaysArray);
+                } else {
+                    overlaysBottomCount = array_length(_overlaysArray);
+                }
             }
         });
         
-        array_sort(overlaysArray, function (_overlayA, _overlayB) {
+        array_sort(overlaysTopArray, function (_overlayA, _overlayB) {
+            return sign(_overlayB.depth - _overlayA.depth);
+        });
+        
+        array_sort(overlaysBottomArray, function (_overlayA, _overlayB) {
             return sign(_overlayB.depth - _overlayA.depth);
         });
     }
     
-    static drawOverlays = function (_center) {
-        for (var i = 0; i < overlaysCount; i++) {
-            var _overlay = overlaysArray[i];
+    static drawTopOverlays = function (_center) {
+        for (var i = 0; i < overlaysTopCount; i++) {
+            var _overlay = overlaysTopArray[i];
+            _overlay.display.draw(_center);
+        }
+    }
+    
+    static drawBottomOverlays = function (_center) {
+        for (var i = 0; i < overlaysBottomCount; i++) {
+            var _overlay = overlaysBottomArray[i];
             _overlay.display.draw(_center);
         }
     }

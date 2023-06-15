@@ -14,7 +14,9 @@ if (gameController.trixagon.active) {
 }
 
 hexMap.drawHexes(_highlightHex, _selectedTile);
-hexMap.drawUnitsOverlay(gameController.units, _highlightHex, _selectedTile);
+hexMap.drawTrixagonUnits(gameController.units, _highlightHex, _selectedTile);
+hexMap.drawTopTileOverlays();
+hexMap.drawUnitsOverlay(gameController.units);
 
 if (!gameController.trixagon.active && gameController.selectedUnit != pointer_null) {
     gameController.selectedUnit.drawPlannedActions();

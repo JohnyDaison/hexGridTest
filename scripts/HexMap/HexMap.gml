@@ -9,10 +9,14 @@ function HexMap(_orientation, _size, _origin) constructor {
     truncData = ds_map_create();
     truncForHex = pointer_null;
     truncForUnit = pointer_null;
+    truncForFacing = -1;
     truncTiles = array_create(0);
     truncTint = c_white;
+    truncMeleeTarget = false;
+    truncRangedTarget = false;
     truncAlpha = 0.6;
     stripesAlpha = 0.1;
+    topOverlaysTiles = array_create(0);
     
     static destroy = function() {
         grid.destroy();
@@ -247,6 +251,8 @@ function HexMap(_orientation, _size, _origin) constructor {
     }
     
     static drawHexes = function(_highlightHex, _selectedTile) {
+        array_resize(topOverlaysTiles, 0);
+        
         for (var _r = grid.minR; _r <= grid.maxR; _r++) {
             for (var _q = grid.minQ; _q <= grid.maxQ; _q++) {
                 var _hex = new HexVector(_q,_r);
@@ -261,7 +267,11 @@ function HexMap(_orientation, _size, _origin) constructor {
                 drawHexTile(_hexTile);
                 
                 var _center = getTileXY(_hexTile);
-                _hexTile.drawOverlays(_center);
+                _hexTile.drawBottomOverlays(_center);
+                
+                if (_hexTile.overlaysTopCount > 0) {
+                    array_push(topOverlaysTiles, _hexTile);
+                }
                 
                 var _drawHighlight = !is_undefined(_highlightHex) && _hex.equals(_highlightHex);
                 var _highlightColor = highlightColor;
@@ -298,32 +308,54 @@ function HexMap(_orientation, _size, _origin) constructor {
         }
     }
     
-    static drawUnitsOverlay = function(_units, _highlightHex, _selectedTile) {
+    static drawTrixagonUnits = function(_units, _highlightHex, _selectedTile) {
+        if (!gameController.trixagon.active) {
+            return;
+        }
+        
         var _count = ds_list_size(_units);
         
         for (var i = 0; i < _count; i++) {
             var _unit = _units[| i];
             
-            if (gameController.trixagon.active) {
-                drawAnimations(_unit.animations);
-            }
+            drawAnimations(_unit.animations);
             
             if (!_unit.currentTile) {
                 continue;
             }
-            
-            if (gameController.trixagon.active) {
-                var _hexTile = _unit.currentTile;
-                var _hex = _hexTile.position;
-                var _drawHighlight = !is_undefined(_highlightHex) && _hex.equals(_highlightHex);
+
+            var _hexTile = _unit.currentTile;
+            var _hex = _hexTile.position;
+            var _drawHighlight = !is_undefined(_highlightHex) && _hex.equals(_highlightHex);
                 
-                if (_selectedTile != pointer_null && _hexTile == _selectedTile) {
-                    drawTrixagonUnitHighlight(_hex, Colors.trixagonSelection, _unit.type.tint, getTileYOffset(_hexTile));
-                } else if (_drawHighlight) {
-                    if (gameController.canUnitBeSelected(_unit)) {
-                        drawTrixagonUnitHighlight(_hex, Colors.trixagonHover, _unit.type.tint, getTileYOffset(_hexTile));
-                    }
+            if (_selectedTile != pointer_null && _hexTile == _selectedTile) {
+                drawTrixagonUnitHighlight(_hex, Colors.trixagonSelection, _unit.type.tint, getTileYOffset(_hexTile));
+            } else if (_drawHighlight) {
+                if (gameController.canUnitBeSelected(_unit)) {
+                    drawTrixagonUnitHighlight(_hex, Colors.trixagonHover, _unit.type.tint, getTileYOffset(_hexTile));
                 }
+            }
+        }
+    }
+    
+    static drawTopTileOverlays = function () {
+        var _count = array_length(topOverlaysTiles);
+        
+        for (var i = 0; i < _count; i++) {
+            var _hexTile = topOverlaysTiles[i];
+            var _center = getTileXY(_hexTile);
+            _hexTile.drawTopOverlays(_center);
+        }
+    }
+    
+    static drawUnitsOverlay = function(_units) {
+        var _count = ds_list_size(_units);
+        
+        for (var i = 0; i < _count; i++) {
+            var _unit = _units[| i];
+            
+            if (!_unit.currentTile) {
+                continue;
             }
             
             var _tileCenter = getTileXY(_unit.currentTile);
@@ -345,8 +377,10 @@ function HexMap(_orientation, _size, _origin) constructor {
         if (gameController.trixagon.active) {
             _hexTile.overlays.trunc = _hexTile.createOverlay(0);
             _hexTile.overlays.stripes = _hexTile.createOverlay(-1);
+            _hexTile.overlays.meleeTarget = _hexTile.createOverlay(-2);
+            _hexTile.overlays.rangedTarget = _hexTile.createOverlay(-3);
             
-            _hexTile.updateOverlaysArray();
+            _hexTile.updateOverlaysArrays();
         }
         
         return _hexTile;
@@ -472,33 +506,45 @@ function HexMap(_orientation, _size, _origin) constructor {
     static updateTruncOverlay = function () {
         var _desiredTruncHex = pointer_null;
         var _desiredTruncUnit = pointer_null;
+        var _desiredTruncFacing = -1;
         
         if (gameController.selectedUnit && gameController.selectedUnit.currentTile) {
             _desiredTruncHex = gameController.selectedUnit.currentTile.position;
             _desiredTruncUnit = gameController.selectedUnit;
+            _desiredTruncFacing = gameController.selectedUnit.facing;
         }
         
-        if (_desiredTruncHex != truncForHex || _desiredTruncUnit != truncForUnit) {
+        if (_desiredTruncHex != truncForHex || _desiredTruncUnit != truncForUnit || _desiredTruncFacing != truncForFacing) {
             array_foreach(truncTiles, function(_tile, _index) {
                 _tile.overlays.trunc.display.setState(false);
                 _tile.overlays.stripes.display.setState(false);
+                _tile.overlays.meleeTarget.display.setState(false);
+                _tile.overlays.rangedTarget.display.setState(false);
             });
             
             array_resize(truncTiles, 0);
             
             truncForHex = _desiredTruncHex;
             truncForUnit = _desiredTruncUnit;
+            truncForFacing = _desiredTruncFacing;
             
             if (truncForHex && truncForUnit) {
                 var _trunc = truncForHex.getTrixagonTrunc();
                 ds_map_clear(truncData);
                 
                 truncTint = Colors.trixagonTrunc;
+                truncRangedTarget = false;
+                truncMeleeTarget = false;
                 self.setTruncDataByOffset(HexVector.zero);
+                
+                truncMeleeTarget = truncForUnit.combat.trixagonMeleeAttackValid();
                 array_foreach(_trunc.melee, self.setTruncDataByOffset);
+                
+                truncMeleeTarget = false;
                 array_foreach(_trunc.movement, self.setTruncDataByOffset);
                 
                 truncTint = Colors.trixagonTruncRanged;
+                truncRangedTarget = true;
                 array_foreach(_trunc.ranged, self.setTruncDataByOffset);
                 
                 key = ds_map_find_first(truncData);
@@ -519,10 +565,18 @@ function HexMap(_orientation, _size, _origin) constructor {
             
         var _blocked = !truncForUnit.movement.canMoveToTile(_tile);
         
+        var _meleeTarget = false;
+        if (truncMeleeTarget) {
+            var _unitInFront = truncForUnit.getUnitInFrontOfMe();
+            _meleeTarget = _unitInFront && _tile.getTopUnit() == _unitInFront;
+        }
+        
         if (!(gameController.trixagon.hideBlockedTiles && _blocked)) {
             truncData[? _tile] = {
                 tint: truncTint,
-                striped: gameController.trixagon.stripeBlockedTiles && _blocked
+                striped: gameController.trixagon.stripeBlockedTiles && _blocked,
+                meleeTarget: _meleeTarget,
+                rangedTarget: truncRangedTarget,
             }
         }
     }
@@ -540,6 +594,14 @@ function HexMap(_orientation, _size, _origin) constructor {
         if (_data.striped) {
             var _stripesSprite = _isRight ? sprTrixagonTileRightStripes : sprTrixagonTileLeftStripes;
             _tile.overlays.stripes.display.setState(true, _stripesSprite, Colors.trixagonTruncMovementBlocked, stripesAlpha);
+        }
+        
+        if (_data.meleeTarget) {
+            _tile.overlays.meleeTarget.display.setState(true, sprTrixagonMeleeTarget, highlightColor, highlightAlpha);
+        }
+        
+        if (_data.rangedTarget) {
+            _tile.overlays.meleeTarget.display.setState(true, sprTrixagonRangedTarget, highlightColor, highlightAlpha);
         }
         
         array_push(truncTiles, _tile);
