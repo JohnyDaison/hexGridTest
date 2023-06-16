@@ -273,6 +273,10 @@ function GameController() constructor {
     }
     
     static canUnitBeSelected = function (_unit) {
+        if (gameEnding || gameEnded) {
+            return false;
+        }
+        
         if (!_unit || _unit.dying) {
             return false;
         }
