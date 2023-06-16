@@ -7,10 +7,16 @@ function SpriteDisplay() constructor {
     rotation = 0;
     tint = c_white;
     alpha = 1;
+    cursorPulse = false;
     
     static draw = function (_position) {
         if (enabled && !is_undefined(sprite)) {
-            draw_sprite_ext(sprite, imageIndex, _position.x, _position.y, xScale, yScale, rotation, tint, alpha);
+            var _alpha = alpha;
+            if (cursorPulse) {
+                _alpha *= objHexMap.cursorPulseCurrent;
+            }
+            
+            draw_sprite_ext(sprite, imageIndex, _position.x, _position.y, xScale, yScale, rotation, tint, _alpha);
         }
     }
     

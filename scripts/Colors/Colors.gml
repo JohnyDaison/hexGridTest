@@ -6,6 +6,9 @@ function Colors() constructor {
     static trixagonBlue = merge_color(c_white, merge_color(c_blue, c_black, 0.25), 0.7);
     static trixagonHover = c_ltgray;
     static trixagonSelection = c_white;
+    static trixagonCursor = c_yellow;
+    static trixagonMeleeTarget = c_yellow;
+    static trixagonRangedTarget = merge_color(c_yellow, c_white, 0.5);
     
     static trixagonTrunc = c_ltgray;
     static trixagonTruncRanged = merge_color(trixagonTrunc, c_black, 0.2);

@@ -16,3 +16,13 @@ if (mouse_check_button(mb_right)) {
 } else {
     lastPaintedPos = undefined;
 }
+
+cursorPulseCurrent = clamp(cursorPulseCurrent + cursorPulseDirection * cursorPulseSpeed, cursorPulseMin, cursorPulseMax);
+
+if (cursorPulseDirection == 1 && cursorPulseCurrent == cursorPulseMax) {
+    cursorPulseDirection = -1;
+}
+
+if (cursorPulseDirection == -1 && cursorPulseCurrent == cursorPulseMin) {
+    cursorPulseDirection = 1;
+}

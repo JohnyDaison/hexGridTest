@@ -42,6 +42,8 @@ function GameController() constructor {
         lowAttackChance: 0.4,
         stripeBlockedTiles: true,
         hideBlockedTiles: false,
+        meleeTargetAlpha: 0.9,
+        rangedTargetAlpha: 0.7,
     }
     
     if (trixagon.active) {

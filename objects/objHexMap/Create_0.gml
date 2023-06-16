@@ -33,6 +33,12 @@ cursorHex = undefined;
 cursorPos = undefined;
 cursorTile = pointer_null;
 
+cursorPulseMin = 0.6;
+cursorPulseMax = 1;
+cursorPulseCurrent = cursorPulseMax;
+cursorPulseSpeed = 0.0045;
+cursorPulseDirection = 1;
+
 activeTerrainBrush = new TerrainBrush(TerrainBrushShape.Hexagon, 2, 1);
 mainTerrainGenerator = randomTerrainGenerator;
 terrainGeneratorOptions = { height: true };

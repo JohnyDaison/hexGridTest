@@ -277,7 +277,7 @@ function HexMap(_orientation, _size, _origin) constructor {
                 var _highlightColor = highlightColor;
                 
                 if (_drawHighlight) {
-                    draw_set_alpha(highlightAlpha);
+                    draw_set_alpha(highlightAlpha * objHexMap.cursorPulseCurrent);
                     draw_set_color(_highlightColor);
                 
                     drawFlatHex(_hex, getTileYOffset(_hexTile));
@@ -608,11 +608,13 @@ function HexMap(_orientation, _size, _origin) constructor {
         }
         
         if (_data.meleeTarget) {
-            _tile.overlays.meleeTarget.display.setState(true, sprTrixagonMeleeTarget, highlightColor, highlightAlpha);
+            _tile.overlays.meleeTarget.display.setState(true, sprTrixagonMeleeTarget, Colors.trixagonMeleeTarget, gameController.trixagon.meleeTargetAlpha);
+            _tile.overlays.meleeTarget.display.cursorPulse = true;
         }
         
         if (_data.rangedTarget) {
-            _tile.overlays.meleeTarget.display.setState(true, _data.rangedTarget, highlightColor, highlightAlpha);
+            _tile.overlays.meleeTarget.display.setState(true, _data.rangedTarget, Colors.trixagonRangedTarget, gameController.trixagon.rangedTargetAlpha);
+            _tile.overlays.meleeTarget.display.cursorPulse = true;
         }
         
         array_push(truncTiles, _tile);
