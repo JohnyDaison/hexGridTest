@@ -135,6 +135,20 @@ function CombatModule(_unit, _stats) constructor {
         attackHex(_meleeHex, _meleeAttackChance, _meleeAttackChance, false);
     }
     
+    static trixagonRangedAttackValid = function (_rangedTarget) {
+        if (!_rangedTarget) {
+            return false;
+        }
+        
+        var _isIndestructible = _rangedTarget.type.indestructible;
+        
+        if (_isIndestructible) {
+            return false;
+        }
+        
+        return true;
+    }
+    
     static trixagonRangedAttack = function () {
         var _trixagon = myUnit.gameController.trixagon;
         var _myHex = myUnit.nextPosition;

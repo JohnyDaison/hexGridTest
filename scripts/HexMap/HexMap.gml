@@ -573,12 +573,18 @@ function HexMap(_orientation, _size, _origin) constructor {
             _meleeTarget = _unitInFront && _tile.getTopUnit() == _unitInFront;
         }
         
+        var _rangedTarget = pointer_null;
+        if (truncRangedTarget) {
+             var _validRangedTarget = truncForUnit.combat.trixagonRangedAttackValid(_tile.getTopUnit());
+             _rangedTarget = _validRangedTarget ? sprTrixagonRangedTargetValid : sprTrixagonRangedTargetInvalid;
+        }
+        
         if (!(gameController.trixagon.hideBlockedTiles && _blocked)) {
             truncData[? _tile] = {
                 tint: truncTint,
                 striped: gameController.trixagon.stripeBlockedTiles && _blocked,
                 meleeTarget: _meleeTarget,
-                rangedTarget: truncRangedTarget,
+                rangedTarget: _rangedTarget,
             }
         }
     }
@@ -603,7 +609,7 @@ function HexMap(_orientation, _size, _origin) constructor {
         }
         
         if (_data.rangedTarget) {
-            _tile.overlays.meleeTarget.display.setState(true, sprTrixagonRangedTarget, highlightColor, highlightAlpha);
+            _tile.overlays.meleeTarget.display.setState(true, _data.rangedTarget, highlightColor, highlightAlpha);
         }
         
         array_push(truncTiles, _tile);
