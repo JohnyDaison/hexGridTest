@@ -45,6 +45,8 @@ debugText += "\n";
 
 debugText += string("Round: {0}\n", gameController.roundCounter);
 
+debugText += string("Phase: {0}\n", gameController.currentTurnPhase);
+
 var _selectedUnit = gameController.selectedUnit;
 var _unitTargetTile = gameController.unitTargetTile;
 

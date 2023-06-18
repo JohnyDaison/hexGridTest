@@ -9,12 +9,16 @@ function GameController() constructor {
     endTurnButtonPressed = false;
     roundCounter = 1;
     activePlayer = pointer_null;
-    playerTurnIsEnding = false;
     unitQueue = new UnitQueue(self);
     winner = pointer_null;
     gameEnding = false;
     gameEnded = false;
     gameEndCounter = 0;
+    
+    turnPhases = [];
+    turnPhaseCount = 0;
+    currentTurnPhaseIndex = -1;
+    currentTurnPhase = pointer_null;
     
     playerListDisplay = {
         margin: 12,
@@ -53,7 +57,13 @@ function GameController() constructor {
         rules.otherActionsChangeFacing = false;
         rules.planForFutureTurns = false;
         
+        self.addTurnPhase(PhaseType.TrixagonMovement);
+        self.addTurnPhase(PhaseType.TrixagonMelee);
+        self.addTurnPhase(PhaseType.TrixagonRanged);
+        
         objGameCamera.updateZoomLevel(objGameCamera.maxZoomLevel);
+    } else {
+        self.addTurnPhase(PhaseType.HexagonGeneral);
     }
     
     static destroy = function() {
@@ -68,6 +78,7 @@ function GameController() constructor {
     static init = function() {
         unitsRoundStart();
         unitQueue.init();
+        startNextTurnPhase();
         
         if (rules.alternatePlayerTurns && !activePlayer) {
             var _startingPlayerNumber = 1;
@@ -117,6 +128,40 @@ function GameController() constructor {
         }
         
         ds_list_clear(units);
+    }
+    
+    static addTurnPhase = function(_phaseType) {
+        var _phaseConstructor = global.phaseTypeMap[? _phaseType];
+        var _phase = new _phaseConstructor(self);
+        
+        _phase.onEnd = method(self, self.phaseEnded);
+        
+        array_push(turnPhases, _phase);
+        turnPhaseCount++;
+        
+        return _phase;
+    }
+    
+    static phaseEnded = function (_phase) {
+        if (_phase == currentTurnPhase) {
+            startNextTurnPhase();
+        }
+    }
+    
+    static startNextTurnPhase = function () {
+        currentTurnPhaseIndex++;
+        if (currentTurnPhaseIndex >= turnPhaseCount) {
+            currentTurnPhaseIndex = 0;
+            
+            array_foreach(turnPhases, function (_phase) {
+                _phase.reset();
+            });
+            
+            endUnitTurn();
+        }
+        
+        currentTurnPhase = turnPhases[currentTurnPhaseIndex];
+        currentTurnPhase.startPhase();
     }
     
     static addPlayer = function(_name, _color) {
@@ -231,7 +276,7 @@ function GameController() constructor {
             
             if (selectedUnit == pointer_null || selectedUnit.currentAction == pointer_null) {
                 endTurnButtonPressed = false;
-                endUnitTurn();
+                currentTurnPhase.endPhase();
             }
         }
         
@@ -268,26 +313,28 @@ function GameController() constructor {
         unitQueue.updateCards();
         updatePlayersWinLossState();
         
-        if (playerTurnIsEnding && !gameEnding) {
-            if (rules.alternatePlayerTurns) {
-                var _totalActive = 0;
+        if (!currentTurnPhase.interactive && !gameEnding) {
+            var _totalActive = 0;
                 
-                for(var i = 0; i < _unitCount; i++) {
-                    var _unit = units[| i];
-                    if (_unit.currentAction != pointer_null) {
-                        _totalActive++;
-                    }
+            for(var i = 0; i < _unitCount; i++) {
+                var _unit = units[| i];
+                if (_unit.currentAction != pointer_null) {
+                    _totalActive++;
                 }
-                
-                if (_totalActive == 0) {
-                    startPlayerTurn();
-                }
+            }
+            
+            if (_totalActive == 0) {
+                currentTurnPhase.endPhase();
             }
         }
     }
     
     static canUnitBeSelected = function (_unit) {
         if (gameEnding || gameEnded) {
+            return false;
+        }
+        
+        if (!currentTurnPhase.interactive) {
             return false;
         }
         
@@ -398,6 +445,10 @@ function GameController() constructor {
             return false;
         }
         
+        if (!currentTurnPhase.interactive) {
+            return false;
+        }
+        
         if (selectedUnit != pointer_null && ds_list_size(selectedUnit.actionQueue) > 0) {
             return true;
         }
@@ -418,7 +469,7 @@ function GameController() constructor {
             return false;
         }
         
-        if (playerTurnIsEnding) {
+        if (!currentTurnPhase.interactive) {
             return false;
         }
         
@@ -436,17 +487,15 @@ function GameController() constructor {
         selectedUnit = pointer_null;
         unitTargetTile = pointer_null;
         
-        if (rules.useUnitQueue) {
+        if (rules.alternatePlayerTurns) {
+            startPlayerTurn();
+        } else if (rules.useUnitQueue) {
             unitQueue.update();
             selectUnit(unitQueue.activeUnit);
-        }
-        
-        if (rules.alternatePlayerTurns) {
-            endPlayerTurn();
-        }
-        
-        if (selectedUnit == pointer_null && !rules.alternatePlayerTurns) {
-            endRound();
+            
+            if (selectedUnit == pointer_null) {
+                endRound();
+            }
         }
     }
     
@@ -467,22 +516,6 @@ function GameController() constructor {
         }
     }
     
-    static endPlayerTurn = function () {
-        show_debug_message("endPlayerTurn called");
-        
-        if (trixagon.active && roundCounter > 1) {
-            array_foreach(activePlayer.units, function (_unit) {
-                _unit.combat.planTrixagonAttack();
-                
-                if (_unit.currentAction == pointer_null) {
-                    _unit.startNextAction();
-                }
-            });
-        }
-        
-        playerTurnIsEnding = true;
-    }
-    
     static startPlayerTurn = function () {
         endRound();
         
@@ -490,7 +523,6 @@ function GameController() constructor {
             return;
         }
         
-        playerTurnIsEnding = false;
         selectNextPlayer();
     }
     

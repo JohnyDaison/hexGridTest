@@ -34,8 +34,12 @@ function CombatModule(_unit, _stats) constructor {
         myUnit.enqueueAction(new AttackUnitAction(_unit));
     }
     
-    static planTrixagonAttack = function () {
-        myUnit.enqueueAction(new TrixagonAttackAction());
+    static planTrixagonMeleeAttack = function () {
+        myUnit.enqueueAction(new TrixagonMeleeAttackAction());
+    }
+    
+    static planTrixagonRangedAttack = function () {
+        myUnit.enqueueAction(new TrixagonRangedAttackAction());
     }
     
     static planTrixagonExplode = function () {
@@ -125,6 +129,7 @@ function CombatModule(_unit, _stats) constructor {
     
     static trixagonMeleeAttack = function () {
         if (!trixagonMeleeAttackValid()) {
+            myUnit.currentAction.aborted = true;
             return;
         }
         
@@ -132,7 +137,7 @@ function CombatModule(_unit, _stats) constructor {
         var _meleeHex = _meleeTarget.nextPosition;
         var _meleeAttackChance = getTrixagonMeleeAttackChanceAgainstUnit(_meleeTarget);
         
-        attackHex(_meleeHex, _meleeAttackChance, _meleeAttackChance, false);
+        attackHex(_meleeHex, _meleeAttackChance, _meleeAttackChance);
     }
     
     static trixagonRangedAttackValid = function (_rangedTarget) {
@@ -160,11 +165,6 @@ function CombatModule(_unit, _stats) constructor {
             
             attackHex(_hex, _rangedAttackChance, _rangedAttackChance);
         }
-    }
-    
-    static trixagonAttack = function () {
-        trixagonMeleeAttack();
-        trixagonRangedAttack();
     }
     
     static trixagonExplode = function () {

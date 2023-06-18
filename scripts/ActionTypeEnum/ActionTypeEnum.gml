@@ -3,7 +3,8 @@ enum ActionType {
     MoveToHex,
     AttackHex,
     AttackUnit,
-    TrixagonAttack,
+    TrixagonMeleeAttack,
+    TrixagonRangedAttack,
     TrixagonExplode
 }
 
@@ -15,5 +16,6 @@ _map[? ActionType.FaceHex] = FaceHexAction;
 _map[? ActionType.MoveToHex] = MoveToHexAction;
 _map[? ActionType.AttackHex] = AttackHexAction;
 _map[? ActionType.AttackUnit] = AttackUnitAction;
-_map[? ActionType.TrixagonAttack] = TrixagonAttackAction;
+_map[? ActionType.TrixagonMeleeAttack] = TrixagonMeleeAttackAction;
+_map[? ActionType.TrixagonRangedAttack] = TrixagonRangedAttackAction;
 _map[? ActionType.TrixagonExplode] = TrixagonExplodeAction;

@@ -270,7 +270,8 @@ function Unit(_unitType) constructor {
             case ActionType.AttackHex: {
                 return combat.getAttackCost(_fromTile, _action);
             }
-            case ActionType.TrixagonAttack:
+            case ActionType.TrixagonMeleeAttack:
+            case ActionType.TrixagonRangedAttack:
             case ActionType.TrixagonExplode:
                 return 0;
         }
@@ -382,8 +383,12 @@ function Unit(_unitType) constructor {
                     combat.attackHex(currentAction.hex);
                     break;
                 }
-                case ActionType.TrixagonAttack: {
-                    combat.trixagonAttack();
+                case ActionType.TrixagonMeleeAttack: {
+                    combat.trixagonMeleeAttack();
+                    break;
+                }
+                case ActionType.TrixagonRangedAttack: {
+                    combat.trixagonRangedAttack();
                     break;
                 }
                 case ActionType.TrixagonExplode: {
@@ -394,7 +399,7 @@ function Unit(_unitType) constructor {
             
             actionStarted = true;
             
-            if (currentAction.instant) {
+            if (currentAction.instant || currentAction.aborted) {
                 endCurrentAction();
             }
         }

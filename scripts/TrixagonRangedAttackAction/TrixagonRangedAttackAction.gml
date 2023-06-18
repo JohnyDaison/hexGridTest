@@ -1,9 +1,9 @@
-function TrixagonAttackAction() : GameAction() constructor {
-    static type = ActionType.TrixagonAttack;
+function TrixagonRangedAttackAction() : GameAction() constructor {
+    static type = ActionType.TrixagonRangedAttack;
     static planColor = c_red;
     
     static toString = function() {
-        return "TRIXAGON ATTACK";
+        return "TRIXAGON RANGED ATTACK";
     }
     
     static drawPlanned = function(_unit, _fromHex) {

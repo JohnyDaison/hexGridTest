@@ -3,6 +3,7 @@ function GameAction() constructor {
     static planColor = c_white;
     static pointCost = 1;
     static instant = false;
+    aborted = false;
     
     static drawPlanned = function(_unit, _fromHex) {}
     

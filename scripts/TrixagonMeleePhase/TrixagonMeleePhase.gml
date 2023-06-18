@@ -1,0 +1,23 @@
+function TrixagonMeleePhase(_gameController) : GamePhase(_gameController) constructor {
+    static type = PhaseType.TrixagonMelee;
+    static interactive = false;
+    
+    static toString = function() {
+        return "TRIXAGON MELEE";
+    }
+    
+    static baseStartPhase = self.startPhase;
+    static startPhase = function () {
+        if (gameController.roundCounter > 1) {
+            array_foreach(gameController.activePlayer.units, function (_unit) {
+                _unit.combat.planTrixagonMeleeAttack();
+                
+                if (_unit.currentAction == pointer_null) {
+                    _unit.startNextAction();
+                }
+            });
+        }
+        
+        baseStartPhase();
+    }
+}
