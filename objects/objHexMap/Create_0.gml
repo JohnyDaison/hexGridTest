@@ -78,22 +78,31 @@ drawFacingDragArrow = function() {
 }
 
 createTestTiles = function() {
+    var _player1 = gameController.players[? 1];
+    var _player2 = gameController.players[? 2];
+    var _unit;
+    
     var _swordSkeleton = hexMap.addTile(-1, 0, TerrainType.Snow);
-    gameController.addUnit(_swordSkeleton, UnitType.SkeletonSwordBasic);
+    _unit = gameController.addUnit(_swordSkeleton, UnitType.SkeletonSwordBasic);
+    _player2.addUnit(_unit);
 
     var _bowSkeleton = hexMap.addTile(-1, 1, TerrainType.Snow, 3);
-    gameController.addUnit(_bowSkeleton, UnitType.SkeletonBowBasic);
+    _unit = gameController.addUnit(_bowSkeleton, UnitType.SkeletonBowBasic);
+    _player2.addUnit(_unit);
     
     var _water = hexMap.addTile(0, -1, TerrainType.Water, 2);
     
     var _center = hexMap.addTile(0, 0, TerrainType.Rock, 3);
-    gameController.addUnit(_center, UnitType.KnightUnarmedBasic);
+    _unit = gameController.addUnit(_center, UnitType.KnightUnarmedBasic);
+    _player1.addUnit(_unit);
     
     var _swordKnight = hexMap.addTile(0, 1, TerrainType.Sand, 2);
-    gameController.addUnit(_swordKnight, UnitType.KnightSwordBasic);
+    _unit = gameController.addUnit(_swordKnight, UnitType.KnightSwordBasic);
+    _player1.addUnit(_unit);
 
     var _bowKnight = hexMap.addTile(1, -1, TerrainType.Grass);
-    gameController.addUnit(_bowKnight, UnitType.KnightBowBasic);
+    _unit = gameController.addUnit(_bowKnight, UnitType.KnightBowBasic);
+    _player1.addUnit(_unit);
     
     var _dummy = hexMap.addTile(1, 0, TerrainType.Grass);
     gameController.addUnit(_dummy, UnitType.TrainingDummy);
@@ -207,6 +216,7 @@ if (gameController.trixagon.active) {
     createTrixagonPlayers();
     createTrixagonTestTiles();
 } else {
+    createTrixagonPlayers();
     createTestTiles();
 }
 

@@ -80,7 +80,7 @@ function GameController() constructor {
         }
         
         if (rules.useUnitQueue) {
-            selectedUnit = unitQueue.activeUnit;
+            selectUnit(unitQueue.activeUnit);
         }
     }
     
@@ -184,6 +184,18 @@ function GameController() constructor {
         }
         
         return _result;
+    }
+    
+    static selectUnit = function (_unit) {
+        if (!_unit) {
+            selectedUnit = pointer_null;
+            activePlayer = pointer_null;
+            
+            return;
+        }
+        
+        selectedUnit = _unit;
+        activePlayer = _unit.player;
     }
     
     static animationUpdate = function () {
@@ -426,7 +438,7 @@ function GameController() constructor {
         
         if (rules.useUnitQueue) {
             unitQueue.update();
-            selectedUnit = unitQueue.activeUnit;
+            selectUnit(unitQueue.activeUnit);
         }
         
         if (rules.alternatePlayerTurns) {
