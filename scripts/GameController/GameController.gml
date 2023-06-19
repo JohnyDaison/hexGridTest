@@ -157,7 +157,7 @@ function GameController() constructor {
                 _phase.reset();
             });
             
-            endUnitTurn();
+            endTurn();
         }
         
         currentTurnPhase = turnPhases[currentTurnPhaseIndex];
@@ -241,6 +241,11 @@ function GameController() constructor {
         
         selectedUnit = _unit;
         activePlayer = _unit.player;
+    }
+    
+    static deselectUnit = function () {
+        selectedUnit = pointer_null;
+        unitTargetTile = pointer_null;
     }
     
     static animationUpdate = function () {
@@ -370,8 +375,7 @@ function GameController() constructor {
                 }
             } else if (_cursorUnit && _cursorUnit == selectedUnit) {
                 if (canUnitBeDeselected(_cursorUnit)) {
-                    selectedUnit = pointer_null;
-                    unitTargetTile = pointer_null;
+                    deselectUnit();
                 }
             } else {
                 unitTargetTile = _cursorTile;
@@ -465,6 +469,15 @@ function GameController() constructor {
         return true;
     }
     
+    static endTurn = function () {
+        if (rules.alternatePlayerTurns) {
+            startNextPlayerTurn();
+        } else if (rules.useUnitQueue) {
+            endUnitTurn();
+        }
+    }
+    
+    // for use with rules.useUnitQueue
     static endUnitTurn = function () {
         show_debug_message("endUnitTurn called");
         
@@ -473,18 +486,13 @@ function GameController() constructor {
             selectedUnit.turnCounter++;
         }
         
-        selectedUnit = pointer_null;
-        unitTargetTile = pointer_null;
+        deselectUnit();
         
-        if (rules.alternatePlayerTurns) {
-            startPlayerTurn();
-        } else if (rules.useUnitQueue) {
-            unitQueue.update();
-            selectUnit(unitQueue.activeUnit);
+        unitQueue.update();
+        selectUnit(unitQueue.activeUnit);
             
-            if (selectedUnit == pointer_null) {
-                endRound();
-            }
+        if (selectedUnit == pointer_null) {
+            endRound();
         }
     }
     
@@ -505,7 +513,7 @@ function GameController() constructor {
         }
     }
     
-    static startPlayerTurn = function () {
+    static startNextPlayerTurn = function () {
         endRound();
         
         if (gameEnding) {
