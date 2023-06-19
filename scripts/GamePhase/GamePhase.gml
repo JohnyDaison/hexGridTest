@@ -49,6 +49,10 @@ function GamePhase(_gameController) constructor {
         if (!starting && !started && !ending && !ended) {
             starting = true;
             startTime = current_time;
+            
+            if (!interactive) {
+                gameController.deselectUnit();
+            }
         }
     }
     
