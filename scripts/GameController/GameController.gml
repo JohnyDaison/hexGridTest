@@ -313,19 +313,8 @@ function GameController() constructor {
         unitQueue.updateCards();
         updatePlayersWinLossState();
         
-        if (!currentTurnPhase.interactive && !gameEnding) {
-            var _totalActive = 0;
-                
-            for(var i = 0; i < _unitCount; i++) {
-                var _unit = units[| i];
-                if (_unit.currentAction != pointer_null) {
-                    _totalActive++;
-                }
-            }
-            
-            if (_totalActive == 0) {
-                currentTurnPhase.endPhase();
-            }
+        if (!gameEnding) {
+            currentTurnPhase.update();
         }
     }
     
