@@ -6,8 +6,7 @@ function TrixagonMeleePhase(_gameController) : GamePhase(_gameController) constr
         return "TRIXAGON MELEE";
     }
     
-    static baseStartPhase = self.startPhase;
-    static startPhase = function () {
+    static phaseStartLogic = function () {
         if (gameController.roundCounter > 1) {
             array_foreach(gameController.activePlayer.units, function (_unit) {
                 _unit.combat.planTrixagonMeleeAttack();
@@ -17,7 +16,5 @@ function TrixagonMeleePhase(_gameController) : GamePhase(_gameController) constr
                 }
             });
         }
-        
-        baseStartPhase();
     }
 }

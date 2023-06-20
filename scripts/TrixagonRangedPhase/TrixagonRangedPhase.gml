@@ -6,8 +6,7 @@ function TrixagonRangedPhase(_gameController) : GamePhase(_gameController) const
         return "TRIXAGON RANGED";
     }
     
-    static baseStartPhase = self.startPhase;
-    static startPhase = function () {
+    static phaseStartLogic = function () {
         if (gameController.roundCounter > 1) {
             array_foreach(gameController.activePlayer.units, function (_unit) {
                 _unit.combat.planTrixagonRangedAttack();
@@ -17,7 +16,5 @@ function TrixagonRangedPhase(_gameController) : GamePhase(_gameController) const
                 }
             });
         }
-        
-        baseStartPhase();
     }
 }

@@ -12,13 +12,19 @@ function GamePhase(_gameController) constructor {
     ending = false;
     ended = false;
     
+    static isInProgress = function () {
+        return started && !ending && !ended;
+    }
+    
     static update = function() {
         if (starting && current_time >= startTime + startDelay) {
+            starting = false;
             started = true;
+            phaseStartLogic();
             onStart(self);
         }
         
-        if (!interactive && !ending) {
+        if (!interactive && isInProgress()) {
             var _units = gameController.units;
             var _unitCount = ds_list_size(_units);
             var _totalActive = 0;
@@ -36,13 +42,15 @@ function GamePhase(_gameController) constructor {
         }
         
         if (ending && current_time >= endTime + endDelay) {
+            ending = false;
             ended = true;
+            phaseEndLogic();
             onEnd(self);
         }
     }
     
     static isInteractive = function() {
-        return interactive && started && !ending && !ended;
+        return interactive && isInProgress();
     }
     
     static startPhase = function() {
@@ -57,7 +65,7 @@ function GamePhase(_gameController) constructor {
     }
     
     static endPhase = function() {
-        if (started && !ending && !ended) {
+        if (isInProgress()) {
             ending = true;
             endTime = current_time;
         }
@@ -72,6 +80,8 @@ function GamePhase(_gameController) constructor {
         ended = false;
     }
     
+    static phaseStartLogic = function() {}
+    static phaseEndLogic = function() {}
     static onStart = function(_phase) {}
     static onEnd = function(_phase) {}
 }
