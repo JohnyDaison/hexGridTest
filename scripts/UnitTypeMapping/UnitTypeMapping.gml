@@ -42,6 +42,7 @@ function trixagonUnitType(_id, _name) {
     var _unitType = new UnitTypeData(_id, _name);
     
     _unitType.animMovementSpeed = 500;
+    _unitType.animAttackSpeed = 800;
     _unitType.shadowRadius = 0;
     _unitType.healthBarOffset.y = 0;
     
