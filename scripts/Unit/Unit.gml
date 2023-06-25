@@ -44,6 +44,24 @@ function Unit(_unitType) constructor {
     nextPosition = pointer_null;
     plannedFinalPosition = pointer_null;
     
+    healthLossAnimation = {
+        blinkTime: 300,
+        maxDuration: 1000,
+        timeLeft: 0,
+        
+        start: function () {
+            timeLeft = maxDuration;
+        },
+        
+        update: function () {
+            timeLeft -= delta_time / 1000;
+        },
+        
+        isBlinking: function () {
+            return timeLeft > 0 && (timeLeft mod blinkTime) / blinkTime <= 0.5;
+        }
+    }
+    
     self.setAnimState(UnitAnimState.Idle);
     
     static toString = function() {
@@ -129,6 +147,8 @@ function Unit(_unitType) constructor {
                 animProgress = _prevProgress;
             }
         }
+        
+        healthLossAnimation.update();
     }
     
     static onAnimEnd = function () {
@@ -177,7 +197,7 @@ function Unit(_unitType) constructor {
         var _healthBarPosition = _center.add(type.healthBarOffset);
             
         if (gameController.trixagon.active) {
-            drawHealthNumber(_healthBarPosition);
+            drawHealthNumber(_healthBarPosition, healthLossAnimation.isBlinking());
         } else {
             drawHealthBar(_healthBarPosition);
         }
@@ -205,14 +225,22 @@ function Unit(_unitType) constructor {
         drawBar(_position, healthBarSize, healthBarColor, _healthRatio, _halign, _valign);
     }
     
-    static drawHealthNumber = function (_position, _halign = fa_center, _valign = fa_middle) {
+    static drawHealthNumber = function (_position, _invert = false, _halign = fa_center, _valign = fa_middle) {
         draw_set_alpha(0.8);
         draw_set_color(c_black);
+        if (_invert) {
+            draw_set_color(c_white);
+        }
+        
         draw_circle(_position.x - 1, _position.y - 1, 48, false);
         
         draw_set_color(c_white);
-        draw_set_halign(fa_center);
-        draw_set_valign(fa_middle);
+        if (_invert) {
+            draw_set_color(c_black);
+        }
+        
+        draw_set_halign(_halign);
+        draw_set_valign(_valign);
         draw_set_font(fontHealthNumber);
         draw_text(_position.x + 1, _position.y + 3, string(combat.stats.health));
     }

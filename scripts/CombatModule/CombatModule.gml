@@ -193,8 +193,13 @@ function CombatModule(_unit, _stats) constructor {
     
     static receiveDamage = function (_damage, _fromUnit) {
         if (!myUnit.type.indestructible) {
+            var _origHealth = stats.health;
             stats.health -= max(0, _damage - stats.armor);
             stats.health = max(0, stats.health);
+            
+            if (stats.health < _origHealth) {
+                myUnit.healthLossAnimation.start();
+            }
         }
         
         myUnit.setNextAnimState(UnitAnimState.ReceivingHit);
