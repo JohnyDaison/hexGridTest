@@ -466,6 +466,10 @@ function GameController() constructor {
             return false;
         }
         
+        if (trixagon.active && selectedUnit != pointer_null && selectedUnit.facingUncertain) {
+            return false;
+        }
+        
         return true;
     }
     

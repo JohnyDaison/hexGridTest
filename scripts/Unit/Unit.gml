@@ -4,6 +4,7 @@ function Unit(_unitType) constructor {
     initiative = type.initiative;
     actionPoints = type.actionPoints;
     facing = 0;
+    facingUncertain = false;
     animations = ds_list_create();
     player = pointer_null;
     
@@ -169,7 +170,7 @@ function Unit(_unitType) constructor {
             return;
         }
         
-        if (type.hasFace) {
+        if (type.hasFace && !facingUncertain) {
             drawFacingArrow(_center.x, _center.y, facingArrowAlpha);
         }
             
@@ -368,8 +369,9 @@ function Unit(_unitType) constructor {
                 case ActionType.FaceHex: {
                     var _origFacing = facing;
                     movement.faceHex(currentAction.hex);
+                    facingUncertain = false;
                     
-                    if (_origFacing == facing) {
+                    if (_origFacing != facing) {
                         var _actionCost = getActionCost(currentTile, currentAction);
                         actionPointsUsed -= _actionCost;
                     }

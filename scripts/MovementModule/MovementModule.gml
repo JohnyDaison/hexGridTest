@@ -153,6 +153,10 @@ function MovementModule(_unit, _stats) constructor {
             faceHex(_hex);
         }
         
+        if (myUnit.gameController.trixagon.active) {
+            myUnit.facingUncertain = true;
+        }
+        
         var _endTile = myUnit.hexMap.getTile(_hex);
         var _movementAnimation = new BasicMovementAnimation(myUnit.gameController, myUnit, _endTile);
         myUnit.hexMap.displaceUnit(myUnit);

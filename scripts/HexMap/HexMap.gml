@@ -233,7 +233,7 @@ function HexMap(_orientation, _size, _origin) constructor {
         for (var i = 0; i < _count; i++) {
             var _unit = _hexTile.getUnit(i);
             
-            if (_unit.type.drawOverlay && _unit.type.hasFace) {
+            if (_unit.type.drawOverlay && _unit.type.hasFace  && !_unit.facingUncertain) {
                 _unit.drawFacingArrow(_vector.x, _vector.y, Unit.facingArrowAlpha);
             }
             _unit.draw(_vector.x, _vector.y);
