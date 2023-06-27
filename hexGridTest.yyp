@@ -150,6 +150,7 @@
     {"id":{"name":"sprSkeleton_Walk_Bow","path":"sprites/sprSkeleton_Walk_Bow/sprSkeleton_Walk_Bow.yy",},},
     {"id":{"name":"sprBat_Hit","path":"sprites/sprBat_Hit/sprBat_Hit.yy",},},
     {"id":{"name":"sprWaterBasic","path":"sprites/sprWaterBasic/sprWaterBasic.yy",},},
+    {"id":{"name":"TileOverlayGroup","path":"scripts/TileOverlayGroup/TileOverlayGroup.yy",},},
     {"id":{"name":"sprKnight_Jump_Airborne","path":"sprites/sprKnight_Jump_Airborne/sprKnight_Jump_Airborne.yy",},},
     {"id":{"name":"sprKnight_Hit","path":"sprites/sprKnight_Hit/sprKnight_Hit.yy",},},
     {"id":{"name":"CombatModule","path":"scripts/CombatModule/CombatModule.yy",},},

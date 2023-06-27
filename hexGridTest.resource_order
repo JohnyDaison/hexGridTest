@@ -118,6 +118,7 @@
     {"name":"sprKnight_Idle_Sword","order":5,"path":"sprites/sprKnight_Idle_Sword/sprKnight_Idle_Sword.yy",},
     {"name":"sprSkeleton_Walk_Bow","order":5,"path":"sprites/sprSkeleton_Walk_Bow/sprSkeleton_Walk_Bow.yy",},
     {"name":"sprBat_Hit","order":4,"path":"sprites/sprBat_Hit/sprBat_Hit.yy",},
+    {"name":"TileOverlayGroup","order":6,"path":"scripts/TileOverlayGroup/TileOverlayGroup.yy",},
     {"name":"sprKnight_Jump_Airborne","order":4,"path":"sprites/sprKnight_Jump_Airborne/sprKnight_Jump_Airborne.yy",},
     {"name":"sprKnight_Hit","order":2,"path":"sprites/sprKnight_Hit/sprKnight_Hit.yy",},
     {"name":"CombatModule","order":5,"path":"scripts/CombatModule/CombatModule.yy",},

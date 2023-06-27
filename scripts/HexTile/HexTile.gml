@@ -24,7 +24,7 @@ function HexTile(_position, _terrainType = TerrainType.Base) constructor {
         var _keyCount = array_length(_keys);
         
         array_foreach(_keys, function (_key) {
-            var _overlay = variable_struct_get(overlays, _key)
+            var _overlay = overlays[$ _key];
             var _overlaysArray = _overlay.depth < 0 ? overlaysTopArray : overlaysBottomArray;
             var _index = array_get_index(_overlaysArray, _overlay);
             

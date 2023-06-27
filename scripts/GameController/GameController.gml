@@ -104,6 +104,15 @@ function GameController() constructor {
         hexMap.gameController = self;
         hexMap.stackHeight = 60;
         
+        if (trixagon.active) {
+            hexMap.addTileOverlay("tint", 0);
+            hexMap.addTileOverlay("stripes", -1);
+            hexMap.addTileOverlay("meleeTarget", -2);
+            hexMap.addTileOverlay("rangedTarget", -3);
+            
+            hexMap.addTileOverlayGroup("trunc");
+        }
+        
         return hexMap;
     }
     
@@ -317,6 +326,10 @@ function GameController() constructor {
         
         unitQueue.updateCards();
         updatePlayersWinLossState();
+        
+        if (trixagon.active) {
+            hexMap.updateTruncOverlay();
+        }
         
         if (!gameEnding) {
             currentTurnPhase.update();

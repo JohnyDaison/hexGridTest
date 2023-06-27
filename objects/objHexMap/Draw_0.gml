@@ -9,10 +9,6 @@ if (gameController.selectedUnit != pointer_null && gameController.selectedUnit.c
     _selectedTile = gameController.selectedUnit.currentTile;
 }
 
-if (gameController.trixagon.active) {
-    hexMap.updateTruncOverlay();
-}
-
 hexMap.drawHexes(_highlightHex, _selectedTile);
 hexMap.drawTrixagonUnits(gameController.units, _highlightHex, _selectedTile);
 hexMap.drawUnitsOverlay(gameController.units);

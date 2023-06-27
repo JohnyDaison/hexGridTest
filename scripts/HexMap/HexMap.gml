@@ -6,11 +6,11 @@ function HexMap(_orientation, _size, _origin) constructor {
     highlightAlpha = 0.5;
     terrainPainter = new TerrainPainter(self);
     drawTileCoords = false;
-    truncData = ds_map_create();
+    
     truncForHex = pointer_null;
     truncForUnit = pointer_null;
     truncForFacing = -1;
-    truncTiles = array_create(0);
+    
     truncTint = c_white;
     truncMeleeTarget = false;
     truncRangedTarget = false;
@@ -18,9 +18,26 @@ function HexMap(_orientation, _size, _origin) constructor {
     stripesAlpha = 0.1;
     topOverlaysTiles = array_create(0);
     
+    tileOverlayIDs = [];
+    tileOverlayCount = 0;
+    tileOverlayData = ds_map_create();
+    
+    tileOverlayGroupIDs = [];
+    tileOverlayGroupCount = 0;
+    tileOverlayGroupData = ds_map_create();
+    
     static destroy = function() {
         grid.destroy();
-        ds_map_destroy(truncData);
+        
+        for (var i = 0; i < tileOverlayGroupCount; i++) {
+            var _id = tileOverlayGroupIDs[ i];
+            var _group = tileOverlayGroupData[? _id];
+            _group.destroy();
+        }
+        
+        ds_map_destroy(tileOverlayGroupData);
+        
+        ds_map_destroy(tileOverlayData);
     }
     
     static isValidPosition = function(_hex) {
@@ -374,14 +391,14 @@ function HexMap(_orientation, _size, _origin) constructor {
         _hexTile.height = _height;
         _hexTile.hexMap = self;
         
-        if (gameController.trixagon.active) {
-            _hexTile.overlays.trunc = _hexTile.createOverlay(0);
-            _hexTile.overlays.stripes = _hexTile.createOverlay(-1);
-            _hexTile.overlays.meleeTarget = _hexTile.createOverlay(-2);
-            _hexTile.overlays.rangedTarget = _hexTile.createOverlay(-3);
+        for(var i = 0; i < tileOverlayCount; i++) {
+            var _id = tileOverlayIDs[i];
+            var _data = tileOverlayData[? _id];
             
-            _hexTile.updateOverlaysArrays();
+            _hexTile.overlays[$ _id] = _hexTile.createOverlay(_data.depth);
         }
+        
+        _hexTile.updateOverlaysArrays();
         
         return _hexTile;
     }
@@ -503,6 +520,30 @@ function HexMap(_orientation, _size, _origin) constructor {
         return _unit;
     }
     
+    static addTileOverlay = function (_id, _depth) {
+        if (array_contains(tileOverlayIDs, _id)) {
+            return;
+        }
+        
+        array_push(tileOverlayIDs, _id);
+        tileOverlayCount++;
+        
+        tileOverlayData[? _id] = {
+            depth: _depth,
+        }
+    }
+    
+    static addTileOverlayGroup = function (_id) {
+        if (array_contains(tileOverlayGroupIDs, _id)) {
+            return;
+        }
+        
+        array_push(tileOverlayGroupIDs, _id);
+        tileOverlayGroupCount++;
+        
+        tileOverlayGroupData[? _id] = new TileOverlayGroup(self);
+    }
+    
     static updateTruncOverlay = function () {
         var _desiredTruncHex = pointer_null;
         var _desiredTruncUnit = pointer_null;
@@ -515,14 +556,10 @@ function HexMap(_orientation, _size, _origin) constructor {
         }
         
         if (_desiredTruncHex != truncForHex || _desiredTruncUnit != truncForUnit || _desiredTruncFacing != truncForFacing) {
-            array_foreach(truncTiles, function(_tile, _index) {
-                _tile.overlays.trunc.display.setState(false);
-                _tile.overlays.stripes.display.setState(false);
-                _tile.overlays.meleeTarget.display.setState(false);
-                _tile.overlays.rangedTarget.display.setState(false);
-            });
-            
-            array_resize(truncTiles, 0);
+            var _truncGroup = tileOverlayGroupData[? "trunc"];
+                
+            _truncGroup.clearOverlays();
+            _truncGroup.clearData();
             
             truncForHex = _desiredTruncHex;
             truncForUnit = _desiredTruncUnit;
@@ -530,7 +567,6 @@ function HexMap(_orientation, _size, _origin) constructor {
             
             if (truncForHex && truncForUnit) {
                 var _trunc = truncForHex.getTrixagonTrunc();
-                ds_map_clear(truncData);
                 
                 truncTint = Colors.trixagonTrunc;
                 truncRangedTarget = false;
@@ -547,18 +583,14 @@ function HexMap(_orientation, _size, _origin) constructor {
                 truncRangedTarget = true;
                 array_foreach(_trunc.ranged, self.setTruncDataByOffset);
                 
-                key = ds_map_find_first(truncData);
-                
-                while (!is_undefined(key)) {
-                    setTruncTileOverlay(key, truncData[? key]);
-                    key = ds_map_find_next(truncData, key);
-                }
+                _truncGroup.applyData();
             }
         }
     }
     
     static setTruncDataByOffset = function (_hexOffset) {
         var _tile = truncForUnit.currentTile.getRelativeTile(_hexOffset);
+        var _truncGroup = tileOverlayGroupData[? "trunc"];
         
         if (!_tile)
             return;
@@ -583,40 +615,46 @@ function HexMap(_orientation, _size, _origin) constructor {
         }
         
         if (!(gameController.trixagon.hideBlockedTiles && _blocked)) {
-            truncData[? _tile] = {
+            _truncGroup.setData(_tile, {
                 tint: truncTint,
-                striped: gameController.trixagon.stripeBlockedTiles && _blocked,
+                stripes: gameController.trixagon.stripeBlockedTiles && _blocked,
                 meleeTarget: _meleeTarget,
                 rangedTarget: _rangedTarget,
-            }
+            });
+        }
+    }
+
+    static updateTileOverlay = function (_tile, _data) {
+        if (gameController.trixagon.active) {
+            updateTrixagonTileOverlay(_tile, _data);
         }
     }
     
-    static setTruncTileOverlay = function (_tile, _data) {
+    static updateTrixagonTileOverlay = function (_tile, _data) {
         if (!_tile || !_data) {
             return;
         }
         
         var _isRight = _tile.position.isTrixagonRight();
-        var _truncSprite = _isRight ? sprTrixagonTileRight : sprTrixagonTileLeft;
         
-        _tile.overlays.trunc.display.setState(true, _truncSprite, _data.tint, truncAlpha);
+        if (!is_undefined(_data[$ "tint"])) {
+            var _truncSprite = _isRight ? sprTrixagonTileRight : sprTrixagonTileLeft;
+            _tile.overlays.tint.display.setState(_data.tint != pointer_null, _truncSprite, _data.tint, truncAlpha);
+        }
         
-        if (_data.striped) {
+        if (!is_undefined(_data[$ "stripes"])) {
             var _stripesSprite = _isRight ? sprTrixagonTileRightStripes : sprTrixagonTileLeftStripes;
-            _tile.overlays.stripes.display.setState(true, _stripesSprite, Colors.trixagonTruncMovementBlocked, stripesAlpha);
+            _tile.overlays.stripes.display.setState(_data.stripes, _stripesSprite, Colors.trixagonTruncMovementBlocked, stripesAlpha);
         }
         
-        if (_data.meleeTarget) {
-            _tile.overlays.meleeTarget.display.setState(true, sprTrixagonMeleeTarget, Colors.trixagonMeleeTarget, gameController.trixagon.meleeTargetAlpha);
+        if (!is_undefined(_data[$ "meleeTarget"])) {
+            _tile.overlays.meleeTarget.display.setState(_data.meleeTarget, sprTrixagonMeleeTarget, Colors.trixagonMeleeTarget, gameController.trixagon.meleeTargetAlpha);
             _tile.overlays.meleeTarget.display.cursorPulse = true;
         }
         
-        if (_data.rangedTarget) {
-            _tile.overlays.meleeTarget.display.setState(true, _data.rangedTarget, Colors.trixagonRangedTarget, gameController.trixagon.rangedTargetAlpha);
-            _tile.overlays.meleeTarget.display.cursorPulse = true;
+        if (!is_undefined(_data[$ "rangedTarget"])) {
+            _tile.overlays.rangedTarget.display.setState(_data.rangedTarget != pointer_null, _data.rangedTarget, Colors.trixagonRangedTarget, gameController.trixagon.rangedTargetAlpha);
+            _tile.overlays.rangedTarget.display.cursorPulse = true;
         }
-        
-        array_push(truncTiles, _tile);
     }
 }
