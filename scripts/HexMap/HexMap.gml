@@ -10,6 +10,9 @@ function HexMap(_orientation, _size, _origin) constructor {
     truncForHex = pointer_null;
     truncForUnit = pointer_null;
     truncForFacing = -1;
+    
+    bombForHex = pointer_null;
+    bombForUnit = pointer_null;
 
     truncAlpha = 0.6;
     stripesAlpha = 0.1;
@@ -186,7 +189,7 @@ function HexMap(_orientation, _size, _origin) constructor {
         draw_primitive_end();
     }
     
-    static drawTrixagonUnitHighlight = function(_hex, _bandColor, _unitColor, _yOffset = 0, _radius = 80) {
+    static drawTrixagonUnitHighlight = function(_hex, _bandColor, _unitColor, _yOffset = 0, _tintBand = false, _radius = 80) {
         var _lineThickness = 4;
         var _bandThickness = 24;
         
@@ -204,6 +207,10 @@ function HexMap(_orientation, _size, _origin) constructor {
         
         draw_set_color(c_black);
         draw_circle(_x, _yWithOffset, _outerRadius, false);
+        
+        if (_tintBand) {
+            _bandColor = merge_color(_bandColor, _unitColor, 0.4)
+        }
         
         draw_set_color(_bandColor);
         draw_circle(_x, _yWithOffset, _outerBandRadius, false);
@@ -343,7 +350,8 @@ function HexMap(_orientation, _size, _origin) constructor {
             var _drawHighlight = !is_undefined(_highlightHex) && _hex.equals(_highlightHex);
                 
             if (_selectedTile != pointer_null && _hexTile == _selectedTile) {
-                drawTrixagonUnitHighlight(_hex, Colors.trixagonSelection, _unit.type.tint, getTileYOffset(_hexTile));
+                var _tintBand = gameController.hoveredUnit && gameController.selectedUnit && gameController.hoveredUnit != gameController.selectedUnit;
+                drawTrixagonUnitHighlight(_hex, Colors.trixagonSelection, _unit.type.tint, getTileYOffset(_hexTile), _tintBand);
             } else if (_drawHighlight) {
                 if (gameController.canUnitBeSelected(_unit)) {
                     drawTrixagonUnitHighlight(_hex, Colors.trixagonHover, _unit.type.tint, getTileYOffset(_hexTile));
@@ -543,6 +551,7 @@ function HexMap(_orientation, _size, _origin) constructor {
     
     static updateTileOverlays = function () {
         updateTruncOverlay();
+        updateBombOverlay();
     }
     
     static updateTruncOverlay = function () {
@@ -611,6 +620,56 @@ function HexMap(_orientation, _size, _origin) constructor {
         }
     }
     
+    static updateBombOverlay = function () {
+        var _desiredBombHex = pointer_null;
+        var _desiredBombUnit = pointer_null;
+        
+        if (gameController.hoveredUnit && gameController.hoveredUnit.currentTile && gameController.hoveredUnit.type.typeId == UnitType.TrixagonBomb) {
+            _desiredBombHex = gameController.hoveredUnit.currentTile.position;
+            _desiredBombUnit = gameController.hoveredUnit;
+        }
+        
+        if (_desiredBombHex != bombForHex || _desiredBombUnit != bombForUnit) {
+            var _movementGroup = tileOverlayGroupData[? "movement"];
+            var _combatGroup = tileOverlayGroupData[? "combat"];
+            var _bombGroup = tileOverlayGroupData[? "bomb"];
+            
+                
+            _bombGroup.clearOverlays();
+            _bombGroup.clearData();
+            
+            bombForHex = _desiredBombHex;
+            bombForUnit = _desiredBombUnit;
+            
+            if (bombForHex && bombForUnit) {
+                var _unitTile = bombForUnit.currentTile;
+                var _trunc = bombForHex.getTrixagonTrunc();
+                var _tile;
+                
+                for (var i = 0; i < 3; i++) {
+                    var _hexOffset = _trunc.melee[i];
+                    _tile = _unitTile.getRelativeTile(_hexOffset);
+                    
+                    self.setTrixagonBombTileOverlaysData(_tile, bombForUnit, true, false);
+                }
+                
+                for (var i = 0; i < 6; i++) {
+                    var _hexOffset = _trunc.movement[i];
+                    _tile = _unitTile.getRelativeTile(_hexOffset);
+                    
+                    self.setTrixagonBombTileOverlaysData(_tile, bombForUnit, false, true);
+                }
+                
+                _movementGroup.clearOverlays();
+                _combatGroup.clearOverlays();
+                _bombGroup.applyData();
+            } else {
+                _movementGroup.applyData();
+                _combatGroup.applyData();
+            }
+        }
+    }
+    
     static setTrixagonMovementTileOverlaysData = function (_tile, _canMove, _tint) {
         if (!_tile)
             return;
@@ -648,6 +707,30 @@ function HexMap(_orientation, _size, _origin) constructor {
             });
         }
         
+        
+        if (_ranged) {
+            var _rangedTarget = pointer_null;
+            var _validRangedTarget = _forUnit.combat.trixagonRangedAttackValid(_unit);
+            _rangedTarget = _validRangedTarget ? sprTrixagonRangedTargetValid : sprTrixagonRangedTargetInvalid;
+             
+            _overlayGroup.setData(_tile, {
+                rangedTarget: _rangedTarget,
+            });
+        }
+    }
+    
+    static setTrixagonBombTileOverlaysData = function (_tile, _forUnit, _melee, _ranged) {
+        if (!_tile)
+            return;
+        
+        var _overlayGroup = tileOverlayGroupData[? "bomb"];
+        var _unit = _tile.getTopUnit();
+        
+        if (_melee) {
+            _overlayGroup.setData(_tile, {
+                meleeTarget: true,
+            });
+        }
         
         if (_ranged) {
             var _rangedTarget = pointer_null;

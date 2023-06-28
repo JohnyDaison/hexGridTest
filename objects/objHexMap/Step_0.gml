@@ -1,3 +1,5 @@
+cursorLastTile = cursorTile;
+
 cursorHex = hexMap.cursorToHex(mouse_x, mouse_y);
 cursorPos = hexMap.pixelToHex(mouse_x, mouse_y);
 cursorTile = pointer_null;
@@ -6,6 +8,16 @@ var _paintPos = cursorPos;
 if (!is_undefined(cursorHex)) {
     cursorTile = hexMap.getTile(cursorHex);
     _paintPos = cursorHex;
+}
+
+if (cursorTile != cursorLastTile) {
+    if (cursorLastTile) {
+        gameController.handleTileHoverEnd(cursorLastTile);
+    }
+
+    if (cursorTile) {
+        gameController.handleTileHoverStart(cursorTile);
+    }
 }
 
 if (mouse_check_button(mb_right)) {

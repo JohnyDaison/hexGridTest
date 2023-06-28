@@ -32,6 +32,7 @@ endTurnButton = noone;
 cursorHex = undefined;
 cursorPos = undefined;
 cursorTile = pointer_null;
+cursorLastTile = pointer_null;
 
 cursorPulseMin = 0.6;
 cursorPulseMax = 1;

@@ -5,6 +5,7 @@ function GameController() constructor {
     gameAnimations = ds_list_create();
     hexMap = pointer_null;
     selectedUnit = pointer_null;
+    hoveredUnit = pointer_null;
     unitTargetTile = pointer_null;
     endTurnButtonPressed = false;
     roundCounter = 1;
@@ -47,7 +48,7 @@ function GameController() constructor {
         stripeBlockedTiles: true,
         hideBlockedTiles: false,
         meleeTargetAlpha: 0.9,
-        rangedTargetAlpha: 0.7,
+        rangedTargetAlpha: 0.75,
     }
     
     if (trixagon.active) {
@@ -112,6 +113,7 @@ function GameController() constructor {
             
             hexMap.addTileOverlayGroup("movement");
             hexMap.addTileOverlayGroup("combat");
+            hexMap.addTileOverlayGroup("bomb");
         }
         
         return hexMap;
@@ -371,6 +373,14 @@ function GameController() constructor {
     
     static canUnitSelectionChange = function () {
         return selectedUnit == pointer_null || canUnitBeDeselected(selectedUnit);
+    }
+    
+    static handleTileHoverStart = function (_cursorTile) {
+        hoveredUnit = _cursorTile.getTopUnit();
+    }
+    
+    static handleTileHoverEnd = function (_cursorTile) {
+        hoveredUnit = pointer_null;
     }
     
     static handleTileClicked = function (_cursorTile) {
