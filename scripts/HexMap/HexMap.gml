@@ -728,6 +728,7 @@ function HexMap(_orientation, _size, _origin) constructor {
         
         if (_melee) {
             _overlayGroup.setData(_tile, {
+                tint: Colors.trixagonTrunc,
                 meleeTarget: true,
             });
         }
@@ -738,6 +739,7 @@ function HexMap(_orientation, _size, _origin) constructor {
             _rangedTarget = _validRangedTarget ? sprTrixagonRangedTargetValid : sprTrixagonRangedTargetInvalid;
              
             _overlayGroup.setData(_tile, {
+                tint: Colors.trixagonTrunc,
                 rangedTarget: _rangedTarget,
             });
         }

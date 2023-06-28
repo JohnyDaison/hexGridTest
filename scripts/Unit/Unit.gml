@@ -45,7 +45,7 @@ function Unit(_unitType) constructor {
     plannedFinalPosition = pointer_null;
     
     healthLossAnimation = {
-        blinkTime: 300,
+        blinkTime: 500,
         maxDuration: 1000,
         timeLeft: 0,
         
