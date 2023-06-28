@@ -544,6 +544,10 @@ function HexMap(_orientation, _size, _origin) constructor {
         tileOverlayGroupData[? _id] = new TileOverlayGroup(self);
     }
     
+    static updateTileOverlays = function () {
+        updateTruncOverlay();
+    }
+    
     static updateTruncOverlay = function () {
         var _desiredTruncHex = pointer_null;
         var _desiredTruncUnit = pointer_null;
@@ -556,10 +560,14 @@ function HexMap(_orientation, _size, _origin) constructor {
         }
         
         if (_desiredTruncHex != truncForHex || _desiredTruncUnit != truncForUnit || _desiredTruncFacing != truncForFacing) {
-            var _truncGroup = tileOverlayGroupData[? "trunc"];
+            var _movementGroup = tileOverlayGroupData[? "movement"];
+            var _combatGroup = tileOverlayGroupData[? "combat"];
                 
-            _truncGroup.clearOverlays();
-            _truncGroup.clearData();
+            _movementGroup.clearOverlays();
+            _movementGroup.clearData();
+            
+            _combatGroup.clearOverlays();
+            _combatGroup.clearData();
             
             truncForHex = _desiredTruncHex;
             truncForUnit = _desiredTruncUnit;
@@ -567,34 +575,59 @@ function HexMap(_orientation, _size, _origin) constructor {
             
             if (truncForHex && truncForUnit) {
                 var _trunc = truncForHex.getTrixagonTrunc();
+                var _tile;
                 
                 truncTint = Colors.trixagonTrunc;
                 truncRangedTarget = false;
                 truncMeleeTarget = false;
-                self.setTruncDataByOffset(HexVector.zero);
+                
+                _tile = truncForUnit.currentTile.getRelativeTile(HexVector.zero);
+                
+                self.setTrixagonMovementTileOverlaysData(_tile);
+                self.setTrixagonCombatTileOverlaysData(_tile);
                 
                 truncMeleeTarget = truncForUnit.combat.trixagonMeleeAttackValid();
-                array_foreach(_trunc.melee, self.setTruncDataByOffset);
+                
+                for (var i = 0; i < 3; i++) {
+                    var _hexOffset = _trunc.melee[i];
+                    _tile = truncForUnit.currentTile.getRelativeTile(_hexOffset);
+                    
+                    self.setTrixagonMovementTileOverlaysData(_tile);
+                    self.setTrixagonCombatTileOverlaysData(_tile);
+                }
                 
                 truncMeleeTarget = false;
-                array_foreach(_trunc.movement, self.setTruncDataByOffset);
+                
+                for (var i = 0; i < 6; i++) {
+                    var _hexOffset = _trunc.movement[i];
+                    _tile = truncForUnit.currentTile.getRelativeTile(_hexOffset);
+                    
+                    self.setTrixagonMovementTileOverlaysData(_tile);
+                    self.setTrixagonCombatTileOverlaysData(_tile);
+                }
                 
                 truncTint = Colors.trixagonTruncRanged;
                 truncRangedTarget = true;
-                array_foreach(_trunc.ranged, self.setTruncDataByOffset);
                 
-                _truncGroup.applyData();
+                for (var i = 0; i < 3; i++) {
+                    var _hexOffset = _trunc.ranged[i];
+                    _tile = truncForUnit.currentTile.getRelativeTile(_hexOffset);
+                    
+                    self.setTrixagonMovementTileOverlaysData(_tile);
+                    self.setTrixagonCombatTileOverlaysData(_tile);
+                }
+                
+                _movementGroup.applyData();
+                _combatGroup.applyData();
             }
         }
     }
     
-    static setTruncDataByOffset = function (_hexOffset) {
-        var _tile = truncForUnit.currentTile.getRelativeTile(_hexOffset);
-        var _truncGroup = tileOverlayGroupData[? "trunc"];
-        
+    static setTrixagonMovementTileOverlaysData = function (_tile) {
         if (!_tile)
             return;
-            
+        
+        var _overlayGroup = tileOverlayGroupData[? "movement"];
         var _blocked = false;
         var _cannotMove = _tile != truncForUnit.currentTile && !truncForUnit.movement.canMove();
         var _unit = _tile.getTopUnit();
@@ -602,26 +635,37 @@ function HexMap(_orientation, _size, _origin) constructor {
         
         _blocked = _cannotMove || _tileBlocked;
         
+        if (!(gameController.trixagon.hideBlockedTiles && _blocked)) {
+            _overlayGroup.setData(_tile, {
+                tint: truncTint,
+                stripes: gameController.trixagon.stripeBlockedTiles && _blocked
+            });
+        }
+    }
+    
+    static setTrixagonCombatTileOverlaysData = function (_tile) {
+        if (!_tile)
+            return;
+        
+        var _overlayGroup = tileOverlayGroupData[? "combat"];
+        var _unit = _tile.getTopUnit();
+        
         var _meleeTarget = false;
         if (truncMeleeTarget) {
             var _unitInFront = truncForUnit.getUnitInFrontOfMe();
-            _meleeTarget = _unitInFront && _tile.getTopUnit() == _unitInFront;
+            _meleeTarget = _unitInFront && _unit == _unitInFront;
         }
         
         var _rangedTarget = pointer_null;
         if (truncRangedTarget) {
-             var _validRangedTarget = truncForUnit.combat.trixagonRangedAttackValid(_tile.getTopUnit());
+             var _validRangedTarget = truncForUnit.combat.trixagonRangedAttackValid(_unit);
              _rangedTarget = _validRangedTarget ? sprTrixagonRangedTargetValid : sprTrixagonRangedTargetInvalid;
         }
         
-        if (!(gameController.trixagon.hideBlockedTiles && _blocked)) {
-            _truncGroup.setData(_tile, {
-                tint: truncTint,
-                stripes: gameController.trixagon.stripeBlockedTiles && _blocked,
-                meleeTarget: _meleeTarget,
-                rangedTarget: _rangedTarget,
-            });
-        }
+        _overlayGroup.setData(_tile, {
+            meleeTarget: _meleeTarget,
+            rangedTarget: _rangedTarget,
+        });
     }
 
     static updateTileOverlay = function (_tile, _data) {

@@ -110,7 +110,8 @@ function GameController() constructor {
             hexMap.addTileOverlay("meleeTarget", -2);
             hexMap.addTileOverlay("rangedTarget", -3);
             
-            hexMap.addTileOverlayGroup("trunc");
+            hexMap.addTileOverlayGroup("movement");
+            hexMap.addTileOverlayGroup("combat");
         }
         
         return hexMap;
@@ -328,7 +329,7 @@ function GameController() constructor {
         updatePlayersWinLossState();
         
         if (trixagon.active) {
-            hexMap.updateTruncOverlay();
+            hexMap.updateTileOverlays();
         }
         
         if (!gameEnding) {
