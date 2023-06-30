@@ -1,9 +1,9 @@
 function GamePhase(_gameController) constructor {
-    static gameController = _gameController;
-    static type = undefined;
-    static interactive = false;
-    static startDelay = 100;
-    static endDelay = 200;
+    gameController = _gameController;
+    type = undefined;
+    interactive = false;
+    startDelay = 100;
+    endDelay = 200;
     
     startTime = 0;
     starting = false;
@@ -11,6 +11,11 @@ function GamePhase(_gameController) constructor {
     endTime = 0;
     ending = false;
     ended = false;
+    
+    static phaseStartLogic = function() {}
+    static phaseEndLogic = function() {}
+    static onStart = function(_phase) {}
+    static onEnd = function(_phase) {}
     
     static isInProgress = function () {
         return started && !ending && !ended;
@@ -79,9 +84,4 @@ function GamePhase(_gameController) constructor {
         ending = false;
         ended = false;
     }
-    
-    static phaseStartLogic = function() {}
-    static phaseEndLogic = function() {}
-    static onStart = function(_phase) {}
-    static onEnd = function(_phase) {}
 }

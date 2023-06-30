@@ -1,7 +1,7 @@
 function TrixagonRangedPhase(_gameController) : GamePhase(_gameController) constructor {
-    static type = PhaseType.TrixagonRanged;
-    static interactive = false;
-    static startDelay = 400;
+    type = PhaseType.TrixagonRanged;
+    interactive = false;
+    startDelay = 400;
     
     static toString = function() {
         return "TRIXAGON RANGED";

@@ -1,6 +1,6 @@
 function TrixagonMeleePhase(_gameController) : GamePhase(_gameController) constructor {
-    static type = PhaseType.TrixagonMelee;
-    static interactive = false;
+    type = PhaseType.TrixagonMelee;
+    interactive = false;
     
     static toString = function() {
         return "TRIXAGON MELEE";
