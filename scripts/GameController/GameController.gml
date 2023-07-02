@@ -15,6 +15,7 @@ function GameController() constructor {
     gameEnding = false;
     gameEnded = false;
     gameEndCounter = 0;
+    inited = false;
     
     turnPhases = [];
     turnPhaseCount = 0;
@@ -246,13 +247,13 @@ function GameController() constructor {
     static selectUnit = function (_unit) {
         if (!_unit) {
             selectedUnit = pointer_null;
-            activePlayer = pointer_null;
+            setActivePlayer(pointer_null);
             
             return;
         }
         
         selectedUnit = _unit;
-        activePlayer = _unit.player;
+        setActivePlayer(_unit.player);
     }
     
     static deselectUnit = function () {
@@ -286,6 +287,11 @@ function GameController() constructor {
     }
     
     static gameUpdate = function () {
+        if (!inited) {
+            init();
+            inited = true;
+        }
+        
         if (endTurnButtonPressed) {
             if (selectedUnit != pointer_null && selectedUnit.currentAction == pointer_null) {
                 selectedUnit.startNextAction();
@@ -556,17 +562,33 @@ function GameController() constructor {
             var _number = activePlayer.number;
             _number = _number == playerCount ? 1 : _number + 1;
             
-            activePlayer = players[? _number];
+            setActivePlayer(players[? _number]);
         }
         
         if (playerCount > 0 && !activePlayer) {
-            activePlayer = players[? 1];
+            setActivePlayer(players[? 1]);
         }
     }
     
     static selectPlayerByNumber = function (_number) {
         if (playerCount >= _number) {
-            activePlayer = players[? _number];
+            setActivePlayer(players[? _number]);
+        }
+    }
+    
+    static setActivePlayer = function (_player) {
+        if (activePlayer == _player) {
+            return;
+        }
+        
+        activePlayer = _player;
+        
+        if (activePlayer && trixagon.active && instance_exists(objEndTurnButton)) {
+            if (activePlayer.name == "Red") {
+                objEndTurnButton.sprite_index = sprEndTurnButton;
+            } else if (activePlayer.name == "Blue") {
+                objEndTurnButton.sprite_index = sprEndTurnButtonBlue;
+            }
         }
     }
     

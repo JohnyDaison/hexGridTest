@@ -246,6 +246,7 @@
     {"id":{"name":"check_circle_object","path":"scripts/check_circle_object/check_circle_object.yy",},},
     {"id":{"name":"in_range","path":"scripts/in_range/in_range.yy",},},
     {"id":{"name":"hex_get_ring","path":"scripts/hex_get_ring/hex_get_ring.yy",},},
+    {"id":{"name":"sprEndTurnButtonBlue","path":"sprites/sprEndTurnButtonBlue/sprEndTurnButtonBlue.yy",},},
     {"id":{"name":"hex_add","path":"scripts/hex_add/hex_add.yy",},},
     {"id":{"name":"hex_lerp","path":"scripts/hex_lerp/hex_lerp.yy",},},
     {"id":{"name":"polygon_corners","path":"scripts/polygon_corners/polygon_corners.yy",},},

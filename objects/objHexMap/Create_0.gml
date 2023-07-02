@@ -234,8 +234,6 @@ createDirectionTestTiles = function() {
 
 // createDirectionTestTiles();
 
-gameController.init();
-
 testInitiativeSystem = function () {
     while (gameController.roundCounter <= gameController.rules.initiativeThreshold) {
         gameController.endUnitTurn();

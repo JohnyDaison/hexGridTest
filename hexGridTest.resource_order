@@ -204,6 +204,7 @@
     {"name":"check_circle_object","order":1,"path":"scripts/check_circle_object/check_circle_object.yy",},
     {"name":"in_range","order":31,"path":"scripts/in_range/in_range.yy",},
     {"name":"hex_get_ring","order":19,"path":"scripts/hex_get_ring/hex_get_ring.yy",},
+    {"name":"sprEndTurnButtonBlue","order":13,"path":"sprites/sprEndTurnButtonBlue/sprEndTurnButtonBlue.yy",},
     {"name":"hex_add","order":6,"path":"scripts/hex_add/hex_add.yy",},
     {"name":"hex_lerp","order":22,"path":"scripts/hex_lerp/hex_lerp.yy",},
     {"name":"polygon_corners","order":37,"path":"scripts/polygon_corners/polygon_corners.yy",},
