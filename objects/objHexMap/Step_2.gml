@@ -1,6 +1,6 @@
 /// @description ANIMATIONS, DEBUG TEXT
 
-if (clearPlanButton == noone) {
+if (clearPlanButton == noone && !gameController.trixagon.active) {
     var _xPos = objGameCamera.baseViewportWidth - clearPlanButtonMargin;
     var _yPos = objGameCamera.baseViewportHeight - endTurnButtonMargin;
     
@@ -26,7 +26,10 @@ if (endTurnButton == noone) {
 // ANIMATIONS
 gameController.gameUpdate();
 gameController.animationUpdate();
-clearPlanButton.enabled = gameController.canPlanBeCleared();
+
+if (!gameController.trixagon.active) {
+    clearPlanButton.enabled = gameController.canPlanBeCleared();
+}
 endTurnButton.enabled = gameController.canTurnBeEnded();
 
 // DEBUG TEXT
