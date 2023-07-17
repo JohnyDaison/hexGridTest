@@ -42,7 +42,7 @@ function HexMap(_orientation, _size, _origin) constructor {
     
     static isValidPosition = function(_hex) {
         if (gameController.trixagon.active) {
-            return modulo(_hex.q, 3) != modulo(_hex.r, 3);
+            return modulo(_hex.q - _hex.r, 3) != 0;
         }
         
         return true;
